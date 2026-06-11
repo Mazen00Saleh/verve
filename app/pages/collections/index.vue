@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { categories } from '~/data/catalog'
+const { data: categories } = await useCatalog()
 
 useHead({
   title: 'Categories | Verve Luxury Interiors'

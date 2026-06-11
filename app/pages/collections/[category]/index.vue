@@ -63,13 +63,12 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { categories } from '~/data/catalog'
 
 const route = useRoute()
 const categorySlug = route.params.category as string
 
-// Find current category
-const category = categories.find(cat => cat.slug === categorySlug)
+const { data: categories } = await useCatalog()
+const category = categories.value?.find(cat => cat.slug === categorySlug)
 
 if (!category) {
   throw createError({ statusCode: 404, statusMessage: 'Category not found' })
