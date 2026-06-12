@@ -14,6 +14,7 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/supabase": "^2.0.9",
     "@nuxtjs/tailwindcss": "^6.14.0",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "browser-image-compression": "^2.0.2",
     "nuxt": "^4.4.4",
@@ -23,6 +24,9 @@
     "@nuxt/icon": "^2.2.2"
   },
   "overrides": {
+    "@vercel/analytics": {
+      "vue-router": "^5.1.0"
+    },
     "@vercel/speed-insights": {
       "vue-router": "^5.1.0"
     }

@@ -146,14 +146,4 @@ Hosted on **Vercel**. Set the same env vars as `.env.example` in the Vercel proj
 npm run build   # must pass before deploying
 ```
 
-`@vercel/speed-insights` is included. The `package.json` override for `vue-router` is required for Nuxt 4 compatibility — do not remove it.
-
----
-
-## Need access?
-
-Ask the team lead for:
-
-- Supabase project invite (Dashboard access)
-- Vercel project access (deployments & env vars)
-- Admin account credentials or profile setup
+`@vercel/analytics` and `@vercel/speed-insights` are included. The `package.json` overrides for `vue-router` are required for Nuxt 4 compatibility — do not remove them.
