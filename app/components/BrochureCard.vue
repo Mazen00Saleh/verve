@@ -15,12 +15,6 @@
       <h3 class="catalog-card-title">
         {{ brochure.title }}
       </h3>
-      <p v-if="brochure.date" class="catalog-card-meta">
-        {{ brochure.date }}
-      </p>
-      <p v-if="brochure.description" class="catalog-card-description hidden sm:block">
-        {{ brochure.description }}
-      </p>
     </div>
   </button>
 </template>

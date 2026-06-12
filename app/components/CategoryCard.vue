@@ -8,7 +8,6 @@
     />
     <div class="catalog-card-body mx-auto text-center">
       <h2 class="catalog-card-title">{{ category.title }}</h2>
-      <p class="catalog-card-description">{{ category.description }}</p>
       <span class="catalog-card-cta">Discover Category</span>
     </div>
   </NuxtLink>

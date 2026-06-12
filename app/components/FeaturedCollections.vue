@@ -44,9 +44,6 @@
               <h3 class="catalog-card-title">
                 {{ collection.title }}
               </h3>
-              <p class="catalog-card-description">
-                {{ collection.description }}
-              </p>
             </div>
           </NuxtLink>
         </div>

@@ -42,11 +42,11 @@
   }
 
   .catalog-card-body {
-    @apply mt-2 text-center sm:mt-5 md:mt-6;
+    @apply mt-2 text-center sm:mt-3 md:mt-4;
   }
 
   .catalog-card-title {
-    @apply font-serif text-sm leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass sm:text-xl md:text-2xl lg:text-3xl;
+    @apply font-serif text-xs leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass sm:text-sm md:text-base lg:text-lg;
   }
 
   .catalog-card-description {

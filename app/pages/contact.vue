@@ -102,11 +102,48 @@
           </div>
         </div>
       </div>
+
+      <section class="mx-auto mt-16 max-w-5xl" aria-labelledby="find-us-heading">
+        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 id="find-us-heading" class="font-serif text-2xl text-luxury-matte-black">Find Us</h2>
+            <p class="mt-2 text-sm font-light text-luxury-charcoal sm:text-base">
+              Visit our showroom in Al-Swaifyeh, Amman.
+            </p>
+          </div>
+          <a
+            :href="mapsDirectionsUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex w-max items-center gap-2 border-b border-luxury-brass pb-1 text-sm text-luxury-brass transition-colors hover:text-luxury-matte-black"
+          >
+            <span>Get directions</span>
+            <Icon name="lucide:external-link" size="14" />
+          </a>
+        </div>
+
+        <div class="overflow-hidden border border-luxury-warm-beige/30 bg-luxury-warm-beige/10 shadow-sm">
+          <div class="relative aspect-[4/3] w-full sm:aspect-[16/9]">
+            <iframe
+              :src="mapsEmbedUrl"
+              title="Verve showroom location on Google Maps"
+              class="absolute inset-0 h-full w-full border-0"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+// Official Google Maps listing for VERVE showroom (fabric store, Al-Swaifyeh)
+const mapsEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3386.85417570248!2d35.8681432!3d31.955486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151ca1026694633b%3A0xcddacdf59402220!2sVERVE!5e0!3m2!1sen!2sjo!4v1749686400000!5m2!1sen!2sjo'
+const mapsDirectionsUrl = 'https://www.google.com/maps/place/VERVE/@31.955486,35.870518,17z/data=!4m6!3m5!1s0x151ca1026694633b:0xcddacdf59402220!8m2!3d31.955486!4d35.870518!16s%2Fg%2F11b7l81lj5'
+
 const { submit, submitting, error, success, reset } = useContactForm()
 
 const form = reactive({

@@ -19,9 +19,6 @@
     </div>
     <div class="catalog-card-body text-center">
       <h3 class="catalog-card-title">{{ product.name }}</h3>
-      <p class="catalog-card-meta">
-        SKU: {{ product.sku }}
-      </p>
     </div>
   </NuxtLink>
 </template>
