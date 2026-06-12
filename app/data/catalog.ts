@@ -1,7 +1,26 @@
 export interface Product {
+  id: string
   name: string
   sku: string
   image: string
+  description: string
+  secondaryImages: string[]
+  mockupImages: string[]
+}
+
+export interface FeaturedCollection extends Collection {
+  categorySlug: string
+  categoryTitle: string
+}
+
+export interface PublicBrochure {
+  id: string
+  title: string
+  description: string
+  fileUrl: string
+  date: string
+  slug: string
+  coverImage: string
 }
 
 export interface Collection {
@@ -292,9 +311,13 @@ export const categories: Category[] = rawCatalogData.map((cat, catIdx) => {
       const products: Product[] = coll.productNames.map((pName, pIdx) => {
         const productImgIdx = (collectionImgIdx * 6) + pIdx
         return {
+          id: `${cat.categorySlug}-${coll.slug}-${pIdx}`,
           name: pName,
           sku: `${coll.skuPrefix}-${1001 + pIdx}`,
-          image: getImage(productImgIdx)
+          image: getImage(productImgIdx),
+          description: coll.longDescription,
+          secondaryImages: [],
+          mockupImages: [],
         }
       })
       

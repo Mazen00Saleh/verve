@@ -1,10 +1,12 @@
-import type { Category, Collection, Product } from '~/data/catalog'
+import type { Category, Collection, FeaturedCollection, Product } from '~/data/catalog'
 import { categories as staticCategories } from '~/data/catalog'
+import { pickDailyRandom } from '~/utils/shuffle'
 import { toSlug } from '~/utils/slug'
 
 type DbProductImage = {
   url: string
   order_index: number | null
+  type: string | null
 }
 
 type DbProduct = {
@@ -31,15 +33,30 @@ type DbCategory = {
   collections: DbCollection[] | null
 }
 
+function sortImages(images: DbProductImage[]): DbProductImage[] {
+  return [...images].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
+}
+
 function mapProduct(product: DbProduct): Product {
-  const sortedImages = [...(product.product_images ?? [])].sort(
-    (a, b) => (a.order_index ?? 0) - (b.order_index ?? 0),
-  )
+  const sortedImages = sortImages(product.product_images ?? [])
+  const secondaryImages = sortedImages
+    .filter(image => image.type === 'secondary')
+    .map(image => image.url)
+  const mockupImages = sortedImages
+    .filter(image => image.type === 'mockup')
+    .map(image => image.url)
+  const fallbackGallery = sortedImages
+    .filter(image => image.type !== 'mockup')
+    .map(image => image.url)
 
   return {
+    id: product.id,
     name: product.name,
     sku: toSlug(product.name),
-    image: product.primary_image ?? sortedImages[0]?.url ?? '',
+    image: product.primary_image ?? fallbackGallery[0]?.url ?? '',
+    description: product.description ?? '',
+    secondaryImages,
+    mockupImages,
   }
 }
 
@@ -88,7 +105,8 @@ async function fetchCategoriesFromSupabase(): Promise<Category[]> {
           primary_image,
           product_images (
             url,
-            order_index
+            order_index,
+            type
           )
         )
       )
@@ -105,6 +123,48 @@ async function fetchCategoriesFromSupabase(): Promise<Category[]> {
   }
 
   return (data as DbCategory[]).map(mapCategory)
+}
+
+export function flattenCollections(categories: Category[]): FeaturedCollection[] {
+  return categories.flatMap(category =>
+    category.collections.map(collection => ({
+      ...collection,
+      categorySlug: category.slug,
+      categoryTitle: category.title,
+    })),
+  )
+}
+
+export function getFeaturedCategories(categories: Category[], count = 2): Category[] {
+  const withImages = categories.filter(category => category.image)
+
+  if (!withImages.length) {
+    return pickDailyRandom(categories, count, 'featured-categories')
+  }
+
+  return pickDailyRandom(withImages, count, 'featured-categories')
+}
+
+export function getFeaturedCollections(categories: Category[], count = 3): FeaturedCollection[] {
+  const allCollections = flattenCollections(categories).filter(collection => collection.heroImage)
+
+  if (!allCollections.length) {
+    return pickDailyRandom(flattenCollections(categories), count, 'featured-collections')
+  }
+
+  return pickDailyRandom(allCollections, count, 'featured-collections')
+}
+
+export function getHeroSlides(categories: Category[], count = 3) {
+  const featured = getFeaturedCollections(categories, count)
+
+  return featured.map(collection => ({
+    title: collection.title,
+    description: collection.description,
+    leftImage: collection.heroImage,
+    rightImage: collection.products[0]?.image || collection.heroImage,
+    link: `/collections/${collection.categorySlug}/${collection.slug}`,
+  }))
 }
 
 export function useCatalog() {

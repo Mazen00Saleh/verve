@@ -3,6 +3,7 @@
     <HeroSection />
     <PartnerLogos />
     <FeaturedCollections />
+    <HomeCategories />
     <PremiumMaterials />
   </div>
 </template>

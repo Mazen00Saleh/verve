@@ -2,7 +2,7 @@
   <div>
     <h2 class="font-serif text-3xl text-luxury-matte-black">Dashboard</h2>
     <p class="mt-3 max-w-2xl text-sm font-light text-luxury-charcoal">
-      Welcome to the Verve admin area. Use the navigation to manage categories, collections, products, and brochures.
+      Welcome to the Verve admin area. Use the navigation to manage catalog content, hero slides, and contact messages.
     </p>
 
     <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -41,7 +41,17 @@ const quickLinks = [
   {
     label: 'Brochures',
     to: '/admin/brochures',
-    description: 'Upload and maintain downloadable brochure files.',
+    description: 'Manage brochure titles and PDF links.',
+  },
+  {
+    label: 'Hero Slides',
+    to: '/admin/hero-slides',
+    description: 'Curate the homepage hero carousel.',
+  },
+  {
+    label: 'Contact Messages',
+    to: '/admin/contact',
+    description: 'Review messages from the public contact form.',
   },
 ]
 

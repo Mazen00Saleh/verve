@@ -1,32 +1,40 @@
 <template>
-  <div class="pt-24 bg-luxury-ivory min-h-screen">
-    <div class="container mx-auto px-6 lg:px-12 py-16">
-      <div class="text-center mb-16">
-        <h1 class="text-5xl font-serif text-luxury-matte-black mb-4">Our Categories</h1>
-        <p class="text-luxury-charcoal font-light max-w-2xl mx-auto">Explore our range of premium wallpapers, fabrics, posters, and wallcoverings, each comprising unique curated collections.</p>
+  <div class="page-shell">
+    <div class="page-container py-8 sm:py-12 md:py-16">
+      <div class="mb-12 text-center sm:mb-16">
+        <span class="section-eyebrow">Catalog</span>
+        <h1 class="section-title mb-4">Our Categories</h1>
+        <p class="section-intro mx-auto max-w-2xl text-sm sm:text-base">
+          Explore our range of premium wallpapers, fabrics, posters, and wallcoverings, each comprising unique curated collections.
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-12 gap-y-24">
-        <NuxtLink v-for="(category, index) in categories" :key="index" :to="`/collections/${category.slug}`" class="group block">
-          <div class="relative overflow-hidden aspect-[4/3] mb-6">
-            <img :src="category.image" :alt="category.title" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
-            <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
-          </div>
-          <div class="text-center">
-            <h2 class="text-3xl font-serif text-luxury-matte-black mb-3 group-hover:text-luxury-brass transition-colors">{{ category.title }}</h2>
-            <p class="text-luxury-charcoal font-light mb-4">{{ category.description }}</p>
-            <span class="text-xs uppercase tracking-widest text-luxury-matte-black border-b border-luxury-matte-black pb-1 group-hover:border-luxury-brass group-hover:text-luxury-brass transition-colors">Discover Category</span>
-          </div>
-        </NuxtLink>
-      </div>
+      <PageState
+        :pending="pending"
+        :error-message="errorMessage"
+        :empty="!categories?.length"
+        empty-title="No categories yet"
+        empty-message="Our catalog is being curated. Please check back soon."
+        :retry="refresh"
+      >
+        <div class="catalog-grid lg:gap-x-16 lg:gap-y-24">
+          <CategoryCard
+            v-for="category in categories"
+            :key="category.slug"
+            :category="category"
+          />
+        </div>
+      </PageState>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const { data: categories } = await useCatalog()
+const { data: categories, pending, error, refresh } = await useCatalog()
+
+const errorMessage = computed(() => error.value?.message ?? null)
 
 useHead({
-  title: 'Categories | Verve Luxury Interiors'
+  title: 'Categories | Verve Luxury Interiors',
 })
 </script>

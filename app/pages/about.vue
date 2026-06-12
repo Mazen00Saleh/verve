@@ -1,6 +1,6 @@
 <template>
-  <div class="pt-24 bg-luxury-ivory min-h-screen">
-    <div class="container mx-auto px-6 lg:px-12 py-16">
+  <div class="page-shell">
+    <div class="page-container py-8 sm:py-12 md:py-16">
       <div class="max-w-4xl mx-auto text-center mb-24">
         <span class="text-luxury-brass uppercase tracking-[0.3em] text-xs font-semibold mb-6 block">Our Heritage</span>
         <h1 class="text-5xl md:text-7xl font-serif text-luxury-matte-black mb-8 leading-tight">A Legacy of <span class="italic font-light">Elegance</span></h1>
@@ -9,9 +9,16 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24">
-        <div>
-          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=80" alt="Design Studio" class="w-full h-auto object-cover grayscale-[20%]" />
+      <div class="mb-24 grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16">
+        <div class="overflow-hidden">
+          <CatalogImage
+            :src="heroImage"
+            alt="Design Studio"
+            aspect="4/5"
+            :overlay="false"
+            :hover-scale="false"
+            image-class="grayscale-[20%]"
+          />
         </div>
         <div class="space-y-6">
           <h2 class="text-3xl font-serif text-luxury-matte-black">What We Do</h2>
@@ -29,7 +36,11 @@
 </template>
 
 <script setup lang="ts">
+const { data: categories } = await useCatalog()
+
+const heroImage = computed(() => categories.value?.[0]?.image ?? '')
+
 useHead({
-  title: 'About | Verve Luxury Interiors'
+  title: 'About | Verve Luxury Interiors',
 })
 </script>

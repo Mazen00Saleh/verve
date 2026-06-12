@@ -1,75 +1,74 @@
 <template>
-  <div class="bg-luxury-ivory min-h-screen pt-24">
-    <div class="container mx-auto px-6 lg:px-12 py-16">
-      
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-24">
-        <div class="lg:col-span-4 flex flex-col justify-center">
-          <span class="text-luxury-brass uppercase tracking-[0.3em] text-xs font-semibold mb-4 block">Project Focus</span>
-          <h1 class="text-4xl md:text-5xl font-serif text-luxury-matte-black mb-6">{{ project.title }}</h1>
-          <p class="text-luxury-charcoal font-light leading-relaxed mb-8">
-            {{ project.description }}
-          </p>
-          <div class="space-y-4 pt-8 border-t border-luxury-warm-beige">
-            <div>
-              <span class="block text-xs uppercase tracking-widest text-luxury-charcoal mb-1">Location</span>
-              <span class="text-luxury-matte-black font-serif">{{ project.location }}</span>
-            </div>
-            <div>
-              <span class="block text-xs uppercase tracking-widest text-luxury-charcoal mb-1">Designer</span>
-              <span class="text-luxury-matte-black font-serif">{{ project.designer }}</span>
-            </div>
+  <div class="page-shell">
+    <div class="page-container py-8">
+      <PageState
+        :pending="pending"
+        :error-message="errorMessage"
+        :empty="!brochure"
+        empty-title="Brochure not found"
+        empty-message="This brochure may have been removed or is not yet available."
+      >
+        <template v-if="brochure">
+          <div class="mb-8">
+            <NuxtLink to="/inspiration" class="back-link group">
+              <svg class="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Brochures
+            </NuxtLink>
           </div>
-        </div>
-        
-        <div class="lg:col-span-8">
-          <img :src="project.mainImage" :alt="project.title" class="w-full h-auto object-cover shadow-sm" />
-        </div>
-      </div>
 
-      <div class="mb-24">
-        <h2 class="text-3xl font-serif text-center text-luxury-matte-black mb-12">Featured Products</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <NuxtLink v-for="(product, index) in project.products" :key="index" :to="`/collections/wallpapers/the-heritage`" class="group block">
-            <div class="aspect-square bg-white mb-4 relative overflow-hidden">
-               <img :src="product.image" :alt="product.name" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            </div>
-            <div class="text-center">
-              <h3 class="text-lg font-serif text-luxury-matte-black group-hover:text-luxury-brass transition-colors">{{ product.name }}</h3>
-              <p class="text-luxury-charcoal text-sm font-light mt-1">{{ product.sku }}</p>
-            </div>
-          </NuxtLink>
-        </div>
-      </div>
-      
-      <div class="text-center">
-        <NuxtLink to="/inspiration" class="btn-outline">
-          Back to Inspiration
-        </NuxtLink>
-      </div>
+          <div class="mb-6 text-center sm:mb-8">
+            <span class="section-eyebrow">Brochure</span>
+            <h1 class="section-title">{{ brochure.title }}</h1>
+            <p v-if="brochure.date" class="mt-3 text-sm font-light text-luxury-charcoal/60">
+              {{ brochure.date }}
+            </p>
+            <p v-if="brochure.description" class="section-intro mx-auto mt-4 max-w-2xl text-sm sm:text-base">
+              {{ brochure.description }}
+            </p>
+          </div>
 
+          <div v-if="brochure.fileUrl" class="mx-auto max-w-6xl overflow-hidden border border-neutral-200 bg-white shadow-2xl">
+            <iframe
+              :src="brochure.fileUrl"
+              class="h-[70vh] w-full border-0 sm:h-[80vh]"
+              allowfullscreen
+              allow="clipboard-write"
+            />
+          </div>
+
+          <div v-else class="mx-auto max-w-lg border border-neutral-200 bg-white px-6 py-10 text-center">
+            <p class="text-sm font-light text-luxury-charcoal">
+              This brochure does not have a viewable file yet.
+            </p>
+          </div>
+        </template>
+      </PageState>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-
 const route = useRoute()
+const slug = route.params.slug as string
 
-// Mock data based on slug
-const project = {
-  title: route.params.slug ? (route.params.slug as string).replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Project Name',
-  description: 'An exploration of texture and light, this project showcases the transformative power of premium wallcoverings in a sophisticated residential setting. The interplay between the bold damask patterns and the minimalist furniture creates a striking balance.',
-  location: 'Paris, France',
-  designer: 'Atelier Verve',
-  mainImage: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80',
-  products: [
-    { name: 'Imperial Damask', sku: 'V-1001', image: 'https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&w=800&q=80' },
-    { name: 'Velvet Noir Accent', sku: 'V-2005', image: 'https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=800&q=80' }
-  ]
-}
+const { data: brochures, pending, error } = await usePublicBrochures()
+
+const errorMessage = computed(() => error.value?.message ?? null)
+const brochure = computed(() => brochures.value?.find(item => item.slug === slug))
+
+watch([pending, brochures], () => {
+  if (!pending.value && brochures.value && !brochure.value) {
+    throw createError({ statusCode: 404, statusMessage: 'Brochure not found' })
+  }
+})
 
 useHead({
-  title: `${project.title} | Verve Inspiration`
+  title: computed(() =>
+    brochure.value
+      ? `${brochure.title} | Verve Inspiration`
+      : 'Brochure | Verve Inspiration',
+  ),
 })
 </script>

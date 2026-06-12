@@ -1,217 +1,327 @@
 <template>
-  <div class="pt-32 bg-luxury-ivory min-h-screen pb-24">
-    <div class="container mx-auto px-6 lg:px-12">
-      <!-- Top Left Back Button -->
-      <div class="mb-12">
-        <NuxtLink 
-          :to="`/collections/${category.slug}/${collection.slug}`" 
-          class="inline-flex items-center text-xs uppercase tracking-widest text-luxury-matte-black hover:text-luxury-brass transition-colors duration-300 group"
-        >
-          <svg class="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div class="page-shell">
+    <div class="page-container">
+      <div class="mb-10 sm:mb-12">
+        <NuxtLink :to="`/collections/${category?.slug}/${collection?.slug}`" class="back-link group">
+          <svg class="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Back to Collection
         </NuxtLink>
       </div>
 
-      <!-- Main Layout: Symmetrical 2-Column Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-        
-        <!-- Left Column: Main Image & Zoom Magnifier -->
-        <div class="relative w-full aspect-square bg-luxury-warm-beige/10 border border-neutral-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] select-none">
-          <div 
-            class="relative w-full h-full overflow-hidden cursor-zoom-in"
-            @mouseenter="isZooming = true"
-            @mouseleave="isZooming = false"
-            @mousemove="handleMouseMove"
-          >
-            <img 
-              ref="mainImageRef"
-              :src="activeImage" 
-              :alt="product.name" 
-              class="w-full h-full object-cover transition-opacity duration-300" 
-            />
-            
-            <!-- Square magnifying lens overlay on top of main image -->
-            <div 
-              v-if="isZooming"
-              class="absolute border border-luxury-brass bg-black/10 pointer-events-none shadow-[0_0_8px_rgba(0,0,0,0.1)] transition-transform duration-75"
-              :style="{
-                width: '180px',
-                height: '180px',
-                left: `${lensX}px`,
-                top: `${lensY}px`
-              }"
-            ></div>
-          </div>
-
-          <!-- Floating zoom display box on the right -->
-          <div 
-            v-if="isZooming"
-            class="absolute left-[105%] top-0 w-[480px] h-[480px] z-30 border border-neutral-200 bg-white overflow-hidden hidden xl:block shadow-2xl"
-          >
-            <img 
-              :src="activeImage" 
-              class="max-w-none absolute pointer-events-none"
-              :style="{
-                width: '300%', /* 3x zoom level */
-                height: '300%',
-                left: `-${zoomX * 2}%`,
-                top: `-${zoomY * 2}%`
-              }"
-            />
-          </div>
-        </div>
-
-        <!-- Right Column: Product details and Swatch selector -->
-        <div class="space-y-10 lg:sticky lg:top-32">
-          <!-- Title & Subtitle -->
-          <div>
-            <h1 class="text-4xl md:text-5xl font-serif tracking-wider text-luxury-matte-black mb-1 uppercase">{{ product.name }}</h1>
-            <p class="text-xs uppercase tracking-widest text-luxury-charcoal/60 font-sans">
-              {{ category.title }} VERVE
-            </p>
-          </div>
-
-          <!-- Colorway/Variants selector (Pattern Swatches) -->
-          <div class="space-y-4 pt-4 border-t border-neutral-100">
-            <div class="flex justify-between items-center">
-              <span class="text-xs uppercase tracking-widest text-luxury-charcoal font-semibold">
-                Variations
-              </span>
-              <span class="text-xs italic text-luxury-brass font-serif">{{ selectedVariant.name }}</span>
-            </div>
-            <div class="flex flex-wrap gap-4">
-              <button 
-                v-for="(variant, idx) in variants" 
-                :key="idx" 
-                @click="selectedVariantIdx = idx"
-                :class="[
-                  'w-20 h-20 border transition-all duration-300 relative overflow-hidden flex items-center justify-center p-0.5',
-                  selectedVariantIdx === idx ? 'border-neutral-900 ring-1 ring-neutral-900' : 'border-neutral-200 hover:border-neutral-400'
-                ]"
-                :title="variant.name"
+      <PageState
+        :pending="pending"
+        :error-message="errorMessage"
+        :empty="!product"
+        empty-title="Product not found"
+        empty-message="This product may have been removed or is not yet available."
+      >
+        <template v-if="category && collection && product">
+          <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
+            <div class="relative aspect-square w-full select-none border border-neutral-100 bg-luxury-warm-beige/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+              <div
+                class="relative h-full w-full cursor-zoom-in overflow-hidden"
+                @mouseenter="isZooming = true"
+                @mouseleave="isZooming = false"
+                @mousemove="handleMouseMove"
               >
-                <img 
-                  :src="variant.image" 
-                  :alt="variant.name" 
-                  class="w-full h-full object-cover" 
+                <img
+                  ref="mainImageRef"
+                  :src="activeImage"
+                  :alt="product.name"
+                  class="h-full w-full object-cover transition-opacity duration-300"
+                  @load="onMainImageLoad"
+                >
+
+                <div
+                  v-if="isZooming"
+                  class="pointer-events-none absolute border border-luxury-brass bg-black/10 shadow-[0_0_8px_rgba(0,0,0,0.1)] transition-transform duration-75"
+                  :style="{
+                    width: `${LENS_SIZE}px`,
+                    height: `${LENS_SIZE}px`,
+                    left: `${lensX}px`,
+                    top: `${lensY}px`,
+                  }"
                 />
-              </button>
+              </div>
+
+              <div
+                v-if="isZooming && zoomPanelStyle"
+                class="absolute left-[105%] top-0 z-30 hidden h-[480px] w-[480px] overflow-hidden border border-neutral-200 bg-white shadow-2xl xl:block"
+              >
+                <img
+                  :src="activeImage"
+                  alt=""
+                  class="pointer-events-none absolute max-w-none select-none"
+                  :style="zoomPanelStyle"
+                >
+              </div>
+            </div>
+
+            <div class="space-y-8 lg:sticky lg:top-32 lg:space-y-10">
+              <div>
+                <h1 class="mb-1 font-serif text-3xl uppercase tracking-wider text-luxury-matte-black sm:text-4xl md:text-5xl">
+                  {{ product.name }}
+                </h1>
+                <p class="font-sans text-xs uppercase tracking-widest text-luxury-charcoal/60">
+                  {{ category.title }} · Verve
+                </p>
+              </div>
+
+              <div v-if="variants.length > 1" class="space-y-4 border-t border-neutral-100 pt-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold uppercase tracking-widest text-luxury-charcoal">
+                    Variations
+                  </span>
+                  <span class="font-serif text-xs italic text-luxury-brass">
+                    {{ selectedVariant.label }}
+                  </span>
+                </div>
+                <div class="flex flex-wrap gap-3 sm:gap-4">
+                  <button
+                    v-for="(variant, idx) in variants"
+                    :key="variant.id"
+                    type="button"
+                    :class="[
+                      'relative h-16 w-16 overflow-hidden border transition-all duration-300 sm:h-20 sm:w-20',
+                      selectedVariantIdx === idx ? 'border-neutral-900 ring-1 ring-neutral-900' : 'border-neutral-200 hover:border-neutral-400',
+                    ]"
+                    :title="variant.label"
+                    @click="selectedVariantIdx = idx"
+                  >
+                    <img
+                      :src="variant.image"
+                      :alt="variant.label"
+                      class="h-full w-full object-cover"
+                    >
+                  </button>
+                </div>
+              </div>
+
+              <div class="py-2 font-mono text-xs uppercase tracking-widest text-luxury-charcoal">
+                Reference:
+                <span class="ml-2 font-sans font-semibold text-luxury-matte-black">
+                  {{ product.sku }}
+                </span>
+              </div>
+
+              <p
+                v-if="product.description"
+                class="border-t border-neutral-100 pt-4 text-sm font-light leading-relaxed text-luxury-charcoal"
+              >
+                {{ product.description }}
+              </p>
             </div>
           </div>
 
-          <!-- SKU Code -->
-          <div class="text-xs text-luxury-charcoal font-mono tracking-widest uppercase py-2">
-            Reference: <span class="text-luxury-matte-black font-semibold font-sans ml-2">{{ product.sku }}-{{ selectedVariant.skuSuffix }}</span>
+          <div v-if="mockups.length" class="mt-16 border-t border-neutral-200 pt-12 sm:mt-20 sm:pt-16">
+            <h3 class="mb-8 text-center text-xs font-semibold uppercase tracking-widest text-luxury-charcoal sm:mb-12">
+              Room Inspirations
+            </h3>
+            <div
+              class="mx-auto grid max-w-6xl grid-cols-1 items-end gap-6 sm:gap-8"
+              :class="mockupGridClass"
+            >
+              <div
+                v-for="(mockup, index) in mockups"
+                :key="`${mockup}-${index}`"
+                :class="mockupItemClass(index)"
+              >
+                <CatalogImage
+                  :src="mockup"
+                  :alt="`Room inspiration ${index + 1}`"
+                  :aspect="mockupAspect(index)"
+                  :overlay="false"
+                />
+              </div>
+            </div>
           </div>
-
-          <!-- Description paragraph -->
-          <p class="text-luxury-charcoal font-light leading-relaxed text-sm pt-4 border-t border-neutral-100">
-            The interlaced foliage gives way to a beautiful pattern design. Its refinement has inspired couturiers and decorators alike. Silky weaves cover the base fabric with pure luxury, bringing an elegant combination of texture depth and subtle modern lusters.
-          </p>
-
-
-
-        </div>
-
-      </div>
-
-      <!-- Full-Width In-Room Mockups Previews below -->
-      <div class="pt-16 border-t border-neutral-200 mt-20">
-        <h3 class="text-xs uppercase tracking-widest text-luxury-charcoal mb-12 font-semibold text-center">Room Inspirations</h3>
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-end max-w-6xl mx-auto">
-          <!-- Left close-up drapery / vertical portrait mockup (takes 5 cols) -->
-          <div class="md:col-span-5 aspect-[3/4] bg-neutral-100 overflow-hidden relative shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-            <img :src="mockups[0]" alt="Close Up View" class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
-            <div class="absolute inset-0 bg-black/5 pointer-events-none"></div>
-          </div>
-          <!-- Right full room mockup (takes 7 cols) -->
-          <div class="md:col-span-7 aspect-[4/3] bg-neutral-100 overflow-hidden relative shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-            <img :src="mockups[1]" alt="Full Room Setting" class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
-            <div class="absolute inset-0 bg-black/5 pointer-events-none"></div>
-          </div>
-        </div>
-      </div>
-
+        </template>
+      </PageState>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
-
 const route = useRoute()
 const categorySlug = route.params.category as string
 const collectionSlug = route.params.collection as string
 const productSlug = route.params.product as string
 
-const { data: categories } = await useCatalog()
-const category = categories.value?.find(cat => cat.slug === categorySlug)
-if (!category) {
-  throw createError({ statusCode: 404, statusMessage: 'Category not found' })
-}
+const { data: categories, pending, error } = await useCatalog()
 
-const collection = category.collections.find(coll => coll.slug === collectionSlug)
-if (!collection) {
-  throw createError({ statusCode: 404, statusMessage: 'Collection not found' })
-}
+const errorMessage = computed(() => error.value?.message ?? null)
 
-const product = collection.products.find(p => p.sku.toLowerCase() === productSlug)
-if (!product) {
-  throw createError({ statusCode: 404, statusMessage: 'Product not found' })
-}
+const category = computed(() => categories.value?.find(item => item.slug === categorySlug))
+const collection = computed(() =>
+  category.value?.collections.find(item => item.slug === collectionSlug),
+)
+const product = computed(() =>
+  collection.value?.products.find(item => item.sku.toLowerCase() === productSlug),
+)
 
-// Variants definitions (Swatches with actual images)
-const variants = [
-  { name: 'Antique Gold', skuSuffix: 'GD', colorHex: '#D4AF37', image: product.image },
-  { name: 'Royal Emerald', skuSuffix: 'EM', colorHex: '#0B4F30', image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Midnight Blue', skuSuffix: 'MB', colorHex: '#14213d', image: 'https://images.unsplash.com/photo-1617104424032-b9bd6972d0e4?auto=format&fit=crop&w=800&q=80' }
-]
+const variants = computed(() => {
+  if (!product.value) {
+    return []
+  }
+
+  const images = [product.value.image, ...product.value.secondaryImages].filter(Boolean)
+  const uniqueImages = [...new Set(images)]
+
+  return uniqueImages.map((image, index) => ({
+    id: `${product.value!.id}-${index}`,
+    image,
+    label: index === 0 ? 'Primary' : `Variation ${index}`,
+  }))
+})
 
 const selectedVariantIdx = ref(0)
-const selectedVariant = computed(() => variants[selectedVariantIdx.value])
-const activeImage = computed(() => selectedVariant.value.image)
+const selectedVariant = computed(() => variants.value[selectedVariantIdx.value] ?? { label: 'Primary', image: '' })
+const activeImage = computed(() => selectedVariant.value.image || product.value?.image || '')
 
-// In-room mockup previews (Vertical close up & wider scene view)
-const mockups = [
-  'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80'
-]
+const mockups = computed(() => product.value?.mockupImages ?? [])
 
-// Zoom implementation
+const mockupGridClass = computed(() =>
+  mockups.value.length === 1 ? 'md:grid-cols-1' : 'md:grid-cols-12',
+)
+
+function mockupItemClass(index: number) {
+  if (mockups.value.length === 1) {
+    return 'md:col-span-12'
+  }
+
+  return index === 0 ? 'md:col-span-5' : 'md:col-span-7'
+}
+
+function mockupAspect(index: number): '3/4' | '4/3' {
+  if (mockups.value.length === 1) {
+    return '4/3'
+  }
+
+  return index === 0 ? '3/4' : '4/3'
+}
+
+watch(product, () => {
+  selectedVariantIdx.value = 0
+})
+
+watch([pending, categories], () => {
+  if (!pending.value && categories.value) {
+    if (!category.value) {
+      throw createError({ statusCode: 404, statusMessage: 'Category not found' })
+    }
+
+    if (!collection.value) {
+      throw createError({ statusCode: 404, statusMessage: 'Collection not found' })
+    }
+
+    if (!product.value) {
+      throw createError({ statusCode: 404, statusMessage: 'Product not found' })
+    }
+  }
+})
+
+const LENS_SIZE = 180
+const PANEL_SIZE = 480
+const ZOOM_RATIO = PANEL_SIZE / LENS_SIZE
+
+type CoverMetrics = {
+  scale: number
+  renderedW: number
+  renderedH: number
+  offsetX: number
+  offsetY: number
+  containerW: number
+  containerH: number
+}
+
 const isZooming = ref(false)
-const zoomX = ref(0)
-const zoomY = ref(0)
 const lensX = ref(0)
 const lensY = ref(0)
 const mainImageRef = ref<HTMLImageElement | null>(null)
+const coverMetrics = ref<CoverMetrics | null>(null)
 
-const handleMouseMove = (e: MouseEvent) => {
-  if (!mainImageRef.value) return
-  const { left, top, width, height } = mainImageRef.value.getBoundingClientRect()
-  
-  // Relative coordinates inside the image container (0 to 100)
-  let x = ((e.clientX - left) / width) * 100
-  let y = ((e.clientY - top) / height) * 100
-  
-  // Constrain boundaries (0 to 100)
-  x = Math.max(0, Math.min(100, x))
-  y = Math.max(0, Math.min(100, y))
-  
-  zoomX.value = x
-  zoomY.value = y
-  
-  // Position of the 180px lens relative to the image
-  const pxX = e.clientX - left
-  const pxY = e.clientY - top
-  
-  lensX.value = Math.max(0, Math.min(width - 180, pxX - 90))
-  lensY.value = Math.max(0, Math.min(height - 180, pxY - 90))
+const zoomPanelStyle = computed(() => {
+  const metrics = coverMetrics.value
+
+  if (!metrics) {
+    return null
+  }
+
+  const zoomW = metrics.renderedW * ZOOM_RATIO
+  const zoomH = metrics.renderedH * ZOOM_RATIO
+  const lensCenterX = lensX.value + LENS_SIZE / 2
+  const lensCenterY = lensY.value + LENS_SIZE / 2
+  const naturalX = (lensCenterX - metrics.offsetX) / metrics.scale
+  const naturalY = (lensCenterY - metrics.offsetY) / metrics.scale
+  const centerXInZoom = naturalX * metrics.scale * ZOOM_RATIO
+  const centerYInZoom = naturalY * metrics.scale * ZOOM_RATIO
+
+  return {
+    width: `${zoomW}px`,
+    height: `${zoomH}px`,
+    left: `${PANEL_SIZE / 2 - centerXInZoom}px`,
+    top: `${PANEL_SIZE / 2 - centerYInZoom}px`,
+  }
+})
+
+function updateCoverMetrics() {
+  const image = mainImageRef.value
+
+  if (!image?.naturalWidth || !image.naturalHeight) {
+    coverMetrics.value = null
+    return
+  }
+
+  const { width, height } = image.getBoundingClientRect()
+  const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight)
+  const renderedW = image.naturalWidth * scale
+  const renderedH = image.naturalHeight * scale
+
+  coverMetrics.value = {
+    scale,
+    renderedW,
+    renderedH,
+    offsetX: (width - renderedW) / 2,
+    offsetY: (height - renderedH) / 2,
+    containerW: width,
+    containerH: height,
+  }
 }
 
+function onMainImageLoad() {
+  updateCoverMetrics()
+}
+
+function handleMouseMove(event: MouseEvent) {
+  if (!mainImageRef.value) {
+    return
+  }
+
+  const { left, top, width, height } = mainImageRef.value.getBoundingClientRect()
+  const pxX = event.clientX - left
+  const pxY = event.clientY - top
+
+  lensX.value = Math.max(0, Math.min(width - LENS_SIZE, pxX - LENS_SIZE / 2))
+  lensY.value = Math.max(0, Math.min(height - LENS_SIZE, pxY - LENS_SIZE / 2))
+}
+
+watch(activeImage, () => {
+  coverMetrics.value = null
+})
+
+watch(isZooming, (zooming) => {
+  if (zooming) {
+    updateCoverMetrics()
+  }
+})
+
 useHead({
-  title: `${product.name} | ${collection.title} | Verve Luxury Interiors`
+  title: computed(() =>
+    product.value && collection.value
+      ? `${product.value.name} | ${collection.value.title} | Verve Luxury Interiors`
+      : 'Product | Verve Luxury Interiors',
+  ),
 })
 </script>

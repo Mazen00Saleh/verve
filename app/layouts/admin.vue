@@ -56,6 +56,8 @@
         </main>
       </div>
     </div>
+
+    <AdminToast />
   </div>
 </template>
 
@@ -71,6 +73,8 @@ const navItems = [
   { label: 'Collections', to: '/admin/collections' },
   { label: 'Products', to: '/admin/products' },
   { label: 'Brochures', to: '/admin/brochures' },
+  { label: 'Hero Slides', to: '/admin/hero-slides' },
+  { label: 'Contact Messages', to: '/admin/contact' },
 ]
 
 const userEmail = computed(() => user.value?.email ?? 'Admin user')

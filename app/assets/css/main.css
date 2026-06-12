@@ -20,6 +20,62 @@
   .btn-outline {
     @apply inline-block px-8 py-3 border border-luxury-matte-black text-luxury-matte-black font-sans text-sm uppercase tracking-widest hover:bg-luxury-matte-black hover:text-luxury-ivory transition-colors duration-300;
   }
+
+  .section-eyebrow {
+    @apply mb-3 block text-[10px] font-semibold uppercase tracking-[0.25em] text-luxury-brass sm:mb-4 sm:text-xs sm:tracking-[0.2em];
+  }
+
+  .section-title {
+    @apply font-serif text-3xl text-luxury-matte-black sm:text-4xl md:text-5xl;
+  }
+
+  .section-intro {
+    @apply font-light leading-relaxed text-luxury-charcoal;
+  }
+
+  .catalog-grid {
+    @apply grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-10 md:gap-x-8 md:gap-y-12;
+  }
+
+  .catalog-card {
+    @apply block min-w-0;
+  }
+
+  .catalog-card-body {
+    @apply mt-2 text-center sm:mt-5 md:mt-6;
+  }
+
+  .catalog-card-title {
+    @apply font-serif text-sm leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass sm:text-xl md:text-2xl lg:text-3xl;
+  }
+
+  .catalog-card-description {
+    @apply mx-auto mb-1 mt-1 line-clamp-2 max-w-sm font-light text-[10px] leading-snug text-luxury-charcoal sm:mb-4 sm:mt-2 sm:line-clamp-none sm:text-sm md:text-base;
+  }
+
+  .catalog-card-cta {
+    @apply hidden border-b border-luxury-matte-black pb-0.5 text-[10px] uppercase tracking-widest text-luxury-matte-black transition-colors group-hover:border-luxury-brass group-hover:text-luxury-brass sm:inline-block sm:text-[11px];
+  }
+
+  .catalog-card-meta {
+    @apply mt-1 font-sans text-[10px] font-light tracking-wide text-luxury-charcoal/60 sm:mt-1.5 sm:text-xs;
+  }
+
+  .catalog-card-eyebrow {
+    @apply mb-0.5 text-[8px] uppercase tracking-[0.15em] text-luxury-brass sm:mb-1 sm:text-[10px] sm:tracking-[0.2em];
+  }
+
+  .page-shell {
+    @apply min-h-screen bg-luxury-ivory pb-20 pt-24 sm:pb-24 sm:pt-28 md:pt-32;
+  }
+
+  .page-container {
+    @apply container mx-auto px-4 sm:px-6 lg:px-12;
+  }
+
+  .back-link {
+    @apply inline-flex items-center text-xs uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass;
+  }
 }
 
 /* Custom scrollbar */

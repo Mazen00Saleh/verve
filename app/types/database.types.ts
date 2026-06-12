@@ -18,6 +18,7 @@ export type Database = {
           description: string | null
           file_url: string | null
           id: string
+          image_url: string | null
           name: string
         }
         Insert: {
@@ -25,6 +26,7 @@ export type Database = {
           description?: string | null
           file_url?: string | null
           id?: string
+          image_url?: string | null
           name: string
         }
         Update: {
@@ -32,7 +34,74 @@ export type Database = {
           description?: string | null
           file_url?: string | null
           id?: string
+          image_url?: string | null
           name?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+          status?: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      hero_slides: {
+        Row: {
+          created_at: string | null
+          cta_label: string
+          description: string | null
+          id: string
+          is_active: boolean
+          left_image_url: string
+          link_url: string
+          order_index: number
+          right_image_url: string
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          cta_label?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          left_image_url: string
+          link_url: string
+          order_index?: number
+          right_image_url: string
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          cta_label?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          left_image_url?: string
+          link_url?: string
+          order_index?: number
+          right_image_url?: string
+          title?: string
         }
         Relationships: []
       }
