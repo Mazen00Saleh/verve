@@ -156,6 +156,10 @@ const currentSlide = ref(0)
 let autoplayTimer: ReturnType<typeof setInterval> | null = null
 
 const startAutoplay = () => {
+  if (import.meta.server) {
+    return
+  }
+
   stopAutoplay()
 
   if (slides.value.length <= 1) {
@@ -170,6 +174,7 @@ const startAutoplay = () => {
 const stopAutoplay = () => {
   if (autoplayTimer) {
     clearInterval(autoplayTimer)
+    autoplayTimer = null
   }
 }
 
@@ -197,10 +202,12 @@ const selectSlide = (index: number) => {
 watch(slides, (value) => {
   currentSlide.value = 0
 
-  if (value.length > 1) {
-    startAutoplay()
-  } else {
-    stopAutoplay()
+  if (import.meta.client) {
+    if (value.length > 1) {
+      startAutoplay()
+    } else {
+      stopAutoplay()
+    }
   }
 }, { immediate: true })
 
