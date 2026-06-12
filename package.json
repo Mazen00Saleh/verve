@@ -17,10 +17,14 @@
     "@vercel/speed-insights": "^2.0.0",
     "browser-image-compression": "^2.0.2",
     "nuxt": "^4.4.4",
-    "vue": "^3.5.33",
-    "vue-router": "^5.0.6"
+    "vue": "^3.5.33"
   },
   "devDependencies": {
     "@nuxt/icon": "^2.2.2"
+  },
+  "overrides": {
+    "@vercel/speed-insights": {
+      "vue-router": "^5.1.0"
+    }
   }
 }

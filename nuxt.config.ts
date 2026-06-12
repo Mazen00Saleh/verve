@@ -2,7 +2,13 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', '@nuxt/icon', '@nuxtjs/supabase','@vercel/speed-insights'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/google-fonts',
+    '@nuxt/icon',
+    '@nuxtjs/supabase',
+    '@vercel/speed-insights/nuxt',
+  ],
   supabase: {
     redirect: false,
     useSsrCookies: true,
