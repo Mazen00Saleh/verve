@@ -6,7 +6,7 @@
     
     <div class="flex w-max animate-scroll">
       <div class="flex items-center gap-16 px-8" v-for="n in 2" :key="n">
-        <span v-for="(brand, i) in brands" :key="`${n}-${i}`" class="text-xl md:text-2xl font-serif text-luxury-charcoal uppercase tracking-[0.1em] opacity-60 hover:opacity-100 transition-opacity duration-300 cursor-default select-none">
+        <span v-for="(brand, i) in brands" :key="`${n}-${i}`" class="cursor-default select-none font-serif text-xl uppercase tracking-[0.1em] text-luxury-charcoal md:text-2xl">
           {{ brand }}
         </span>
       </div>

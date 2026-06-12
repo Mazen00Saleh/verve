@@ -55,7 +55,7 @@
             </h3>
             <button
               type="button"
-              class="flex shrink-0 items-center space-x-1.5 text-xs font-semibold uppercase tracking-widest text-luxury-brass transition-colors hover:text-white"
+              class="flex shrink-0 items-center space-x-1.5 text-xs font-semibold uppercase tracking-widest text-luxury-brass-light transition-colors hover:text-white"
               @click="closeBrochure"
             >
               <span>Close</span>

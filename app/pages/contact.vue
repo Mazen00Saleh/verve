@@ -92,7 +92,7 @@
             <h3 class="mb-4 font-serif text-xl text-luxury-matte-black">Contact Information</h3>
             <p class="mb-1 font-light text-luxury-charcoal">Telephone : 06-5925041</p>
             <p class="mb-1 font-light text-luxury-charcoal">Mobile: 079 0202 838</p>
-            <a href="mailto:info@verve-group.com" class="block w-max border-b border-luxury-brass pb-1 text-luxury-brass transition-colors hover:text-luxury-matte-black">info@verve-group.com</a>
+            <a href="mailto:info@verve-group.com" class="block w-max border-b border-luxury-brass-contrast pb-1 text-luxury-brass-contrast transition-colors hover:text-luxury-matte-black">info@verve-group.com</a>
           </div>
           <div>
             <h3 class="mb-4 font-serif text-xl text-luxury-matte-black">Working Hours</h3>
@@ -115,7 +115,7 @@
             :href="mapsDirectionsUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex w-max items-center gap-2 border-b border-luxury-brass pb-1 text-sm text-luxury-brass transition-colors hover:text-luxury-matte-black"
+            class="inline-flex w-max items-center gap-2 border-b border-luxury-brass-contrast pb-1 text-sm text-luxury-brass-contrast transition-colors hover:text-luxury-matte-black"
           >
             <span>Get directions</span>
             <Icon name="lucide:external-link" size="14" />
@@ -180,6 +180,6 @@ useHead({
 
 <style scoped>
 .contact-input {
-  @apply w-full border-b border-luxury-charcoal bg-transparent py-2 text-base outline-none transition-colors focus:border-luxury-brass disabled:opacity-60;
+  @apply w-full border-b border-luxury-charcoal bg-transparent py-2 text-base text-luxury-matte-black outline-none transition-colors focus:border-luxury-brass-contrast disabled:opacity-60;
 }
 </style>

@@ -11,7 +11,7 @@
         </div>
         <NuxtLink
           to="/collections"
-          class="hidden border-b border-luxury-matte-black pb-1 text-sm uppercase tracking-widest transition-colors hover:border-luxury-brass hover:text-luxury-brass md:inline-block"
+          class="hidden border-b border-luxury-matte-black pb-1 text-sm uppercase tracking-widest transition-colors hover:border-luxury-brass-contrast hover:text-luxury-brass-contrast md:inline-block"
         >
           View All
         </NuxtLink>
@@ -26,7 +26,7 @@
       >
         <div class="catalog-grid lg:grid-cols-3">
           <NuxtLink
-            v-for="collection in featuredCollections"
+            v-for="(collection, index) in featuredCollections"
             :key="`${collection.categorySlug}-${collection.slug}`"
             :to="`/collections/${collection.categorySlug}/${collection.slug}`"
             class="catalog-card group block"
@@ -36,6 +36,7 @@
               :alt="collection.title"
               aspect="3/4"
               overlay
+              :priority="index === 0"
             />
             <div class="catalog-card-body">
               <p class="catalog-card-eyebrow">

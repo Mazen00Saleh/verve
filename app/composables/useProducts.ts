@@ -1,5 +1,7 @@
 import type { Tables, TablesInsert } from '~/types/database.types'
+import { PAGINATION } from '~/config/pagination'
 import { getErrorMessage } from '~/utils/errors'
+import { buildPaginatedResult, getPaginationRange, type PaginatedResult } from '~/utils/pagination'
 import { collectUrls } from '~/utils/storage'
 
 export type Product = Tables<'products'>
@@ -30,6 +32,29 @@ export function useProducts() {
 
   const loading = ref(false)
   const error = ref<string | null>(null)
+
+  async function fetchPage(page: number, pageSize = PAGINATION['admin-products']): Promise<PaginatedResult<ProductWithRelations>> {
+    const { from, to } = getPaginationRange(page, pageSize)
+
+    const { data, error: fetchError, count } = await supabase
+      .from('products')
+      .select(`
+        *,
+        collections (
+          name,
+          categories (name)
+        ),
+        product_images (*)
+      `, { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(from, to)
+
+    if (fetchError) {
+      throw fetchError
+    }
+
+    return buildPaginatedResult((data ?? []) as ProductWithRelations[], count ?? 0, page, pageSize)
+  }
 
   async function fetchAll(): Promise<ProductWithRelations[]> {
     loading.value = true
@@ -287,6 +312,7 @@ export function useProducts() {
     loading: readonly(loading),
     error: readonly(error),
     fetchAll,
+    fetchPage,
     fetchOne,
     create,
     update,

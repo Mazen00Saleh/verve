@@ -19,8 +19,13 @@ export default {
           'warm-beige': '#D8C3A5',
           'matte-black': '#1A1A1A',
           charcoal: '#333333',
+          muted: '#4A4A4A',
           taupe: '#483C32',
-          brass: '#BCA153',
+          brass: {
+            DEFAULT: '#BCA153',
+            contrast: '#7A6220',
+            light: '#E2C875',
+          },
         }
       },
       fontFamily: {

@@ -6,23 +6,36 @@
   body {
     @apply bg-luxury-ivory text-luxury-matte-black font-sans antialiased;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-normal;
+  }
+
+  :focus {
+    @apply outline-none;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2;
+    outline-color: theme('colors.luxury.brass.contrast');
   }
 }
 
 @layer components {
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-sm focus:bg-luxury-matte-black focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-luxury-ivory;
+  }
+
   .btn-primary {
     @apply inline-block px-8 py-3 bg-luxury-matte-black text-luxury-ivory font-sans text-sm uppercase tracking-widest hover:bg-luxury-charcoal transition-colors duration-300;
   }
-  
+
   .btn-outline {
     @apply inline-block px-8 py-3 border border-luxury-matte-black text-luxury-matte-black font-sans text-sm uppercase tracking-widest hover:bg-luxury-matte-black hover:text-luxury-ivory transition-colors duration-300;
   }
 
   .section-eyebrow {
-    @apply mb-3 block text-[10px] font-semibold uppercase tracking-[0.25em] text-luxury-brass sm:mb-4 sm:text-xs sm:tracking-[0.2em];
+    @apply mb-3 block text-[10px] font-semibold uppercase tracking-[0.25em] text-luxury-brass-contrast sm:mb-4 sm:text-xs sm:tracking-[0.2em];
   }
 
   .section-title {
@@ -46,7 +59,7 @@
   }
 
   .catalog-card-title {
-    @apply font-serif text-xs leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass sm:text-sm md:text-base lg:text-lg;
+    @apply font-serif text-xs leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass-contrast sm:text-sm md:text-base lg:text-lg;
   }
 
   .catalog-card-description {
@@ -54,15 +67,15 @@
   }
 
   .catalog-card-cta {
-    @apply hidden border-b border-luxury-matte-black pb-0.5 text-[10px] uppercase tracking-widest text-luxury-matte-black transition-colors group-hover:border-luxury-brass group-hover:text-luxury-brass sm:inline-block sm:text-[11px];
+    @apply hidden border-b border-luxury-matte-black pb-0.5 text-[10px] uppercase tracking-widest text-luxury-matte-black transition-colors group-hover:border-luxury-brass-contrast group-hover:text-luxury-brass-contrast sm:inline-block sm:text-[11px];
   }
 
   .catalog-card-meta {
-    @apply mt-1 font-sans text-[10px] font-light tracking-wide text-luxury-charcoal/60 sm:mt-1.5 sm:text-xs;
+    @apply mt-1 font-sans text-[10px] font-light tracking-wide text-luxury-muted sm:mt-1.5 sm:text-xs;
   }
 
   .catalog-card-eyebrow {
-    @apply mb-0.5 text-[8px] uppercase tracking-[0.15em] text-luxury-brass sm:mb-1 sm:text-[10px] sm:tracking-[0.2em];
+    @apply mb-0.5 text-[8px] uppercase tracking-[0.15em] text-luxury-brass-contrast sm:mb-1 sm:text-[10px] sm:tracking-[0.2em];
   }
 
   .page-shell {
@@ -74,7 +87,7 @@
   }
 
   .back-link {
-    @apply inline-flex items-center text-xs uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass;
+    @apply inline-flex items-center text-xs uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass-contrast;
   }
 }
 
@@ -92,39 +105,33 @@
   background: #BCA153;
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Page Transitions */
+/* Page transitions — opacity/transform only (no blur for perf) */
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-              transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-              filter 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .page-enter-from {
   opacity: 0;
-  transform: translateY(12px);
-  filter: blur(4px);
+  transform: translateY(8px);
 }
 
 .page-leave-to {
   opacity: 0;
-  transform: translateY(-12px);
-  filter: blur(4px);
+  transform: translateY(-8px);
 }
 
-/* Layout Transitions */
 .layout-enter-active,
 .layout-leave-active {
-  transition: opacity 0.4s ease;
+  transition: opacity 0.35s ease;
 }
 
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
 }
-

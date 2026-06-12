@@ -39,11 +39,12 @@
           >
             <div class="catalog-grid md:grid-cols-3">
               <ProductCard
-                v-for="product in items"
+                v-for="(product, index) in items"
                 :key="product.id"
                 :product="product"
                 :category-slug="category.slug"
                 :collection-slug="collection.slug"
+                :priority="page === 1 && index === 0"
               />
             </div>
 

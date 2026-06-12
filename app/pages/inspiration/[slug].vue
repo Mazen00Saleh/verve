@@ -21,7 +21,7 @@
           <div class="mb-6 text-center sm:mb-8">
             <span class="section-eyebrow">Brochure</span>
             <h1 class="section-title">{{ brochure.title }}</h1>
-            <p v-if="brochure.date" class="mt-3 text-sm font-light text-luxury-charcoal/60">
+            <p v-if="brochure.date" class="mt-3 text-sm font-light text-luxury-muted">
               {{ brochure.date }}
             </p>
             <p v-if="brochure.description" class="section-intro mx-auto mt-4 max-w-2xl text-sm sm:text-base">

@@ -9,7 +9,7 @@
           v-for="link in leftLinks"
           :key="link.to"
           :to="link.to"
-          class="text-sm uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass lg:text-base"
+          class="text-sm uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass-contrast lg:text-base"
         >
           {{ link.label }}
         </NuxtLink>
@@ -31,7 +31,7 @@
             v-for="link in rightLinks"
             :key="link.to"
             :to="link.to"
-            class="text-sm uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass lg:text-base"
+            class="text-sm uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass-contrast lg:text-base"
           >
             {{ link.label }}
           </NuxtLink>
@@ -39,7 +39,7 @@
 
         <button
           type="button"
-          class="ml-2 inline-flex items-center justify-center p-2 text-luxury-matte-black transition-colors hover:text-luxury-brass md:hidden"
+          class="ml-2 inline-flex items-center justify-center p-2 text-luxury-matte-black transition-colors hover:text-luxury-brass-contrast md:hidden"
           :aria-expanded="mobileOpen"
           aria-label="Toggle navigation menu"
           @click="toggleMobile"
@@ -59,7 +59,7 @@
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="px-2 py-3 text-sm uppercase tracking-widest text-luxury-matte-black transition-colors hover:text-luxury-brass"
+            class="px-2 py-3 text-sm uppercase tracking-widest text-luxury-matte-black transition-colors hover:text-luxury-brass-contrast"
             @click="closeMobile"
           >
             {{ link.label }}

@@ -24,26 +24,33 @@
           ]"
         >
           <div class="relative hidden h-full w-[22%] overflow-hidden lg:block">
-            <div
-              class="h-full w-full bg-cover bg-center transition-transform duration-[8000ms] ease-out"
+            <img
+              :src="slide.leftImage"
+              alt=""
+              aria-hidden="true"
+              class="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-[8000ms] ease-out"
               :style="{
-                backgroundImage: `url(${slide.leftImage})`,
                 transform: currentSlide === index ? 'scale(1.05)' : 'scale(1.15)',
               }"
-            />
+              :loading="index === 0 ? 'eager' : 'lazy'"
+              :fetchpriority="index === 0 ? 'high' : 'auto'"
+              decoding="async"
+              width="400"
+              height="600"
+            >
             <div class="absolute inset-0 bg-black/10" />
           </div>
 
           <div
-            class="relative z-20 flex w-full flex-col justify-center bg-luxury-ivory px-6 py-12 text-left transition-all duration-1000 delay-300 sm:px-10 md:w-[40%] md:py-16 lg:w-[26%] lg:px-16"
+            class="relative z-20 flex w-full flex-col justify-center bg-luxury-ivory px-8 py-16 text-left transition-all duration-1000 delay-300 sm:px-12 md:w-[40%] lg:w-[26%] lg:px-16"
             :style="{
               transform: currentSlide === index ? 'translateY(0)' : 'translateY(20px)',
               opacity: currentSlide === index ? '1' : '0',
             }"
           >
-            <div class="space-y-5 sm:space-y-6">
+            <div class="flex min-h-[280px] flex-col justify-center space-y-6 sm:min-h-[300px]">
               <h2
-                class="font-serif text-3xl uppercase leading-tight tracking-wide text-luxury-matte-black transition-all duration-700 delay-500 sm:text-4xl lg:text-5xl"
+                class="line-clamp-3 min-h-[4.5rem] font-serif text-2xl uppercase leading-tight tracking-wide text-luxury-matte-black transition-all duration-700 delay-500 sm:min-h-[5.25rem] sm:text-3xl lg:min-h-[6rem] lg:text-4xl"
                 :style="{
                   transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
                   opacity: currentSlide === index ? '1' : '0',
@@ -52,7 +59,7 @@
                 {{ slide.title }}
               </h2>
               <p
-                class="text-xs font-light leading-relaxed text-luxury-charcoal transition-all duration-700 delay-700 sm:text-sm"
+                class="line-clamp-4 min-h-[4.5rem] text-xs font-light leading-relaxed text-luxury-charcoal transition-all duration-700 delay-700 sm:min-h-[5rem] sm:text-sm"
                 :style="{
                   transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
                   opacity: currentSlide === index ? '1' : '0',
@@ -74,13 +81,19 @@
           </div>
 
           <div class="relative h-full flex-grow overflow-hidden">
-            <div
-              class="h-full w-full bg-cover bg-center transition-transform duration-[8000ms] ease-out"
+            <img
+              :src="slide.rightImage"
+              :alt="slide.title"
+              class="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-[8000ms] ease-out"
               :style="{
-                backgroundImage: `url(${slide.rightImage})`,
                 transform: currentSlide === index ? 'scale(1)' : 'scale(1.1)',
               }"
-            />
+              :loading="index === 0 ? 'eager' : 'lazy'"
+              :fetchpriority="index === 0 ? 'high' : 'auto'"
+              decoding="async"
+              width="1200"
+              height="800"
+            >
             <div class="absolute inset-0 bg-black/[0.03]" />
           </div>
         </div>
@@ -89,7 +102,7 @@
       <button
         v-if="slides.length > 1"
         type="button"
-        class="absolute left-4 top-1/2 z-30 -translate-y-1/2 p-2 text-white/50 transition-all duration-300 hover:scale-110 hover:text-white sm:left-6"
+        class="absolute left-4 top-1/2 z-30 -translate-y-1/2 p-2 text-white/90 transition-all duration-300 hover:scale-110 hover:text-white sm:left-6"
         aria-label="Previous slide"
         @click="prevSlide"
       >
@@ -99,7 +112,7 @@
       <button
         v-if="slides.length > 1"
         type="button"
-        class="absolute right-4 top-1/2 z-30 -translate-y-1/2 p-2 text-white/50 transition-all duration-300 hover:scale-110 hover:text-white sm:right-6"
+        class="absolute right-4 top-1/2 z-30 -translate-y-1/2 p-2 text-white/90 transition-all duration-300 hover:scale-110 hover:text-white sm:right-6"
         aria-label="Next slide"
         @click="nextSlide"
       >
@@ -113,7 +126,7 @@
           type="button"
           :class="[
             'h-1.5 rounded-full transition-all duration-300',
-            currentSlide === index ? 'w-6 bg-luxury-brass' : 'w-1.5 bg-white/40 hover:bg-white/70',
+            currentSlide === index ? 'w-6 bg-luxury-brass-light' : 'w-1.5 bg-white/70 hover:bg-white',
           ]"
           :aria-label="`Go to slide ${index + 1}`"
           @click="selectSlide(index)"
@@ -150,6 +163,16 @@ const slides = computed<PublicHeroSlide[]>(() => {
     link: slide.link,
     ctaLabel: 'Explore Collection',
   }))
+})
+
+const lcpImage = computed(() => slides.value[0]?.rightImage ?? null)
+
+useHead({
+  link: computed(() => (
+    lcpImage.value
+      ? [{ rel: 'preload', as: 'image', href: lcpImage.value, fetchpriority: 'high' }]
+      : []
+  )),
 })
 
 const currentSlide = ref(0)

@@ -2,7 +2,7 @@
   <div class="page-shell">
     <div class="page-container py-8 sm:py-12 md:py-16">
       <div class="max-w-4xl mx-auto text-center mb-24">
-        <span class="text-luxury-brass uppercase tracking-[0.3em] text-xs font-semibold mb-6 block">Our Heritage</span>
+        <span class="mb-6 block text-xs font-semibold uppercase tracking-[0.3em] text-luxury-brass-contrast">Our Heritage</span>
         <h1 class="text-5xl md:text-7xl font-serif text-luxury-matte-black mb-8 leading-tight">A Legacy of <span class="italic font-light">Elegance</span></h1>
         <p class="text-luxury-charcoal text-lg font-light leading-relaxed">
            Today, Verve is recognized as one of the largest suppliers of furnishing fabrics and wallpapers in the region. Our philosophy remains unchanged: to constantly evolve and innovate while preserving the core values of quality, creativity, and integrity that have defined us since 2006. We are not just supplying materials; we are crafting experiences that shape the spaces where life happens.

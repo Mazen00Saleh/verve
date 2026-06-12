@@ -7,6 +7,7 @@
       :src="collection.heroImage"
       :alt="collection.title"
       aspect="4/5"
+      :priority="priority"
       overlay
       container-class="shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
     />
@@ -23,5 +24,6 @@ import type { Collection } from '~/data/catalog'
 defineProps<{
   collection: Collection
   categorySlug: string
+  priority?: boolean
 }>()
 </script>

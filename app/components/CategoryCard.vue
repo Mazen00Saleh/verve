@@ -3,7 +3,7 @@
     <CatalogImage
       :src="category.image"
       :alt="category.title"
-      aspect="4/3"
+      :aspect="compact ? '1/1' : '4/3'"
       overlay
     />
     <div class="catalog-card-body mx-auto text-center">
@@ -18,5 +18,6 @@ import type { Category } from '~/data/catalog'
 
 defineProps<{
   category: Category
+  compact?: boolean
 }>()
 </script>

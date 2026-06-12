@@ -31,6 +31,11 @@
                   :src="activeImage"
                   :alt="product.name"
                   class="h-full w-full object-cover transition-opacity duration-300"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+                  width="800"
+                  height="800"
                   @load="onMainImageLoad"
                 >
 
@@ -64,7 +69,7 @@
                 <h1 class="mb-1 font-serif text-3xl uppercase tracking-wider text-luxury-matte-black sm:text-4xl md:text-5xl">
                   {{ product.name }}
                 </h1>
-                <p class="font-sans text-xs uppercase tracking-widest text-luxury-charcoal/60">
+                <p class="font-sans text-xs uppercase tracking-widest text-luxury-muted">
                   {{ category.title }} · Verve
                 </p>
               </div>
@@ -74,7 +79,7 @@
                   <span class="text-xs font-semibold uppercase tracking-widest text-luxury-charcoal">
                     Variations
                   </span>
-                  <span class="font-serif text-xs italic text-luxury-brass">
+                  <span class="font-serif text-xs italic text-luxury-brass-contrast">
                     {{ selectedVariant.label }}
                   </span>
                 </div>
@@ -323,5 +328,13 @@ useHead({
       ? `${product.value.name} | ${collection.value.title} | Verve Luxury Interiors`
       : 'Product | Verve Luxury Interiors',
   ),
+  link: computed(() => {
+    const href = activeImage.value
+    if (!href) {
+      return []
+    }
+
+    return [{ rel: 'preload', as: 'image', href, fetchpriority: 'high' }]
+  }),
 })
 </script>

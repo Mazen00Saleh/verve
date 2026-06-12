@@ -4,7 +4,7 @@
       <p class="text-center text-xs font-light text-luxury-charcoal sm:text-sm">
         {{ summary.rangeLabel }}
       </p>
-      <p class="text-center text-[11px] uppercase tracking-widest text-luxury-charcoal/70">
+      <p class="text-center text-[11px] uppercase tracking-widest text-luxury-muted">
         {{ summary.pageLabel }}
       </p>
 
@@ -33,7 +33,7 @@
           >
             1
           </button>
-          <span v-if="visiblePages[0] > 2" class="px-1 text-luxury-charcoal/50">…</span>
+          <span v-if="visiblePages[0] > 2" class="px-1 text-luxury-muted">…</span>
 
           <button
             v-for="page in visiblePages"
@@ -47,7 +47,7 @@
             {{ page }}
           </button>
 
-          <span v-if="visiblePages[visiblePages.length - 1] < totalPages - 1" class="px-1 text-luxury-charcoal/50">…</span>
+          <span v-if="visiblePages[visiblePages.length - 1] < totalPages - 1" class="px-1 text-luxury-muted">…</span>
           <button
             v-if="visiblePages[visiblePages.length - 1] < totalPages"
             type="button"
@@ -111,7 +111,7 @@ function emitPageChange(page: number) {
 
 <style scoped>
 .pagination-btn {
-  @apply inline-flex min-h-10 min-w-10 items-center justify-center gap-1 rounded-sm border border-neutral-200 px-3 text-xs uppercase tracking-widest text-luxury-matte-black transition-colors hover:border-luxury-brass hover:text-luxury-brass disabled:cursor-not-allowed disabled:opacity-40;
+  @apply inline-flex min-h-10 min-w-10 items-center justify-center gap-1 rounded-sm border border-neutral-200 px-3 text-xs uppercase tracking-widest text-luxury-matte-black transition-colors hover:border-luxury-brass-contrast hover:text-luxury-brass-contrast disabled:cursor-not-allowed disabled:opacity-40;
 }
 
 .pagination-page {
@@ -119,6 +119,6 @@ function emitPageChange(page: number) {
 }
 
 .pagination-page-active {
-  @apply border-luxury-brass bg-luxury-brass/10 font-medium text-luxury-matte-black;
+  @apply border-luxury-brass-contrast bg-luxury-brass/10 font-medium text-luxury-matte-black;
 }
 </style>

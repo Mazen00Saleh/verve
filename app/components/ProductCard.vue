@@ -8,6 +8,7 @@
         :src="product.image"
         :alt="product.name"
         aspect="square"
+        :priority="priority"
         container-class="shadow-[0_4px_20px_rgba(0,0,0,0.04)] bg-luxury-warm-beige/10"
         hover-scale
       />
@@ -30,5 +31,6 @@ defineProps<{
   product: Product
   categorySlug: string
   collectionSlug: string
+  priority?: boolean
 }>()
 </script>

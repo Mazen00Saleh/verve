@@ -1,5 +1,4 @@
 import type { Category, Collection, FeaturedCollection, Product } from '~/data/catalog'
-import { categories as staticCategories } from '~/data/catalog'
 import { pickDailyRandom } from '~/utils/shuffle'
 import { toSlug } from '~/utils/slug'
 
@@ -170,6 +169,12 @@ export function getHeroSlides(categories: Category[], count = 3) {
 export function useCatalog() {
   return useAsyncData('catalog', async () => {
     const fromSupabase = await fetchCategoriesFromSupabase()
-    return fromSupabase.length > 0 ? fromSupabase : staticCategories
+
+    if (fromSupabase.length > 0) {
+      return fromSupabase
+    }
+
+    const { categories } = await import('~/data/catalog')
+    return categories
   })
 }

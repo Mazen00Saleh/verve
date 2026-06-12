@@ -9,12 +9,15 @@
       :alt="alt"
       class="h-full w-full object-cover transition-transform duration-700"
       :class="[imageClass, hoverScale ? 'group-hover:scale-105' : '']"
-      loading="lazy"
+      :loading="priority ? 'eager' : 'lazy'"
+      :fetchpriority="priority ? 'high' : 'auto'"
       decoding="async"
+      :width="width"
+      :height="height"
     >
     <div
       v-else
-      class="flex h-full w-full items-center justify-center bg-luxury-warm-beige/30 text-xs uppercase tracking-widest text-luxury-charcoal/50"
+      class="flex h-full w-full items-center justify-center bg-luxury-warm-beige/30 text-xs uppercase tracking-widest text-luxury-muted"
     >
       No image
     </div>
@@ -29,21 +32,28 @@
 const props = withDefaults(defineProps<{
   src: string
   alt: string
-  aspect?: 'square' | '4/3' | '4/5' | '3/4' | 'auto'
+  aspect?: 'square' | '1/1' | '4/3' | '4/5' | '3/4' | 'auto'
   overlay?: boolean
   hoverScale?: boolean
+  priority?: boolean
+  width?: number
+  height?: number
   containerClass?: string
   imageClass?: string
 }>(), {
   aspect: 'square',
   overlay: false,
   hoverScale: true,
+  priority: false,
   containerClass: '',
   imageClass: '',
 })
 
 const aspectClass = computed(() => {
   switch (props.aspect) {
+    case '1/1':
+    case 'square':
+      return 'aspect-square'
     case '4/3':
       return 'aspect-[4/3]'
     case '4/5':

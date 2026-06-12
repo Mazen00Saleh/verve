@@ -39,10 +39,11 @@
           >
             <div class="catalog-grid lg:grid-cols-3">
               <CollectionCard
-                v-for="collection in items"
+                v-for="(collection, index) in items"
                 :key="collection.slug"
                 :collection="collection"
                 :category-slug="category.slug"
+                :priority="page === 1 && index === 0"
               />
             </div>
 

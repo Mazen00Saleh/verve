@@ -1,5 +1,7 @@
 import type { Tables, TablesInsert, TablesUpdate } from '~/types/database.types'
+import { PAGINATION } from '~/config/pagination'
 import { getErrorMessage } from '~/utils/errors'
+import { buildPaginatedResult, getPaginationRange, type PaginatedResult } from '~/utils/pagination'
 import { collectUrls } from '~/utils/storage'
 
 export type HeroSlide = Tables<'hero_slides'>
@@ -9,6 +11,23 @@ export function useHeroSlides() {
 
   const loading = ref(false)
   const error = ref<string | null>(null)
+
+  async function fetchPage(page: number, pageSize = PAGINATION['admin-hero-slides']): Promise<PaginatedResult<HeroSlide>> {
+    const { from, to } = getPaginationRange(page, pageSize)
+
+    const { data, error: fetchError, count } = await supabase
+      .from('hero_slides')
+      .select('*', { count: 'exact' })
+      .order('order_index', { ascending: true })
+      .order('created_at', { ascending: true })
+      .range(from, to)
+
+    if (fetchError) {
+      throw fetchError
+    }
+
+    return buildPaginatedResult(data ?? [], count ?? 0, page, pageSize)
+  }
 
   async function fetchAll(): Promise<HeroSlide[]> {
     loading.value = true
@@ -154,6 +173,7 @@ export function useHeroSlides() {
     loading: readonly(loading),
     error: readonly(error),
     fetchAll,
+    fetchPage,
     fetchOne,
     create,
     update,
