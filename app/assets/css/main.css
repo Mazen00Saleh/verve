@@ -7,6 +7,14 @@
     @apply bg-luxury-ivory text-luxury-matte-black font-sans antialiased;
   }
 
+  :root {
+    --site-header-height: 8.5rem;
+  }
+
+  .site-main {
+    padding-top: var(--site-header-height);
+  }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-normal;
   }
@@ -79,7 +87,7 @@
   }
 
   .page-shell {
-    @apply min-h-screen bg-luxury-ivory pb-20 pt-24 sm:pb-24 sm:pt-28 md:pt-32;
+    @apply min-h-screen bg-luxury-ivory pb-20 sm:pb-24;
   }
 
   .page-container {

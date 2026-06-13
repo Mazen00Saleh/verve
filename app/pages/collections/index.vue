@@ -3,38 +3,58 @@
     <div class="page-container py-8 sm:py-12 md:py-16">
       <div class="mb-12 text-center sm:mb-16">
         <span class="section-eyebrow">Catalog</span>
-        <h1 class="section-title mb-4">Our Categories</h1>
+        <h1 class="section-title mb-4">Our Collections</h1>
         <p class="section-intro mx-auto max-w-2xl text-sm sm:text-base">
-          Explore our range of premium wallpapers, fabrics, posters, and wallcoverings, each comprising unique curated collections.
+          Browse every curated collection across wallpapers, fabrics, posters, and wallcoverings.
         </p>
       </div>
 
       <PageState
         :pending="pending"
         :error-message="errorMessage"
-        :empty="!categories?.length"
-        empty-title="No categories yet"
+        :empty="!pending && total === 0"
+        empty-title="No collections yet"
         empty-message="Our catalog is being curated. Please check back soon."
         :retry="refresh"
       >
-        <div class="catalog-grid lg:gap-x-16 lg:gap-y-24">
-          <CategoryCard
-            v-for="category in categories"
-            :key="category.slug"
-            :category="category"
+        <CatalogGridSkeleton v-if="pending" grid-class="lg:grid-cols-3" />
+
+        <template v-else>
+          <div class="catalog-grid lg:grid-cols-3">
+            <CollectionCard
+              v-for="(collection, index) in items"
+              :key="`${collection.categorySlug}-${collection.slug}`"
+              :collection="collection"
+              :category-slug="collection.categorySlug"
+              :priority="page === 1 && index === 0"
+            />
+          </div>
+
+          <Pagination
+            :current-page="page"
+            :total-pages="totalPages"
+            :total-items="total"
+            :page-size="pageSize"
+            item-label="collections"
+            @page-change="setPage"
           />
-        </div>
+        </template>
       </PageState>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const { data: categories, pending, error, refresh } = await useCatalog()
+const { data, pending, error, refresh } = await usePaginatedAllCollections()
+const { setPage, pageSize } = useRoutePagination('collections')
 
 const errorMessage = computed(() => error.value?.message ?? null)
+const items = computed(() => data.value?.items ?? [])
+const total = computed(() => data.value?.total ?? 0)
+const page = computed(() => data.value?.page ?? 1)
+const totalPages = computed(() => data.value?.totalPages ?? 1)
 
 useHead({
-  title: 'Categories | Verve Luxury Interiors',
+  title: 'Collections | Verve Luxury Interiors',
 })
 </script>

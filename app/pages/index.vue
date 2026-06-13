@@ -1,10 +1,9 @@
 <template>
   <div>
     <HeroSection />
-    <LazyPartnerLogos hydrate-on-visible />
-    <LazyFeaturedCollections hydrate-on-visible />
-    <LazyHomeCategories hydrate-on-visible />
+    <HomeCategories />
     <LazyPremiumMaterials hydrate-on-visible />
+    <LazyPartnerLogos hydrate-on-visible />
   </div>
 </template>
 

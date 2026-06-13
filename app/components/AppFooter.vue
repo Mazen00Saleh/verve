@@ -1,49 +1,62 @@
 <template>
-  <footer class="bg-luxury-matte-black text-luxury-ivory py-16">
-    <div class="container mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-12">
-      <div class="space-y-4">
-        <h3 class="font-serif text-2xl tracking-[0.1em] uppercase">Verve</h3>
-        <p class="text-luxury-warm-beige text-sm font-light leading-relaxed max-w-sm">
-          Home Deco. Dedicated to Fabric & Wallpaper
-        </p>
+  <footer class="bg-luxury-matte-black py-8 text-white sm:py-10">
+    <div class="mx-auto flex max-w-4xl flex-col items-center gap-5 px-6 sm:gap-6">
+      <NuxtLink to="/" class="block" aria-label="Verve home">
+        <img
+          src="/images/verve-footer-mark.png"
+          alt="Verve"
+          class="h-24 w-auto object-contain sm:h-28 md:h-32"
+          width="120"
+          height="140"
+          loading="lazy"
+          decoding="async"
+        >
+      </NuxtLink>
+
+      <div class="flex items-center gap-6 sm:gap-7">
+        <a
+          href="https://facebook.com/VerveHome"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-white transition-opacity hover:opacity-70"
+          aria-label="Facebook"
+        >
+          <Icon name="lucide:facebook" size="16" />
+        </a>
+        <a
+          href="mailto:info@verve-group.com"
+          class="text-white transition-opacity hover:opacity-70"
+          aria-label="Email"
+        >
+          <Icon name="lucide:mail" size="16" />
+        </a>
+        <a
+          href="https://instagram.com/vervegroup"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-white transition-opacity hover:opacity-70"
+          aria-label="Instagram"
+        >
+          <Icon name="lucide:instagram" size="16" />
+        </a>
+        <a
+          href="https://wa.me/962790202838"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-white transition-opacity hover:opacity-70"
+          aria-label="WhatsApp"
+        >
+          <Icon name="lucide:message-circle" size="16" />
+        </a>
       </div>
-      
-      <div class="space-y-4">
-        <h4 class="mb-6 text-xs uppercase tracking-[0.2em] text-luxury-brass-light">Explore</h4>
-        <nav class="flex flex-col space-y-3">
-          <NuxtLink to="/collections" class="w-max text-sm text-luxury-champagne transition-colors hover:text-luxury-brass-light">Collections</NuxtLink>
-          <NuxtLink to="/inspiration" class="w-max text-sm text-luxury-champagne transition-colors hover:text-luxury-brass-light">Inspiration</NuxtLink>
-          <NuxtLink to="/about" class="w-max text-sm text-luxury-champagne transition-colors hover:text-luxury-brass-light">About Us</NuxtLink>
-          <NuxtLink to="/contact" class="w-max text-sm text-luxury-champagne transition-colors hover:text-luxury-brass-light">Contact Us</NuxtLink>
-        </nav>
-      </div>
-      
-      <div class="space-y-4">
-        <h4 class="mb-6 text-xs uppercase tracking-[0.2em] text-luxury-brass-light">Connect</h4>
-        <div class="space-y-2 text-sm font-light text-luxury-champagne">
-          <p>Verve Building No.(67)</p>
-          <p>Prs. Alia St, Al-Swaifyeh</p>
-          <p>Amman, Jordan</p>
-          <div class="flex space-x-5 pt-6">
-            <a href="https://instagram.com/vervegroup" target="_blank" rel="noopener noreferrer" class="text-luxury-champagne transition-colors hover:text-luxury-brass-light" aria-label="Instagram">
-              <Icon name="lucide:instagram" size="20" />
-            </a>
-            <a href="https://facebook.com/VerveHome" target="_blank" rel="noopener noreferrer" class="text-luxury-champagne transition-colors hover:text-luxury-brass-light" aria-label="Facebook">
-              <Icon name="lucide:facebook" size="20" />
-            </a>
-            <a href="https://wa.me/962790202838" target="_blank" rel="noopener noreferrer" class="text-luxury-champagne transition-colors hover:text-luxury-brass-light" aria-label="WhatsApp">
-              <Icon name="lucide:message-circle" size="20" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container mx-auto mt-16 flex items-center justify-between border-t border-luxury-charcoal px-6 pt-8 text-xs text-luxury-champagne lg:px-12">
-      <p>&copy; {{ new Date().getFullYear() }} VERVE GROUP. All rights reserved.</p>
-      <div class="space-x-4">
-        <!-- <a href="#" class="hover:text-luxury-ivory">Privacy Policy</a>
-        <a href="#" class="hover:text-luxury-ivory">Terms of Service</a> -->
-      </div>
+
+      <p class="text-[10px] font-light tracking-wide text-white/90 sm:text-[11px]">
+        &copy; {{ year }} All rights Reserved @VERVE
+      </p>
     </div>
   </footer>
 </template>
+
+<script setup lang="ts">
+const year = new Date().getFullYear()
+</script>

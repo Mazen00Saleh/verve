@@ -1,79 +1,42 @@
 <template>
   <header
-    class="fixed top-0 z-50 w-full bg-luxury-ivory py-5 shadow-sm transition-all duration-300 sm:py-6 md:py-8"
-    :class="{ 'shadow-md': scrolled || mobileOpen }"
+    ref="headerRef"
+    class="site-header fixed top-0 z-50 w-full bg-luxury-matte-black pt-4 pb-2 shadow-sm transition-all duration-300 sm:pt-5 sm:pb-2.5 md:pt-5 md:pb-3"
+    :class="{ 'shadow-md shadow-black/20': scrolled }"
   >
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-12">
-      <nav class="hidden flex-1 items-center justify-end space-x-8 pr-8 md:flex lg:space-x-12 lg:pr-12">
+    <div class="mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-4 sm:gap-3.5 sm:px-6 lg:px-12">
+      <NuxtLink to="/" class="flex w-full justify-center">
+        <img
+          src="/images/verve-logo.png"
+          alt="Verve — Exclusive Home Collection"
+          class="h-16 w-auto max-w-full object-contain sm:h-20 md:h-24"
+          width="400"
+          height="168"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        >
+      </NuxtLink>
+
+      <nav class="flex w-full flex-wrap items-center justify-center gap-x-6 gap-y-2 sm:gap-x-8 lg:gap-x-10">
         <NuxtLink
-          v-for="link in leftLinks"
+          v-for="link in navLinks"
           :key="link.to"
           :to="link.to"
-          class="text-sm uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass-contrast lg:text-base"
+          class="nav-link"
+          :class="{ 'nav-link-active': isActiveLink(link.to) }"
         >
           {{ link.label }}
         </NuxtLink>
       </nav>
-
-      <div class="flex flex-none items-center justify-center">
-        <NuxtLink
-          to="/"
-          class="select-none text-center font-serif text-3xl uppercase tracking-[0.15em] text-luxury-matte-black transition-colors duration-300 sm:text-4xl md:text-5xl md:tracking-[0.2em]"
-          @click="closeMobile"
-        >
-          Verve
-        </NuxtLink>
-      </div>
-
-      <div class="flex flex-1 items-center justify-end md:justify-start md:pl-8 lg:pl-12">
-        <nav class="hidden items-center space-x-8 md:flex lg:space-x-12">
-          <NuxtLink
-            v-for="link in rightLinks"
-            :key="link.to"
-            :to="link.to"
-            class="text-sm uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass-contrast lg:text-base"
-          >
-            {{ link.label }}
-          </NuxtLink>
-        </nav>
-
-        <button
-          type="button"
-          class="ml-2 inline-flex items-center justify-center p-2 text-luxury-matte-black transition-colors hover:text-luxury-brass-contrast md:hidden"
-          :aria-expanded="mobileOpen"
-          aria-label="Toggle navigation menu"
-          @click="toggleMobile"
-        >
-          <Icon :name="mobileOpen ? 'lucide:x' : 'lucide:menu'" size="24" />
-        </button>
-      </div>
     </div>
-
-    <Transition name="mobile-nav">
-      <div
-        v-if="mobileOpen"
-        class="border-t border-luxury-warm-beige/40 bg-luxury-ivory md:hidden"
-      >
-        <nav class="page-container flex flex-col gap-1 py-4">
-          <NuxtLink
-            v-for="link in navLinks"
-            :key="link.to"
-            :to="link.to"
-            class="px-2 py-3 text-sm uppercase tracking-widest text-luxury-matte-black transition-colors hover:text-luxury-brass-contrast"
-            @click="closeMobile"
-          >
-            {{ link.label }}
-          </NuxtLink>
-        </nav>
-      </div>
-    </Transition>
   </header>
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
 const scrolled = ref(false)
-const mobileOpen = ref(false)
+const headerRef = ref<HTMLElement | null>(null)
 
 const navLinks = [
   { label: 'Collections', to: '/collections' },
@@ -82,43 +45,45 @@ const navLinks = [
   { label: 'Contact Us', to: '/contact' },
 ]
 
-const leftLinks = navLinks.slice(0, 2)
-const rightLinks = navLinks.slice(2)
+function isActiveLink(to: string) {
+  return route.path === to || route.path.startsWith(`${to}/`)
+}
+
+function updateHeaderHeight() {
+  const height = headerRef.value?.offsetHeight ?? 0
+  document.documentElement.style.setProperty('--site-header-height', `${height}px`)
+}
 
 function handleScroll() {
   scrolled.value = window.scrollY > 50
 }
 
-function toggleMobile() {
-  mobileOpen.value = !mobileOpen.value
-}
-
-function closeMobile() {
-  mobileOpen.value = false
-}
-
-watch(() => route.path, () => {
-  closeMobile()
-})
+let resizeObserver: ResizeObserver | null = null
 
 onMounted(() => {
+  updateHeaderHeight()
   window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('resize', updateHeaderHeight, { passive: true })
+
+  if (headerRef.value && typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(updateHeaderHeight)
+    resizeObserver.observe(headerRef.value)
+  }
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('resize', updateHeaderHeight)
+  resizeObserver?.disconnect()
 })
 </script>
 
 <style scoped>
-.mobile-nav-enter-active,
-.mobile-nav-leave-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
+.nav-link {
+  @apply border-b border-transparent pb-1 text-center text-[10px] uppercase tracking-widest text-luxury-ivory transition-colors duration-300 hover:text-luxury-brass-light sm:text-[11px];
 }
 
-.mobile-nav-enter-from,
-.mobile-nav-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
+.nav-link-active {
+  @apply border-luxury-brass-light text-luxury-brass-light;
 }
 </style>
