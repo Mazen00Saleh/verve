@@ -87,11 +87,15 @@
   }
 
   .page-shell {
-    @apply min-h-screen bg-luxury-ivory pb-20 sm:pb-24;
+    @apply min-h-screen bg-luxury-ivory pb-20 pt-8 sm:pb-24 sm:pt-10 md:pt-12;
   }
 
   .page-container {
     @apply container mx-auto px-4 sm:px-6 lg:px-12;
+  }
+
+  .page-back {
+    @apply mb-10 mt-2 sm:mb-12 sm:mt-4;
   }
 
   .back-link {

@@ -1,6 +1,6 @@
 <template>
   <div class="page-shell">
-    <div class="page-container">
+    <div class="page-container pt-2 sm:pt-4">
       <div class="mb-12 text-center sm:mb-16">
         <span class="section-eyebrow">Inspiration</span>
         <h1 class="section-title">Brochures</h1>

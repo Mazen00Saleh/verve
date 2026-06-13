@@ -9,7 +9,7 @@
         empty-message="This brochure may have been removed or is not yet available."
       >
         <template v-if="brochure">
-          <div class="mb-8">
+          <div class="page-back">
             <NuxtLink to="/inspiration" class="back-link group">
               <svg class="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
