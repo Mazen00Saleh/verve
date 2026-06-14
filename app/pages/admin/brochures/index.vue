@@ -11,10 +11,25 @@
       </template>
     </AdminPageHeader>
 
+    <AdminListToolbar
+      :search="searchInput"
+      :search-placeholder="searchPlaceholder"
+      :selects="[]"
+      :select-values="selectValues"
+      :has-active-filters="hasActiveFilters"
+      @update:search="searchInput = $event"
+      @update:select="setSelectValue"
+      @clear="clearFilters"
+    />
+
     <div v-if="pending" class="text-sm text-luxury-charcoal">Loading brochures...</div>
 
-    <div v-else-if="!items.length && total === 0" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+    <div v-else-if="!items.length && total === 0 && !hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
       No brochures yet.
+    </div>
+
+    <div v-else-if="!items.length && total === 0 && hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+      No brochures match your search.
     </div>
 
     <template v-else>
@@ -24,7 +39,6 @@
             <tr>
               <th class="px-4 py-3">Cover</th>
               <th class="px-4 py-3">Name</th>
-              <th class="px-4 py-3">Description</th>
               <th class="px-4 py-3">URL</th>
               <th class="px-4 py-3 text-right">Actions</th>
             </tr>
@@ -41,7 +55,6 @@
                 <span v-else class="text-xs text-luxury-charcoal">—</span>
               </td>
               <td class="px-4 py-4 font-medium">{{ brochure.name }}</td>
-              <td class="px-4 py-4 text-luxury-charcoal">{{ brochure.description || '—' }}</td>
               <td class="max-w-xs truncate px-4 py-4">
                 <a
                   v-if="brochure.file_url"
@@ -94,9 +107,19 @@ definePageMeta({ layout: 'admin' })
 
 const { fetchPage, remove } = useBrochures()
 const toast = useToast()
+const {
+  searchInput,
+  selectValues,
+  filters,
+  hasActiveFilters,
+  searchPlaceholder,
+  setSelectValue,
+  clearFilters,
+} = useAdminListFilters({ searchPlaceholder: 'Search brochures...' })
 const { items, total, page, totalPages, pending, refresh, setPage, pageSize } = useAdminPaginatedList(
   'admin-brochures',
   fetchPage,
+  filters,
 )
 
 const deletingId = ref<string | null>(null)

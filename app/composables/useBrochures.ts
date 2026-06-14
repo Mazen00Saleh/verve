@@ -1,5 +1,7 @@
 import type { Tables, TablesInsert, TablesUpdate } from '~/types/database.types'
+import type { AdminFetchFilters } from '~/types/adminList'
 import { PAGINATION } from '~/config/pagination'
+import { applyNameSearch } from '~/utils/adminFilters'
 import { getErrorMessage } from '~/utils/errors'
 import { buildPaginatedResult, getPaginationRange, type PaginatedResult } from '~/utils/pagination'
 import { collectUrls } from '~/utils/storage'
@@ -12,12 +14,20 @@ export function useBrochures() {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  async function fetchPage(page: number, pageSize = PAGINATION['admin-brochures']): Promise<PaginatedResult<Brochure>> {
+  async function fetchPage(
+    page: number,
+    pageSize = PAGINATION['admin-brochures'],
+    filters: AdminFetchFilters = {},
+  ): Promise<PaginatedResult<Brochure>> {
     const { from, to } = getPaginationRange(page, pageSize)
 
-    const { data, error: fetchError, count } = await supabase
+    let query = supabase
       .from('brochures')
       .select('*', { count: 'exact' })
+
+    query = applyNameSearch(query, 'name', filters.search)
+
+    const { data, error: fetchError, count } = await query
       .order('created_at', { ascending: false })
       .range(from, to)
 

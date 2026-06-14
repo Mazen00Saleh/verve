@@ -11,10 +11,25 @@
       </template>
     </AdminPageHeader>
 
+    <AdminListToolbar
+      :search="searchInput"
+      :search-placeholder="searchPlaceholder"
+      :selects="[]"
+      :select-values="selectValues"
+      :has-active-filters="hasActiveFilters"
+      @update:search="searchInput = $event"
+      @update:select="setSelectValue"
+      @clear="clearFilters"
+    />
+
     <div v-if="pending" class="text-sm text-luxury-charcoal">Loading categories...</div>
 
-    <div v-else-if="!items.length && total === 0" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+    <div v-else-if="!items.length && total === 0 && !hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
       No categories yet. Create your first category to get started.
+    </div>
+
+    <div v-else-if="!items.length && total === 0 && hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+      No categories match your search or filters.
     </div>
 
     <template v-else>
@@ -24,7 +39,6 @@
             <tr>
               <th class="px-4 py-3">Image</th>
               <th class="px-4 py-3">Name</th>
-              <th class="px-4 py-3">Description</th>
               <th class="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -39,7 +53,6 @@
                 >
               </td>
               <td class="px-4 py-4 font-medium">{{ category.name }}</td>
-              <td class="px-4 py-4 text-luxury-charcoal">{{ category.description || '—' }}</td>
               <td class="px-4 py-4">
                 <div class="flex justify-end gap-2">
                   <NuxtLink
@@ -80,9 +93,19 @@ definePageMeta({ layout: 'admin' })
 
 const { fetchPage, remove } = useCategories()
 const toast = useToast()
+const {
+  searchInput,
+  selectValues,
+  filters,
+  hasActiveFilters,
+  searchPlaceholder,
+  setSelectValue,
+  clearFilters,
+} = useAdminListFilters({ searchPlaceholder: 'Search categories...' })
 const { items, total, page, totalPages, pending, refresh, setPage, pageSize } = useAdminPaginatedList(
   'admin-categories',
   fetchPage,
+  filters,
 )
 
 const deletingId = ref<string | null>(null)

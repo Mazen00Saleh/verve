@@ -2,19 +2,13 @@
   <div>
     <AdminPageHeader
       title="Create Brochure"
-      description="Add a brochure with cover image, description, and a link to the PDF."
+      description="Add a brochure with cover image and a link to the PDF."
     />
 
     <form class="max-w-2xl space-y-6 border border-neutral-200 bg-white p-8" @submit.prevent="handleSubmit">
       <AdminFormField label="Name" required>
         <template #default="{ inputId }">
           <input :id="inputId" v-model="form.name" type="text" required class="admin-input">
-        </template>
-      </AdminFormField>
-
-      <AdminFormField label="Description">
-        <template #default="{ inputId }">
-          <textarea :id="inputId" v-model="form.description" rows="4" class="admin-input" />
         </template>
       </AdminFormField>
 
@@ -60,7 +54,6 @@ const toast = useToast()
 
 const form = reactive({
   name: '',
-  description: '',
   file_url: '',
 })
 
@@ -87,7 +80,7 @@ async function handleSubmit() {
 
   const created = await create({
     name: form.name.trim(),
-    description: form.description.trim() || null,
+    description: null,
     image_url: imageUrl,
     file_url: form.file_url.trim(),
   })

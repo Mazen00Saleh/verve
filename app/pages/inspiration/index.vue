@@ -1,13 +1,10 @@
 <template>
   <div class="page-shell">
-    <div class="page-container pt-2 sm:pt-4">
+    <div class="page-container py-8 sm:py-12 md:py-16">
       <div class="mb-12 text-center sm:mb-16">
         <span class="section-eyebrow">Inspiration</span>
         <h1 class="section-title">Brochures</h1>
-        <div class="mx-auto mt-6 h-px w-12 bg-luxury-brass/40" />
-        <p class="section-intro mx-auto mt-6 max-w-2xl text-sm sm:text-base">
-          Explore our digital brochures and collection catalogs for premium design inspiration.
-        </p>
+        <div class="section-title-divider" />
       </div>
 
       <PageState

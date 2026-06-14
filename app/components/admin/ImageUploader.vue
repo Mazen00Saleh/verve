@@ -3,7 +3,7 @@
     <template #default="{ inputId }">
       <div class="space-y-4">
         <div
-          class="relative rounded-lg border-2 border-dashed transition-colors"
+          class="relative overflow-hidden rounded-lg border-2 border-dashed transition-colors"
           :class="dropZoneClass"
           @dragenter.prevent="onDragEnter"
           @dragover.prevent="onDragOver"
@@ -21,7 +21,125 @@
             @change="onFileInputChange"
           >
 
-          <div class="flex flex-col items-center justify-center px-6 py-10 text-center">
+          <template v-if="!multiple && images[0]">
+            <div class="relative aspect-[4/3] bg-neutral-50 sm:aspect-square">
+              <img
+                :src="images[0].previewUrl ?? images[0].url"
+                :alt="images[0].fileName"
+                class="h-full w-full object-cover"
+              >
+
+              <div
+                v-if="images[0].status === 'compressing' || images[0].status === 'uploading'"
+                class="absolute inset-0 flex items-center justify-center bg-white/80 text-xs uppercase tracking-widest text-luxury-charcoal"
+              >
+                {{ images[0].status === 'compressing' ? 'Optimizing...' : 'Uploading...' }}
+              </div>
+
+              <button
+                type="button"
+                class="absolute right-2 top-2 bg-white/95 px-2 py-1 text-[10px] uppercase tracking-widest hover:bg-white"
+                :disabled="disabled || images[0].status === 'compressing' || images[0].status === 'uploading'"
+                @click="removeImage(images[0])"
+              >
+                Remove
+              </button>
+            </div>
+
+            <div class="space-y-1 border-t border-neutral-200 bg-white px-4 py-3 text-xs text-luxury-charcoal">
+              <p class="truncate font-medium text-luxury-matte-black">{{ images[0].fileName }}</p>
+
+              <template v-if="images[0].status === 'complete' && images[0].originalSize && images[0].compressedSize">
+                <p>Original: {{ formatBytes(images[0].originalSize) }}</p>
+                <p>Optimized: {{ formatBytes(images[0].compressedSize) }}</p>
+                <p class="text-emerald-700">Saved: {{ images[0].savingsPercent }}%</p>
+              </template>
+
+              <p v-else-if="images[0].status === 'complete'" class="text-emerald-700">Uploaded</p>
+              <p v-else-if="images[0].status === 'error'" class="text-red-700">{{ images[0].error }}</p>
+
+              <p class="pt-1 text-[11px] text-luxury-charcoal/70">
+                Drag and drop to replace, or
+                <button
+                  type="button"
+                  class="underline hover:text-luxury-brass"
+                  :disabled="disabled || isBusy"
+                  @click="openFilePicker"
+                >
+                  browse files
+                </button>
+              </p>
+            </div>
+          </template>
+
+          <template v-else-if="multiple && images.length">
+            <div class="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 lg:grid-cols-4">
+              <div
+                v-for="image in images"
+                :key="image.id"
+                class="overflow-hidden border border-neutral-200 bg-white"
+              >
+                <div class="relative aspect-square bg-neutral-50">
+                  <img
+                    :src="image.previewUrl ?? image.url"
+                    :alt="image.fileName"
+                    class="h-full w-full object-cover"
+                  >
+
+                  <div
+                    v-if="image.status === 'compressing' || image.status === 'uploading'"
+                    class="absolute inset-0 flex items-center justify-center bg-white/80 text-xs uppercase tracking-widest text-luxury-charcoal"
+                  >
+                    {{ image.status === 'compressing' ? 'Optimizing...' : 'Uploading...' }}
+                  </div>
+
+                  <button
+                    type="button"
+                    class="absolute right-2 top-2 bg-white/95 px-2 py-1 text-[10px] uppercase tracking-widest hover:bg-white"
+                    :disabled="disabled || image.status === 'compressing' || image.status === 'uploading'"
+                    @click="removeImage(image)"
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div class="space-y-1 px-3 py-3 text-xs text-luxury-charcoal">
+                  <p class="truncate font-medium text-luxury-matte-black">{{ image.fileName }}</p>
+
+                  <template v-if="image.status === 'complete' && image.originalSize && image.compressedSize">
+                    <p>Original: {{ formatBytes(image.originalSize) }}</p>
+                    <p>Optimized: {{ formatBytes(image.compressedSize) }}</p>
+                    <p class="text-emerald-700">Saved: {{ image.savingsPercent }}%</p>
+                  </template>
+
+                  <p v-else-if="image.status === 'complete'" class="text-emerald-700">Uploaded</p>
+                  <p v-else-if="image.status === 'error'" class="text-red-700">{{ image.error }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-dashed border-neutral-200 px-6 py-5 text-center">
+              <p class="text-sm font-medium text-luxury-matte-black">
+                {{ dropZoneTitle }}
+              </p>
+              <p class="mt-2 text-xs font-light text-luxury-charcoal">
+                Drag and drop more images here, or
+                <button
+                  type="button"
+                  class="underline hover:text-luxury-brass"
+                  :disabled="disabled || isBusy"
+                  @click="openFilePicker"
+                >
+                  browse files
+                </button>
+              </p>
+              <p v-if="isBusy" class="mt-3 text-xs text-luxury-brass">
+                {{ busyMessage }}
+              </p>
+            </div>
+          </template>
+
+          <div v-else class="flex flex-col items-center justify-center px-6 py-10 text-center">
             <p class="text-sm font-medium text-luxury-matte-black">
               {{ dropZoneTitle }}
             </p>
@@ -49,55 +167,6 @@
         <p v-if="errorMessage" class="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
           {{ errorMessage }}
         </p>
-
-        <div
-          v-if="images.length"
-          class="grid gap-4"
-          :class="multiple ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'max-w-sm grid-cols-1'"
-        >
-          <div
-            v-for="image in images"
-            :key="image.id"
-            class="overflow-hidden border border-neutral-200 bg-white"
-          >
-            <div class="relative aspect-square bg-neutral-50">
-              <img
-                :src="image.previewUrl ?? image.url"
-                :alt="image.fileName"
-                class="h-full w-full object-cover"
-              >
-
-              <div
-                v-if="image.status === 'compressing' || image.status === 'uploading'"
-                class="absolute inset-0 flex items-center justify-center bg-white/80 text-xs uppercase tracking-widest text-luxury-charcoal"
-              >
-                {{ image.status === 'compressing' ? 'Optimizing...' : 'Uploading...' }}
-              </div>
-
-              <button
-                type="button"
-                class="absolute right-2 top-2 bg-white/95 px-2 py-1 text-[10px] uppercase tracking-widest hover:bg-white"
-                :disabled="disabled || image.status === 'compressing' || image.status === 'uploading'"
-                @click="removeImage(image)"
-              >
-                Remove
-              </button>
-            </div>
-
-            <div class="space-y-1 px-3 py-3 text-xs text-luxury-charcoal">
-              <p class="truncate font-medium text-luxury-matte-black">{{ image.fileName }}</p>
-
-              <template v-if="image.status === 'complete' && image.originalSize && image.compressedSize">
-                <p>Original: {{ formatBytes(image.originalSize) }}</p>
-                <p>Optimized: {{ formatBytes(image.compressedSize) }}</p>
-                <p class="text-emerald-700">Saved: {{ image.savingsPercent }}%</p>
-              </template>
-
-              <p v-else-if="image.status === 'complete'" class="text-emerald-700">Uploaded</p>
-              <p v-else-if="image.status === 'error'" class="text-red-700">{{ image.error }}</p>
-            </div>
-          </div>
-        </div>
       </div>
     </template>
   </AdminFormField>

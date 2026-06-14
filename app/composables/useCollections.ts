@@ -1,5 +1,7 @@
 import type { Tables, TablesInsert, TablesUpdate } from '~/types/database.types'
+import type { AdminFetchFilters } from '~/types/adminList'
 import { PAGINATION } from '~/config/pagination'
+import { applyNameSearch } from '~/utils/adminFilters'
 import { getErrorMessage } from '~/utils/errors'
 import { buildPaginatedResult, getPaginationRange, type PaginatedResult } from '~/utils/pagination'
 import { collectUrls } from '~/utils/storage'
@@ -24,12 +26,24 @@ export function useCollections() {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  async function fetchPage(page: number, pageSize = PAGINATION['admin-collections']): Promise<PaginatedResult<CollectionWithCategory>> {
+  async function fetchPage(
+    page: number,
+    pageSize = PAGINATION['admin-collections'],
+    filters: AdminFetchFilters = {},
+  ): Promise<PaginatedResult<CollectionWithCategory>> {
     const { from, to } = getPaginationRange(page, pageSize)
 
-    const { data, error: fetchError, count } = await supabase
+    let query = supabase
       .from('collections')
       .select('*, categories (name)', { count: 'exact' })
+
+    query = applyNameSearch(query, 'name', filters.search)
+
+    if (filters.categoryId) {
+      query = query.eq('category_id', filters.categoryId)
+    }
+
+    const { data, error: fetchError, count } = await query
       .order('created_at', { ascending: false })
       .range(from, to)
 

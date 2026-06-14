@@ -23,12 +23,6 @@
         </template>
       </AdminFormField>
 
-      <AdminFormField label="Description">
-        <template #default="{ inputId }">
-          <textarea :id="inputId" v-model="form.description" rows="4" class="admin-input" />
-        </template>
-      </AdminFormField>
-
       <AdminImageUploader
         v-model="coverImages"
         folder="collections"
@@ -65,7 +59,6 @@ const submitting = ref(false)
 const form = reactive({
   category_id: '',
   name: '',
-  description: '',
 })
 
 const isUploading = computed(() =>
@@ -89,7 +82,7 @@ async function handleSubmit() {
   const created = await create({
     category_id: form.category_id,
     name: form.name.trim(),
-    description: form.description.trim() || null,
+    description: null,
     image_url: imageUrl,
   })
 

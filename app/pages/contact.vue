@@ -3,8 +3,9 @@
     <div class="page-container py-8 sm:py-12 md:py-16">
       <div class="mx-auto mb-16 max-w-4xl text-center">
         <span class="section-eyebrow">Inquiries</span>
-        <h1 class="section-title mb-6 sm:mb-8">Contact Us</h1>
-        <p class="section-intro mx-auto max-w-2xl text-sm sm:text-base">
+        <h1 class="section-title">Contact Us</h1>
+        <div class="section-title-divider" />
+        <p class="section-intro mx-auto mt-6 max-w-2xl text-sm sm:text-base">
           Whether you are an interior designer sourcing for a project, or a private client looking for something unique, our dedicated team is here to assist you.
         </p>
       </div>

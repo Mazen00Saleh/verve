@@ -13,7 +13,6 @@
     />
     <div class="catalog-card-body text-center">
       <h3 class="catalog-card-title">{{ collection.title }}</h3>
-      <span class="catalog-card-cta">Explore Products</span>
     </div>
   </NuxtLink>
 </template>

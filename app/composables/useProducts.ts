@@ -1,5 +1,7 @@
 import type { Tables, TablesInsert } from '~/types/database.types'
+import type { AdminFetchFilters } from '~/types/adminList'
 import { PAGINATION } from '~/config/pagination'
+import { applyNameSearch } from '~/utils/adminFilters'
 import { getErrorMessage } from '~/utils/errors'
 import { buildPaginatedResult, getPaginationRange, type PaginatedResult } from '~/utils/pagination'
 import { collectUrls } from '~/utils/storage'
@@ -33,10 +35,53 @@ export function useProducts() {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  async function fetchPage(page: number, pageSize = PAGINATION['admin-products']): Promise<PaginatedResult<ProductWithRelations>> {
+  async function fetchPage(
+    page: number,
+    pageSize = PAGINATION['admin-products'],
+    filters: AdminFetchFilters = {},
+  ): Promise<PaginatedResult<ProductWithRelations>> {
     const { from, to } = getPaginationRange(page, pageSize)
 
-    const { data, error: fetchError, count } = await supabase
+    if (filters.categoryId && !filters.collectionId) {
+      const { data: categoryCollections, error: collectionLookupError } = await supabase
+        .from('collections')
+        .select('id')
+        .eq('category_id', filters.categoryId)
+
+      if (collectionLookupError) {
+        throw collectionLookupError
+      }
+
+      if (!categoryCollections?.length) {
+        return buildPaginatedResult([], 0, page, pageSize)
+      }
+
+      let query = supabase
+        .from('products')
+        .select(`
+          *,
+          collections (
+            name,
+            categories (name)
+          ),
+          product_images (*)
+        `, { count: 'exact' })
+
+      query = applyNameSearch(query, 'name', filters.search)
+      query = query.in('collection_id', categoryCollections.map(collection => collection.id))
+
+      const { data, error: fetchError, count } = await query
+        .order('created_at', { ascending: false })
+        .range(from, to)
+
+      if (fetchError) {
+        throw fetchError
+      }
+
+      return buildPaginatedResult((data ?? []) as ProductWithRelations[], count ?? 0, page, pageSize)
+    }
+
+    let query = supabase
       .from('products')
       .select(`
         *,
@@ -46,6 +91,14 @@ export function useProducts() {
         ),
         product_images (*)
       `, { count: 'exact' })
+
+    query = applyNameSearch(query, 'name', filters.search)
+
+    if (filters.collectionId) {
+      query = query.eq('collection_id', filters.collectionId)
+    }
+
+    const { data, error: fetchError, count } = await query
       .order('created_at', { ascending: false })
       .range(from, to)
 

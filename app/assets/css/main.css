@@ -50,6 +50,10 @@
     @apply font-serif text-3xl text-luxury-matte-black sm:text-4xl md:text-5xl;
   }
 
+  .section-title-divider {
+    @apply mx-auto mt-6 h-px w-12 bg-luxury-brass/40;
+  }
+
   .section-intro {
     @apply font-light leading-relaxed text-luxury-charcoal;
   }

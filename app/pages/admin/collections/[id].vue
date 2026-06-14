@@ -25,12 +25,6 @@
         </template>
       </AdminFormField>
 
-      <AdminFormField label="Description">
-        <template #default="{ inputId }">
-          <textarea :id="inputId" v-model="form.description" rows="4" class="admin-input" />
-        </template>
-      </AdminFormField>
-
       <AdminImageUploader
         v-model="coverImages"
         folder="collections"
@@ -75,7 +69,6 @@ const previousImageUrl = ref<string | null>(null)
 const form = reactive({
   category_id: '',
   name: '',
-  description: '',
 })
 
 const isUploading = computed(() =>
@@ -99,7 +92,6 @@ onMounted(async () => {
 
   form.category_id = collection.value.category_id ?? ''
   form.name = collection.value.name
-  form.description = collection.value.description ?? ''
   previousImageUrl.value = collection.value.image_url
 
   if (collection.value.image_url) {
@@ -126,7 +118,7 @@ async function handleSubmit() {
     const updated = await update(collectionId, {
       category_id: form.category_id,
       name: form.name.trim(),
-      description: form.description.trim() || null,
+      description: null,
       image_url: nextImageUrl,
     })
 

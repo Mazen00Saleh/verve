@@ -21,11 +21,8 @@
         <template v-if="category && collection">
           <div class="mx-auto mb-14 max-w-3xl animate-fade-in text-center sm:mb-20">
             <span class="section-eyebrow">Collection</span>
-            <h1 class="section-title mb-4 sm:mb-6">{{ collection.title }}</h1>
-            <p class="section-intro mx-auto max-w-xl text-sm sm:text-base">
-              {{ collection.description }}
-            </p>
-            <div class="mx-auto mt-8 h-px w-12 bg-luxury-brass/30" />
+            <h1 class="section-title">{{ collection.title }}</h1>
+            <div class="section-title-divider" />
           </div>
 
           <CatalogGridSkeleton v-if="pending" grid-class="md:grid-cols-3" />

@@ -11,10 +11,29 @@
       </template>
     </AdminPageHeader>
 
+    <AdminListToolbar
+      :search="searchInput"
+      :search-placeholder="searchPlaceholder"
+      :selects="filterSelects"
+      :select-values="selectValues"
+      :has-active-filters="hasActiveFilters"
+      @update:search="searchInput = $event"
+      @update:select="handleSelectChange"
+      @clear="clearFilters"
+    />
+
+    <p v-if="listError" class="mb-6 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+      {{ listError }}
+    </p>
+
     <div v-if="pending" class="text-sm text-luxury-charcoal">Loading products...</div>
 
-    <div v-else-if="!items.length && total === 0" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+    <div v-else-if="!items.length && total === 0 && !hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
       No products yet.
+    </div>
+
+    <div v-else-if="!items.length && total === 0 && hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+      No products match your search or filters.
     </div>
 
     <template v-else>
@@ -87,11 +106,84 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin' })
 
+const { fetchAll: fetchCategories } = useCategories()
+const { fetchAll: fetchCollections } = useCollections()
 const { fetchPage, remove } = useProducts()
 const toast = useToast()
-const { items, total, page, totalPages, pending, refresh, setPage, pageSize } = useAdminPaginatedList(
+
+const categories = ref<Array<{ id: string, name: string }>>([])
+const collections = ref<Array<{ id: string, name: string, category_id: string | null }>>([])
+
+onMounted(async () => {
+  const [categoryList, collectionList] = await Promise.all([
+    fetchCategories(),
+    fetchCollections(),
+  ])
+
+  categories.value = categoryList.map(category => ({ id: category.id, name: category.name }))
+  collections.value = collectionList.map(collection => ({
+    id: collection.id,
+    name: collection.name,
+    category_id: collection.category_id,
+  }))
+})
+
+const {
+  searchInput,
+  selectValues,
+  filters,
+  hasActiveFilters,
+  searchPlaceholder,
+  setSelectValue,
+  clearFilters,
+} = useAdminListFilters({
+  searchPlaceholder: 'Search products...',
+  selectKeys: ['categoryId', 'collectionId'],
+})
+
+const filteredCollections = computed(() => {
+  if (!selectValues.categoryId) {
+    return collections.value
+  }
+
+  return collections.value.filter(collection => collection.category_id === selectValues.categoryId)
+})
+
+const filterSelects = computed(() => [
+  {
+    key: 'categoryId' as const,
+    label: 'Category',
+    options: categories.value.map(category => ({
+      value: category.id,
+      label: category.name,
+    })),
+  },
+  {
+    key: 'collectionId' as const,
+    label: 'Collection',
+    options: filteredCollections.value.map(collection => ({
+      value: collection.id,
+      label: collection.name,
+    })),
+  },
+])
+
+function handleSelectChange(key: string, value: string) {
+  setSelectValue(key, value)
+
+  if (key === 'categoryId' && selectValues.collectionId) {
+    const collectionStillValid = filteredCollections.value.some(collection => collection.id === selectValues.collectionId)
+
+    if (!collectionStillValid) {
+      setSelectValue('collectionId', '')
+    }
+  }
+}
+
+const { items, total, page, totalPages, pending, listError, refresh, setPage, pageSize } = useAdminPaginatedList(
   'admin-products',
   fetchPage,
+  filters,
 )
 
 const deletingId = ref<string | null>(null)

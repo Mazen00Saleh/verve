@@ -1,5 +1,7 @@
 import type { Tables, TablesUpdate } from '~/types/database.types'
+import type { AdminFetchFilters } from '~/types/adminList'
 import { PAGINATION } from '~/config/pagination'
+import { applyContactSearch } from '~/utils/adminFilters'
 import { getErrorMessage } from '~/utils/errors'
 import { buildPaginatedResult, getPaginationRange, type PaginatedResult } from '~/utils/pagination'
 
@@ -11,12 +13,24 @@ export function useContactSubmissions() {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  async function fetchPage(page: number, pageSize = PAGINATION['admin-contact']): Promise<PaginatedResult<ContactSubmission>> {
+  async function fetchPage(
+    page: number,
+    pageSize = PAGINATION['admin-contact'],
+    filters: AdminFetchFilters = {},
+  ): Promise<PaginatedResult<ContactSubmission>> {
     const { from, to } = getPaginationRange(page, pageSize)
 
-    const { data, error: fetchError, count } = await supabase
+    let query = supabase
       .from('contact_submissions')
       .select('*', { count: 'exact' })
+
+    query = applyContactSearch(query, filters.search)
+
+    if (filters.status) {
+      query = query.eq('status', filters.status)
+    }
+
+    const { data, error: fetchError, count } = await query
       .order('created_at', { ascending: false })
       .range(from, to)
 

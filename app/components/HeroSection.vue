@@ -160,8 +160,8 @@ const slides = computed<PublicHeroSlide[]>(() => {
     description: slide.description,
     leftImage: slide.leftImage,
     rightImage: slide.rightImage,
-    link: slide.link,
-    ctaLabel: 'Explore Collection',
+    link: '/collections',
+    ctaLabel: 'Explore Collections',
   }))
 })
 

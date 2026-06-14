@@ -20,6 +20,11 @@
         </template>
       </AdminFormField>
 
+      <label class="flex items-center gap-3 text-sm text-luxury-charcoal">
+        <input v-model="form.is_active" type="checkbox" class="h-4 w-4 border-neutral-300">
+        Active on homepage
+      </label>
+
       <AdminImageUploader
         v-model="leftImages"
         folder="hero"
@@ -33,29 +38,6 @@
         preset="primary"
         label="Right Image"
       />
-
-      <AdminFormField label="Link URL" required>
-        <template #default="{ inputId }">
-          <input :id="inputId" v-model="form.link_url" type="text" required class="admin-input">
-        </template>
-      </AdminFormField>
-
-      <AdminFormField label="CTA Label" required>
-        <template #default="{ inputId }">
-          <input :id="inputId" v-model="form.cta_label" type="text" required class="admin-input">
-        </template>
-      </AdminFormField>
-
-      <AdminFormField label="Display Order">
-        <template #default="{ inputId }">
-          <input :id="inputId" v-model.number="form.order_index" type="number" min="0" class="admin-input">
-        </template>
-      </AdminFormField>
-
-      <label class="flex items-center gap-3 text-sm text-luxury-charcoal">
-        <input v-model="form.is_active" type="checkbox" class="h-4 w-4 border-neutral-300">
-        Active on homepage
-      </label>
 
       <div class="flex gap-3">
         <button type="submit" class="btn-primary" :disabled="submitting || isUploading">
@@ -92,9 +74,6 @@ const previousRightUrl = ref<string | null>(null)
 const form = reactive({
   title: '',
   description: '',
-  link_url: '',
-  cta_label: 'Explore Collection',
-  order_index: 0,
   is_active: true,
 })
 
@@ -115,9 +94,6 @@ onMounted(async () => {
 
   form.title = slide.value.title
   form.description = slide.value.description ?? ''
-  form.link_url = slide.value.link_url
-  form.cta_label = slide.value.cta_label
-  form.order_index = slide.value.order_index
   form.is_active = slide.value.is_active
 
   previousLeftUrl.value = slide.value.left_image_url
@@ -158,9 +134,9 @@ async function handleSubmit() {
       description: form.description.trim() || null,
       left_image_url: nextLeftUrl,
       right_image_url: nextRightUrl,
-      link_url: form.link_url.trim(),
-      cta_label: form.cta_label.trim() || 'Explore Collection',
-      order_index: form.order_index,
+      link_url: '/collections',
+      cta_label: 'Explore Collections',
+      order_index: 0,
       is_active: form.is_active,
     })
 

@@ -11,10 +11,29 @@
       </template>
     </AdminPageHeader>
 
+    <AdminListToolbar
+      :search="searchInput"
+      :search-placeholder="searchPlaceholder"
+      :selects="filterSelects"
+      :select-values="selectValues"
+      :has-active-filters="hasActiveFilters"
+      @update:search="searchInput = $event"
+      @update:select="setSelectValue"
+      @clear="clearFilters"
+    />
+
+    <p v-if="listError" class="mb-6 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+      {{ listError }}
+    </p>
+
     <div v-if="pending" class="text-sm text-luxury-charcoal">Loading collections...</div>
 
-    <div v-else-if="!items.length && total === 0" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+    <div v-else-if="!items.length && total === 0 && !hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
       No collections yet.
+    </div>
+
+    <div v-else-if="!items.length && total === 0 && hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+      No collections match your search or filters.
     </div>
 
     <template v-else>
@@ -25,7 +44,6 @@
               <th class="px-4 py-3">Image</th>
               <th class="px-4 py-3">Name</th>
               <th class="px-4 py-3">Category</th>
-              <th class="px-4 py-3">Description</th>
               <th class="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -41,7 +59,6 @@
               </td>
               <td class="px-4 py-4 font-medium">{{ collection.name }}</td>
               <td class="px-4 py-4">{{ collection.categories?.name || '—' }}</td>
-              <td class="px-4 py-4 text-luxury-charcoal">{{ collection.description || '—' }}</td>
               <td class="px-4 py-4">
                 <div class="flex justify-end gap-2">
                   <NuxtLink
@@ -80,11 +97,45 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin' })
 
+const { fetchAll: fetchCategories } = useCategories()
 const { fetchPage, remove } = useCollections()
 const toast = useToast()
-const { items, total, page, totalPages, pending, refresh, setPage, pageSize } = useAdminPaginatedList(
+
+const categories = ref<Array<{ id: string, name: string }>>([])
+
+const filterSelects = computed(() => [
+  {
+    key: 'categoryId' as const,
+    label: 'Category',
+    options: categories.value.map(category => ({
+      value: category.id,
+      label: category.name,
+    })),
+  },
+])
+
+onMounted(async () => {
+  const list = await fetchCategories()
+  categories.value = list.map(category => ({ id: category.id, name: category.name }))
+})
+
+const {
+  searchInput,
+  selectValues,
+  filters,
+  hasActiveFilters,
+  searchPlaceholder,
+  setSelectValue,
+  clearFilters,
+} = useAdminListFilters({
+  searchPlaceholder: 'Search collections...',
+  selectKeys: ['categoryId'],
+})
+
+const { items, total, page, totalPages, pending, listError, refresh, setPage, pageSize } = useAdminPaginatedList(
   'admin-collections',
   fetchPage,
+  filters,
 )
 
 const deletingId = ref<string | null>(null)

@@ -2,19 +2,13 @@
   <div>
     <AdminPageHeader
       title="Create Category"
-      description="Add a new category with name, description, and cover image."
+      description="Add a new category with name and cover image."
     />
 
     <form class="max-w-2xl space-y-6 border border-neutral-200 bg-white p-8" @submit.prevent="handleSubmit">
       <AdminFormField label="Name" required>
         <template #default="{ inputId }">
           <input :id="inputId" v-model="form.name" type="text" required class="admin-input">
-        </template>
-      </AdminFormField>
-
-      <AdminFormField label="Description">
-        <template #default="{ inputId }">
-          <textarea :id="inputId" v-model="form.description" rows="4" class="admin-input" />
         </template>
       </AdminFormField>
 
@@ -47,7 +41,6 @@ const toast = useToast()
 
 const form = reactive({
   name: '',
-  description: '',
 })
 
 const coverImages = ref<UploadedImage[]>([])
@@ -69,7 +62,7 @@ async function handleSubmit() {
 
   const created = await create({
     name: form.name.trim(),
-    description: form.description.trim() || null,
+    description: null,
     image_url: imageUrl,
   })
 

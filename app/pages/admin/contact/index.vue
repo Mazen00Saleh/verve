@@ -3,12 +3,27 @@
     <AdminPageHeader
       title="Contact Messages"
       description="Messages submitted through the public contact form."
+    </AdminPageHeader>
+
+    <AdminListToolbar
+      :search="searchInput"
+      :search-placeholder="searchPlaceholder"
+      :selects="filterSelects"
+      :select-values="selectValues"
+      :has-active-filters="hasActiveFilters"
+      @update:search="searchInput = $event"
+      @update:select="setSelectValue"
+      @clear="clearFilters"
     />
 
     <div v-if="pending" class="text-sm text-luxury-charcoal">Loading messages...</div>
 
-    <div v-else-if="!items.length && total === 0" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+    <div v-else-if="!items.length && total === 0 && !hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
       No contact messages yet.
+    </div>
+
+    <div v-else-if="!items.length && total === 0 && hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+      No messages match your search or filters.
     </div>
 
     <template v-else>
@@ -68,9 +83,36 @@ definePageMeta({ layout: 'admin' })
 
 const { fetchPage, updateStatus } = useContactSubmissions()
 const toast = useToast()
+
+const filterSelects = [
+  {
+    key: 'status' as const,
+    label: 'Status',
+    options: [
+      { value: 'new', label: 'New' },
+      { value: 'read', label: 'Read' },
+      { value: 'archived', label: 'Archived' },
+    ],
+  },
+]
+
+const {
+  searchInput,
+  selectValues,
+  filters,
+  hasActiveFilters,
+  searchPlaceholder,
+  setSelectValue,
+  clearFilters,
+} = useAdminListFilters({
+  searchPlaceholder: 'Search name, email, or message...',
+  selectKeys: ['status'],
+})
+
 const { items, total, page, totalPages, pending, refresh, setPage, pageSize } = useAdminPaginatedList(
   'admin-contact',
   fetchPage,
+  filters,
 )
 
 function formatDate(value: string | null) {

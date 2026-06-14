@@ -11,10 +11,25 @@
       </template>
     </AdminPageHeader>
 
+    <AdminListToolbar
+      :search="searchInput"
+      :search-placeholder="searchPlaceholder"
+      :selects="filterSelects"
+      :select-values="selectValues"
+      :has-active-filters="hasActiveFilters"
+      @update:search="searchInput = $event"
+      @update:select="setSelectValue"
+      @clear="clearFilters"
+    />
+
     <div v-if="pending" class="text-sm text-luxury-charcoal">Loading hero slides...</div>
 
-    <div v-else-if="!items.length && total === 0" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+    <div v-else-if="!items.length && total === 0 && !hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
       No hero slides yet. The homepage will fall back to featured collections until slides are added.
+    </div>
+
+    <div v-else-if="!items.length && total === 0 && hasActiveFilters" class="border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-luxury-charcoal">
+      No hero slides match your search or filters.
     </div>
 
     <template v-else>
@@ -24,9 +39,7 @@
             <tr>
               <th class="px-4 py-3">Preview</th>
               <th class="px-4 py-3">Title</th>
-              <th class="px-4 py-3">Order</th>
               <th class="px-4 py-3">Status</th>
-              <th class="px-4 py-3">Link</th>
               <th class="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -36,13 +49,11 @@
                 <img :src="slide.right_image_url" :alt="slide.title" class="h-14 w-20 object-cover">
               </td>
               <td class="px-4 py-4 font-medium">{{ slide.title }}</td>
-              <td class="px-4 py-4">{{ slide.order_index }}</td>
               <td class="px-4 py-4">
                 <span :class="slide.is_active ? 'text-emerald-700' : 'text-luxury-charcoal'">
                   {{ slide.is_active ? 'Active' : 'Hidden' }}
                 </span>
               </td>
-              <td class="max-w-xs truncate px-4 py-4">{{ slide.link_url }}</td>
               <td class="px-4 py-4">
                 <div class="flex justify-end gap-2">
                   <NuxtLink
@@ -83,9 +94,35 @@ definePageMeta({ layout: 'admin' })
 
 const { fetchPage, remove } = useHeroSlides()
 const toast = useToast()
+
+const filterSelects = [
+  {
+    key: 'active' as const,
+    label: 'Status',
+    options: [
+      { value: 'active', label: 'Active' },
+      { value: 'hidden', label: 'Hidden' },
+    ],
+  },
+]
+
+const {
+  searchInput,
+  selectValues,
+  filters,
+  hasActiveFilters,
+  searchPlaceholder,
+  setSelectValue,
+  clearFilters,
+} = useAdminListFilters({
+  searchPlaceholder: 'Search slides...',
+  selectKeys: ['active'],
+})
+
 const { items, total, page, totalPages, pending, refresh, setPage, pageSize } = useAdminPaginatedList(
   'admin-hero-slides',
   fetchPage,
+  filters,
 )
 
 const deletingId = ref<string | null>(null)

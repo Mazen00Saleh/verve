@@ -3,10 +3,8 @@
     <div class="page-container py-8 sm:py-12 md:py-16">
       <div class="mb-12 text-center sm:mb-16">
         <span class="section-eyebrow">Catalog</span>
-        <h1 class="section-title mb-4">Our Collections</h1>
-        <p class="section-intro mx-auto max-w-2xl text-sm sm:text-base">
-          Browse every curated collection across wallpapers, fabrics, posters, and wallcoverings.
-        </p>
+        <h1 class="section-title">Our Collections</h1>
+        <div class="section-title-divider" />
       </div>
 
       <PageState

@@ -18,6 +18,11 @@
         </template>
       </AdminFormField>
 
+      <label class="flex items-center gap-3 text-sm text-luxury-charcoal">
+        <input v-model="form.is_active" type="checkbox" class="h-4 w-4 border-neutral-300">
+        Active on homepage
+      </label>
+
       <AdminImageUploader
         v-model="leftImages"
         folder="hero"
@@ -35,29 +40,6 @@
         hint="Main lifestyle image shown on the right."
         required
       />
-
-      <AdminFormField label="Link URL" hint="Internal path or full URL for the CTA button." required>
-        <template #default="{ inputId }">
-          <input :id="inputId" v-model="form.link_url" type="text" required placeholder="/collections/wallpapers" class="admin-input">
-        </template>
-      </AdminFormField>
-
-      <AdminFormField label="CTA Label" required>
-        <template #default="{ inputId }">
-          <input :id="inputId" v-model="form.cta_label" type="text" required class="admin-input">
-        </template>
-      </AdminFormField>
-
-      <AdminFormField label="Display Order" hint="Lower numbers appear first.">
-        <template #default="{ inputId }">
-          <input :id="inputId" v-model.number="form.order_index" type="number" min="0" class="admin-input">
-        </template>
-      </AdminFormField>
-
-      <label class="flex items-center gap-3 text-sm text-luxury-charcoal">
-        <input v-model="form.is_active" type="checkbox" class="h-4 w-4 border-neutral-300">
-        Active on homepage
-      </label>
 
       <div class="flex gap-3">
         <button type="submit" class="btn-primary" :disabled="submitting || isUploading">
@@ -80,9 +62,6 @@ const toast = useToast()
 const form = reactive({
   title: '',
   description: '',
-  link_url: '',
-  cta_label: 'Explore Collection',
-  order_index: 0,
   is_active: true,
 })
 
@@ -112,9 +91,9 @@ async function handleSubmit() {
     description: form.description.trim() || null,
     left_image_url: leftImageUrl,
     right_image_url: rightImageUrl,
-    link_url: form.link_url.trim(),
-    cta_label: form.cta_label.trim() || 'Explore Collection',
-    order_index: form.order_index,
+    link_url: '/collections',
+    cta_label: 'Explore Collections',
+    order_index: 0,
     is_active: form.is_active,
   })
 

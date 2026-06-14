@@ -8,14 +8,15 @@ export type PublicHeroSlide = {
   ctaLabel: string
 }
 
+const HERO_CTA_LINK = '/collections'
+const HERO_CTA_LABEL = 'Explore Collections'
+
 function mapHeroSlide(row: {
   id: string
   title: string
   description: string | null
   left_image_url: string
   right_image_url: string
-  link_url: string
-  cta_label: string
 }): PublicHeroSlide {
   return {
     id: row.id,
@@ -23,8 +24,8 @@ function mapHeroSlide(row: {
     description: row.description ?? '',
     leftImage: row.left_image_url,
     rightImage: row.right_image_url,
-    link: row.link_url,
-    ctaLabel: row.cta_label,
+    link: HERO_CTA_LINK,
+    ctaLabel: HERO_CTA_LABEL,
   }
 }
 
@@ -33,7 +34,7 @@ async function fetchHeroSlidesFromSupabase(): Promise<PublicHeroSlide[]> {
 
   const { data, error } = await client
     .from('hero_slides')
-    .select('id, title, description, left_image_url, right_image_url, link_url, cta_label')
+    .select('id, title, description, left_image_url, right_image_url')
     .eq('is_active', true)
     .order('order_index', { ascending: true })
     .order('created_at', { ascending: true })

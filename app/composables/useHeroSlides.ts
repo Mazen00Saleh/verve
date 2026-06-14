@@ -1,5 +1,7 @@
 import type { Tables, TablesInsert, TablesUpdate } from '~/types/database.types'
+import type { AdminFetchFilters } from '~/types/adminList'
 import { PAGINATION } from '~/config/pagination'
+import { applyNameSearch } from '~/utils/adminFilters'
 import { getErrorMessage } from '~/utils/errors'
 import { buildPaginatedResult, getPaginationRange, type PaginatedResult } from '~/utils/pagination'
 import { collectUrls } from '~/utils/storage'
@@ -12,12 +14,26 @@ export function useHeroSlides() {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  async function fetchPage(page: number, pageSize = PAGINATION['admin-hero-slides']): Promise<PaginatedResult<HeroSlide>> {
+  async function fetchPage(
+    page: number,
+    pageSize = PAGINATION['admin-hero-slides'],
+    filters: AdminFetchFilters = {},
+  ): Promise<PaginatedResult<HeroSlide>> {
     const { from, to } = getPaginationRange(page, pageSize)
 
-    const { data, error: fetchError, count } = await supabase
+    let query = supabase
       .from('hero_slides')
       .select('*', { count: 'exact' })
+
+    query = applyNameSearch(query, 'title', filters.search)
+
+    if (filters.active === 'active') {
+      query = query.eq('is_active', true)
+    } else if (filters.active === 'hidden') {
+      query = query.eq('is_active', false)
+    }
+
+    const { data, error: fetchError, count } = await query
       .order('order_index', { ascending: true })
       .order('created_at', { ascending: true })
       .range(from, to)
