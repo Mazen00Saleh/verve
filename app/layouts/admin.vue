@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-neutral-100 text-luxury-matte-black">
     <div class="flex min-h-screen">
-      <aside class="relative flex min-h-screen w-64 shrink-0 flex-col border-r border-neutral-200 bg-luxury-matte-black text-luxury-ivory">
+      <aside class="sticky top-0 flex h-screen w-64 shrink-0 flex-col self-start border-r border-neutral-200 bg-luxury-matte-black text-luxury-ivory">
         <div class="border-b border-white/10 px-6 py-8">
           <p class="text-xs uppercase tracking-[0.3em] text-luxury-brass">Verve</p>
           <h1 class="mt-2 font-serif text-2xl">Admin</h1>

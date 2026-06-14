@@ -1,25 +1,28 @@
 <template>
-  <section class="py-12 bg-luxury-ivory border-t border-b border-luxury-warm-beige overflow-hidden relative">
-    <!-- Fade overlays -->
-    <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-luxury-ivory to-transparent z-10 pointer-events-none"></div>
-    <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-luxury-ivory to-transparent z-10 pointer-events-none"></div>
-    
+  <section class="relative overflow-hidden border-b border-t border-luxury-warm-beige bg-luxury-ivory py-10 md:py-12">
+    <div class="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-32 bg-gradient-to-r from-luxury-ivory to-transparent" />
+    <div class="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-32 bg-gradient-to-l from-luxury-ivory to-transparent" />
+
     <div class="flex w-max animate-scroll">
-      <div class="flex items-center gap-16 px-8" v-for="n in 2" :key="n">
-        <span v-for="(brand, i) in brands" :key="`${n}-${i}`" class="cursor-default select-none font-serif text-xl uppercase tracking-[0.1em] text-luxury-charcoal md:text-2xl">
-          {{ brand }}
-        </span>
+      <div v-for="n in 2" :key="n" class="flex items-center gap-12 px-8 md:gap-16">
+        <img
+          v-for="(brand, i) in brands"
+          :key="`${n}-${brand.slug}-${i}`"
+          :src="brand.src"
+          :alt="brand.name"
+          :width="brand.width"
+          :height="brand.height"
+          class="h-10 w-auto max-w-[9.5rem] shrink-0 object-contain md:h-12 md:max-w-[11rem]"
+          loading="lazy"
+          decoding="async"
+        >
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-const brands = [
-  "D&G", "ARMANI/CASA", "AGENA", "ANTHOLOGY", "Baker Lifestyle", 
-  "BLACK edition", "CAMENGO", "CASADECO", "CASAMANCE", "JV ITALIAN DESIGN", 
-  "MISSONI HOME", "NOBILIS", "omexco", "PHILLIP JEFFRIES", "PIERRE FREY", 
-  "pt", "RUBELLI", "SAHCO", "SAMUEL & SONS", "SIRPI", 
-  "zinc textile", "ZOFFANY", "HOULES", "kravet"
-]
+import brandLogos from '~/data/brand-logos.json'
+
+const brands = brandLogos
 </script>

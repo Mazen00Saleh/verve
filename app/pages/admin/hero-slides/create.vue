@@ -6,6 +6,10 @@
     />
 
     <form class="max-w-2xl space-y-6 border border-neutral-200 bg-white p-8" @submit.prevent="handleSubmit">
+      <div class="flex justify-end border-b border-neutral-100 pb-6">
+        <AdminToggle v-model="form.is_active" label="Active" />
+      </div>
+
       <AdminFormField label="Title" required>
         <template #default="{ inputId }">
           <input :id="inputId" v-model="form.title" type="text" required class="admin-input">
@@ -17,11 +21,6 @@
           <textarea :id="inputId" v-model="form.description" rows="4" class="admin-input" />
         </template>
       </AdminFormField>
-
-      <label class="flex items-center gap-3 text-sm text-luxury-charcoal">
-        <input v-model="form.is_active" type="checkbox" class="h-4 w-4 border-neutral-300">
-        Active on homepage
-      </label>
 
       <AdminImageUploader
         v-model="leftImages"

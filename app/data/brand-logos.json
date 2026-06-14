@@ -3,192 +3,168 @@
     "name": "D&G",
     "slug": "d-g",
     "src": "/images/brands/d-g.webp",
-    "width": 47,
-    "height": 40,
-    "source": "fetched"
+    "width": 189,
+    "height": 96
   },
   {
     "name": "ARMANI/CASA",
     "slug": "armani-casa",
     "src": "/images/brands/armani-casa.webp",
-    "width": 35,
-    "height": 40,
-    "source": "fetched"
+    "width": 635,
+    "height": 96
   },
   {
     "name": "AGENA",
     "slug": "agena",
     "src": "/images/brands/agena.webp",
-    "width": 85,
-    "height": 24,
-    "source": "generated"
+    "width": 538,
+    "height": 96
   },
   {
     "name": "ANTHOLOGY",
     "slug": "anthology",
     "src": "/images/brands/anthology.webp",
-    "width": 48,
-    "height": 48,
-    "source": "fetched"
+    "width": 874,
+    "height": 96
   },
   {
     "name": "Baker Lifestyle",
     "slug": "baker-lifestyle",
     "src": "/images/brands/baker-lifestyle.webp",
-    "width": 48,
-    "height": 48,
-    "source": "fetched"
+    "width": 597,
+    "height": 96
   },
   {
     "name": "BLACK edition",
     "slug": "black-edition",
     "src": "/images/brands/black-edition.webp",
-    "width": 175,
-    "height": 24,
-    "source": "generated"
+    "width": 192,
+    "height": 96
   },
   {
     "name": "CAMENGO",
     "slug": "camengo",
     "src": "/images/brands/camengo.webp",
-    "width": 37,
-    "height": 35,
-    "source": "fetched"
+    "width": 538,
+    "height": 96
   },
   {
     "name": "CASADECO",
     "slug": "casadeco",
     "src": "/images/brands/casadeco.webp",
-    "width": 32,
-    "height": 38,
-    "source": "fetched"
+    "width": 526,
+    "height": 96
   },
   {
     "name": "CASAMANCE",
     "slug": "casamance",
     "src": "/images/brands/casamance.webp",
-    "width": 35,
-    "height": 39,
-    "source": "fetched"
+    "width": 616,
+    "height": 96
   },
   {
     "name": "JV ITALIAN DESIGN",
     "slug": "jv-italian-design",
     "src": "/images/brands/jv-italian-design.webp",
-    "width": 174,
-    "height": 25,
-    "source": "generated"
+    "width": 98,
+    "height": 96
   },
   {
     "name": "MISSONI HOME",
     "slug": "missoni-home",
     "src": "/images/brands/missoni-home.webp",
-    "width": 173,
-    "height": 24,
-    "source": "generated"
+    "width": 709,
+    "height": 96
   },
   {
     "name": "NOBILIS",
     "slug": "nobilis",
     "src": "/images/brands/nobilis.webp",
-    "width": 93,
-    "height": 24,
-    "source": "generated"
+    "width": 365,
+    "height": 96
   },
   {
     "name": "omexco",
     "slug": "omexco",
     "src": "/images/brands/omexco.webp",
-    "width": 48,
-    "height": 48,
-    "source": "fetched"
+    "width": 257,
+    "height": 96
   },
   {
     "name": "PHILLIP JEFFRIES",
     "slug": "phillip-jeffries",
     "src": "/images/brands/phillip-jeffries.webp",
-    "width": 32,
-    "height": 36,
-    "source": "fetched"
+    "width": 699,
+    "height": 96
   },
   {
     "name": "PIERRE FREY",
     "slug": "pierre-frey",
     "src": "/images/brands/pierre-frey.webp",
-    "width": 48,
-    "height": 48,
-    "source": "fetched"
+    "width": 427,
+    "height": 96
   },
   {
     "name": "pt",
     "slug": "pt",
     "src": "/images/brands/pt.webp",
-    "width": 35,
-    "height": 44,
-    "source": "fetched"
+    "width": 87,
+    "height": 96
   },
   {
     "name": "RUBELLI",
     "slug": "rubelli",
     "src": "/images/brands/rubelli.webp",
-    "width": 44,
-    "height": 44,
-    "source": "fetched"
+    "width": 181,
+    "height": 96
   },
   {
     "name": "SAHCO",
     "slug": "sahco",
     "src": "/images/brands/sahco.webp",
-    "width": 32,
-    "height": 46,
-    "source": "fetched"
+    "width": 276,
+    "height": 96
   },
   {
     "name": "SAMUEL & SONS",
     "slug": "samuel-and-sons",
     "src": "/images/brands/samuel-and-sons.webp",
-    "width": 48,
-    "height": 48,
-    "source": "fetched"
+    "width": 526,
+    "height": 96
   },
   {
     "name": "SIRPI",
     "slug": "sirpi",
     "src": "/images/brands/sirpi.webp",
-    "width": 61,
-    "height": 24,
-    "source": "generated"
+    "width": 263,
+    "height": 96
   },
   {
     "name": "zinc textile",
     "slug": "zinc-textile",
     "src": "/images/brands/zinc-textile.webp",
-    "width": 48,
-    "height": 36,
-    "source": "fetched"
+    "width": 143,
+    "height": 96
   },
   {
     "name": "ZOFFANY",
     "slug": "zoffany",
     "src": "/images/brands/zoffany.webp",
-    "width": 48,
-    "height": 48,
-    "source": "fetched"
+    "width": 152,
+    "height": 96
   },
   {
     "name": "HOULES",
     "slug": "houles",
     "src": "/images/brands/houles.webp",
-    "width": 48,
-    "height": 42,
-    "source": "fetched"
+    "width": 160,
+    "height": 96
   },
   {
     "name": "kravet",
     "slug": "kravet",
     "src": "/images/brands/kravet.webp",
-    "width": 48,
-    "height": 38,
-    "source": "fetched"
+    "width": 295,
+    "height": 96
   }
 ]
