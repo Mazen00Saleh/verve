@@ -9,31 +9,35 @@
         <div class="section-title-divider" />
       </div>
 
-      <div class="mx-auto mb-12 max-w-6xl sm:mb-16">
-        <picture class="block w-full">
-          <source
-            srcset="/images/about-hero.webp 4500w"
-            sizes="(min-width: 1152px) 1152px, 100vw"
-            type="image/webp"
-          >
-          <img
-            src="/images/about-hero.jpg"
-            srcset="/images/about-hero.jpg 4500w"
-            sizes="(min-width: 1152px) 1152px, 100vw"
-            alt="Verve Exclusive Home Collection"
-            class="h-auto w-full"
-            width="4500"
-            height="2130"
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-          >
-        </picture>
-      </div>
+      <div class="mx-auto mb-16 grid max-w-5xl grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-x-12 lg:gap-x-16">
+        <div class="w-full">
+          <picture class="block w-full">
+            <source
+              srcset="/images/about-hero.webp 4500w"
+              sizes="(min-width: 1024px) 512px, (min-width: 768px) 50vw, 100vw"
+              type="image/webp"
+            >
+            <img
+              src="/images/about-hero.jpg"
+              srcset="/images/about-hero.jpg 4500w"
+              sizes="(min-width: 1024px) 512px, (min-width: 768px) 50vw, 100vw"
+              alt="Verve Exclusive Home Collection"
+              class="h-auto w-full rounded-sm"
+              width="4500"
+              height="2130"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            >
+          </picture>
+        </div>
 
-      <p class="section-intro mx-auto mb-14 max-w-3xl text-center text-sm sm:mb-16 sm:text-base">
-        Today, Verve is recognized as one of the largest suppliers of furnishing fabrics and wallpapers in the region. Our philosophy remains unchanged: to constantly evolve and innovate while preserving the core values of quality, creativity, and integrity that have defined us since 2006. We are not just supplying materials; we are crafting experiences that shape the spaces where life happens.
-      </p>
+        <div class="flex flex-col justify-center text-left">
+          <p class="section-intro text-sm sm:text-base leading-relaxed text-luxury-charcoal">
+            Today, Verve is recognized as one of the largest suppliers of furnishing fabrics and wallpapers in the region. Our philosophy remains unchanged: to constantly evolve and innovate while preserving the core values of quality, creativity, and integrity that have defined us since 2006. We are not just supplying materials; we are crafting experiences that shape the spaces where life happens.
+          </p>
+        </div>
+      </div>
 
       <div class="mx-auto grid max-w-5xl grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16 md:gap-y-0">
         <article class="border-t border-neutral-200 pt-8">
@@ -68,7 +72,7 @@ useHead({
       href: '/images/about-hero.webp',
       type: 'image/webp',
       imagesrcset: '/images/about-hero.webp 4500w',
-      imagesizes: '(min-width: 1152px) 1152px, 100vw',
+      imagesizes: '(min-width: 1024px) 512px, (min-width: 768px) 50vw, 100vw',
     },
   ],
 })
