@@ -35,20 +35,22 @@ const PRESETS: Record<ImageUploadPreset, {
 }> = {
   primary: {
     maxWidthOrHeight: 1920,
-    maxSizeMB: 1,
-    quality: 0.8,
+    maxSizeMB: 0.6,
+    quality: 0.75,
   },
   gallery: {
     maxWidthOrHeight: 1600,
-    maxSizeMB: 0.8,
-    quality: 0.75,
+    maxSizeMB: 0.5,
+    quality: 0.7,
   },
   mockup: {
     maxWidthOrHeight: 1600,
-    maxSizeMB: 0.8,
-    quality: 0.75,
+    maxSizeMB: 0.5,
+    quality: 0.7,
   },
 }
+
+const OUTPUT_TYPE = 'image/webp'
 
 const ACCEPTED_TYPES = new Set([
   'image/jpeg',
@@ -80,7 +82,8 @@ export function useImageUpload() {
   }
 
   function generateFileName(originalName: string): string {
-    return `${crypto.randomUUID()}-${originalName}`
+    const baseName = originalName.replace(/\.[^.]+$/, '')
+    return `${crypto.randomUUID()}-${baseName}.webp`
   }
 
   async function compressImage(file: File, preset: ImageUploadPreset = 'primary'): Promise<CompressionResult> {
@@ -98,7 +101,7 @@ export function useImageUpload() {
         maxWidthOrHeight: options.maxWidthOrHeight,
         useWebWorker: true,
         initialQuality: options.quality,
-        fileType: file.type,
+        fileType: OUTPUT_TYPE,
       })
 
       const compressedSize = compressedFile.size
@@ -128,7 +131,7 @@ export function useImageUpload() {
       .upload(path, file, {
         cacheControl: '3600',
         upsert: false,
-        contentType: file.type,
+        contentType: OUTPUT_TYPE,
       })
 
     if (uploadError) {
