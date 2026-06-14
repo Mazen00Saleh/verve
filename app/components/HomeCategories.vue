@@ -49,14 +49,14 @@ const SLOT_CONFIG: Array<{
   },
   {
     slot: 'left-bottom',
-    label: 'Wall Coverings',
+    label: 'Wallcoverings',
     slugs: ['wall-coverings', 'wallcoverings', 'wall-covering'],
     titlePattern: /wall\s*cover|accessor/i,
     className: 'aspect-[5/3] sm:aspect-[4/3] md:col-start-1 md:row-start-2 md:aspect-auto md:h-full md:min-h-0',
   },
   {
     slot: 'middle',
-    label: 'Wallpaper',
+    label: 'Wallpapers',
     slugs: ['wallpapers', 'wallpaper'],
     titlePattern: /wallpaper/i,
     className: 'aspect-[4/5] sm:aspect-[3/4] md:col-start-2 md:row-span-2 md:row-start-1 md:aspect-auto md:h-full md:min-h-0',
