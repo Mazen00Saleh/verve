@@ -41,12 +41,12 @@ const PRESETS: Record<ImageUploadPreset, {
   gallery: {
     maxWidthOrHeight: 1600,
     maxSizeMB: 0.5,
-    quality: 0.7,
+    quality: 0.75,
   },
   mockup: {
     maxWidthOrHeight: 1600,
     maxSizeMB: 0.5,
-    quality: 0.7,
+    quality: 0.75,
   },
 }
 
