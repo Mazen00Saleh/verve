@@ -1,17 +1,22 @@
 <template>
   <NuxtLink
-    :to="`/collections/${category.slug}`"
+    :to="to"
     class="group relative block h-full w-full min-h-[180px] overflow-hidden bg-neutral-200"
     :class="$attrs.class"
   >
-    <img
+    <CatalogImage
       v-if="category.image"
       :src="category.image"
       :alt="label"
-      class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-      loading="lazy"
-      decoding="async"
-    >
+      aspect="auto"
+      object-fit="cover"
+      :overlay="false"
+      :hover-scale="true"
+      :priority="priority"
+      size="mosaic"
+      container-class="absolute inset-0 h-full w-full"
+      image-class="absolute inset-0 h-full w-full"
+    />
     <div
       v-else
       class="absolute inset-0 bg-luxury-warm-beige/40"
@@ -40,12 +45,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Category } from '~/data/catalog'
+import type { Category } from '~/types/catalog'
 
-defineProps<{
+const props = defineProps<{
   category: Category
   label: string
+  to?: string
+  priority?: boolean
 }>()
+
+const to = computed(() => props.to ?? `/collections/${props.category.slug}`)
 
 defineOptions({
   inheritAttrs: false,

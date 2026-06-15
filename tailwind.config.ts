@@ -30,7 +30,6 @@ export default {
       },
       fontFamily: {
         sans: ['Montserrat', 'sans-serif'],
-        serif: ['Playfair Display', 'serif'],
       },
       animation: {
         'fade-in': 'fadeIn 1s ease-out forwards',

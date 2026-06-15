@@ -2,7 +2,7 @@
   <div class="page-shell">
     <div class="page-container">
       <div class="page-back">
-        <NuxtLink to="/collections" class="back-link group">
+        <NuxtLink :to="`/collections/${categorySlug}`" class="back-link group">
           <svg class="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>

@@ -26,7 +26,7 @@
           >
             <div class="relative hidden h-full w-[22%] overflow-hidden lg:block">
               <img
-                :src="slide.leftImage"
+                :src="heroImageUrl(slide.leftImage, 500, 750)"
                 alt=""
                 aria-hidden="true"
                 class="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-[8000ms] ease-out"
@@ -36,8 +36,8 @@
                 :loading="index === 0 ? 'eager' : 'lazy'"
                 :fetchpriority="index === 0 ? 'high' : 'auto'"
                 decoding="async"
-                width="400"
-                height="600"
+                width="500"
+                height="750"
               >
               <div class="absolute inset-0 bg-black/10" />
               <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-luxury-ivory/60 to-transparent md:h-28" />
@@ -52,7 +52,7 @@
             >
               <div class="flex min-h-[280px] flex-col justify-center space-y-6 sm:min-h-[300px]">
                 <h2
-                  class="line-clamp-3 min-h-[4.5rem] font-serif text-2xl uppercase leading-tight tracking-wide text-luxury-matte-black transition-all duration-700 delay-500 sm:min-h-[5.25rem] sm:text-3xl lg:min-h-[6rem] lg:text-4xl"
+                  class="line-clamp-3 min-h-[4.5rem] text-2xl uppercase leading-tight tracking-wide text-luxury-matte-black transition-all duration-700 delay-500 sm:min-h-[5.25rem] sm:text-3xl lg:min-h-[6rem] lg:text-4xl"
                   :style="{
                     transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
                     opacity: currentSlide === index ? '1' : '0',
@@ -82,9 +82,9 @@
               </div>
             </div>
 
-            <div class="relative h-full flex-grow overflow-hidden">
+            <div class="relative h-full min-w-0 flex-grow overflow-hidden">
               <img
-                :src="slide.rightImage"
+                :src="heroImageUrl(slide.rightImage, 1600, 1067)"
                 :alt="slide.title"
                 class="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-[8000ms] ease-out"
                 :style="{
@@ -93,8 +93,8 @@
                 :loading="index === 0 ? 'eager' : 'lazy'"
                 :fetchpriority="index === 0 ? 'high' : 'auto'"
                 decoding="async"
-                width="1200"
-                height="800"
+                width="1600"
+                height="1067"
               >
               <div class="absolute inset-0 bg-black/[0.03]" />
               <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-luxury-ivory/70 via-luxury-ivory/15 to-transparent md:h-32" />
@@ -153,42 +153,37 @@
 </template>
 
 <script setup lang="ts">
-import type { PublicHeroSlide } from '~/composables/usePublicHeroSlides'
+const { data: slidesData, pending, error } = await usePublicHeroSlides()
 
-const { data: cmsSlides, pending: cmsPending, error: cmsError } = await usePublicHeroSlides()
-const { data: categories, pending: catalogPending, error: catalogError } = await useCatalog()
+const slides = computed(() => slidesData.value ?? [])
+const errorMessage = computed(() => error.value?.message ?? null)
 
-const pending = computed(() => cmsPending.value || catalogPending.value)
-const errorMessage = computed(() => cmsError.value?.message ?? catalogError.value?.message ?? null)
-
-const slides = computed<PublicHeroSlide[]>(() => {
-  if (cmsSlides.value?.length) {
-    return cmsSlides.value
-  }
-
-  if (!categories.value?.length) {
-    return []
-  }
-
-  return getHeroSlides(categories.value, 3).map((slide, index) => ({
-    id: `catalog-fallback-${index}`,
-    title: slide.title,
-    description: slide.description,
-    leftImage: slide.leftImage,
-    rightImage: slide.rightImage,
-    link: '/collections',
-    ctaLabel: 'Explore Collections',
-  }))
-})
-
+const $img = useImage()
 const lcpImage = computed(() => slides.value[0]?.rightImage ?? null)
 
+function heroImageUrl(src: string, width: number, height?: number) {
+  return $img(src, {
+    width,
+    height,
+    quality: 80,
+    format: 'webp',
+  })
+}
+
 useHead({
-  link: computed(() => (
-    lcpImage.value
-      ? [{ rel: 'preload', as: 'image', href: lcpImage.value, fetchpriority: 'high' }]
-      : []
-  )),
+  link: computed(() => {
+    const src = lcpImage.value
+    if (!src) {
+      return []
+    }
+
+    return [{
+      rel: 'preload',
+      as: 'image',
+      href: heroImageUrl(src, 1600, 1067),
+      fetchpriority: 'high',
+    }]
+  }),
 })
 
 const currentSlide = ref(0)

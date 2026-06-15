@@ -4,7 +4,7 @@
       <aside class="sticky top-0 flex h-screen w-64 shrink-0 flex-col self-start border-r border-neutral-200 bg-luxury-matte-black text-luxury-ivory">
         <div class="border-b border-white/10 px-6 py-8">
           <p class="text-xs uppercase tracking-[0.3em] text-luxury-brass">Verve</p>
-          <h1 class="mt-2 font-serif text-2xl">Admin</h1>
+          <h1 class="mt-2 text-2xl">Admin</h1>
         </div>
 
         <nav class="flex-1 px-4 py-6">
@@ -73,6 +73,7 @@ const navItems = [
   { label: 'Collections', to: '/admin/collections' },
   { label: 'Products', to: '/admin/products' },
   { label: 'Brochures', to: '/admin/brochures' },
+  { label: 'Brand Logos', to: '/admin/brand-logos' },
   { label: 'Hero Slides', to: '/admin/hero-slides' },
   { label: 'Contact Messages', to: '/admin/contact' },
 ]

@@ -12,6 +12,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      brand_logos: {
+        Row: {
+          created_at: string | null
+          id: string
+          logo_url: string
+          name: string
+          order_index: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          logo_url: string
+          name: string
+          order_index?: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          logo_url?: string
+          name?: string
+          order_index?: number
+        }
+        Relationships: []
+      }
       brochures: {
         Row: {
           created_at: string | null

@@ -4,11 +4,12 @@
     class="catalog-card group block"
   >
     <div class="relative">
-      <CatalogImage
-        :src="product.image"
-        :alt="product.name"
-        aspect="square"
-        :priority="priority"
+    <CatalogImage
+      :src="product.image"
+      :alt="product.name"
+      aspect="square"
+      :priority="priority"
+      size="card"
         container-class="shadow-[0_4px_20px_rgba(0,0,0,0.04)] bg-luxury-warm-beige/10"
         hover-scale
       />
@@ -25,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Product } from '~/data/catalog'
+import type { Product } from '~/types/catalog'
 
 defineProps<{
   product: Product

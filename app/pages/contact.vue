@@ -12,7 +12,7 @@
 
       <div class="mx-auto grid max-w-5xl grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
         <div class="border border-luxury-warm-beige/30 bg-white p-6 shadow-sm sm:p-10">
-          <h2 class="mb-6 font-serif text-2xl text-luxury-matte-black sm:mb-8">Send a Message</h2>
+          <h2 class="mb-6 text-2xl text-luxury-matte-black sm:mb-8">Send a Message</h2>
 
           <div
             v-if="success"
@@ -84,19 +84,19 @@
 
         <div class="flex flex-col justify-center space-y-10">
           <div>
-            <h3 class="mb-4 font-serif text-xl text-luxury-matte-black">Address</h3>
+            <h3 class="mb-4 text-xl text-luxury-matte-black">Address</h3>
             <p class="mb-1 font-light text-luxury-charcoal">Verve Building No.(67)</p>
             <p class="mb-1 font-light text-luxury-charcoal">Prs. Alia St, Al-Swaifyeh</p>
             <p class="font-light text-luxury-charcoal">Amman, Jordan</p>
           </div>
           <div>
-            <h3 class="mb-4 font-serif text-xl text-luxury-matte-black">Contact Information</h3>
+            <h3 class="mb-4 text-xl text-luxury-matte-black">Contact Information</h3>
             <p class="mb-1 font-light text-luxury-charcoal">Telephone : 06-5925041</p>
             <p class="mb-1 font-light text-luxury-charcoal">Mobile: 079 0202 838</p>
             <a href="mailto:info@verve-group.com" class="block w-max border-b border-luxury-brass-contrast pb-1 text-luxury-brass-contrast transition-colors hover:text-luxury-matte-black">info@verve-group.com</a>
           </div>
           <div>
-            <h3 class="mb-4 font-serif text-xl text-luxury-matte-black">Working Hours</h3>
+            <h3 class="mb-4 text-xl text-luxury-matte-black">Working Hours</h3>
             <p class="mb-1 font-light text-luxury-charcoal">Saturday - Wednesday: 10am - 8pm</p>
             <p class="mb-1 font-light text-luxury-charcoal">Thursday: 10am - 7pm</p>
             <p class="font-light text-luxury-charcoal">Friday: Closed</p>
@@ -107,7 +107,7 @@
       <section class="mx-auto mt-16 max-w-5xl" aria-labelledby="find-us-heading">
         <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 id="find-us-heading" class="font-serif text-2xl text-luxury-matte-black">Find Us</h2>
+            <h2 id="find-us-heading" class="text-2xl text-luxury-matte-black">Find Us</h2>
             <p class="mt-2 text-sm font-light text-luxury-charcoal sm:text-base">
               Visit our showroom in Al-Swaifyeh, Amman.
             </p>

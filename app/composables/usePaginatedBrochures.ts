@@ -1,4 +1,4 @@
-import type { PublicBrochure } from '~/data/catalog'
+import type { PublicBrochure } from '~/types/catalog'
 import { PAGINATION } from '~/config/pagination'
 import { formatBrochureDate } from '~/utils/format-date'
 import { buildPaginatedResult, getPaginationRange, normalizePage, parsePageQuery, type PaginatedResult } from '~/utils/pagination'

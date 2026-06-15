@@ -3,7 +3,7 @@
     <div class="w-full max-w-md border border-neutral-200 bg-white p-8 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
       <div class="mb-8 text-center">
         <p class="text-xs uppercase tracking-[0.3em] text-luxury-brass">Verve Admin</p>
-        <h1 class="mt-3 font-serif text-3xl text-luxury-matte-black">Sign in</h1>
+        <h1 class="mt-3 text-3xl text-luxury-matte-black">Sign in</h1>
         <p class="mt-2 text-sm font-light text-luxury-charcoal">
           Use your administrator credentials to access the dashboard.
         </p>

@@ -28,14 +28,14 @@
               >
                 <img
                   ref="mainImageRef"
-                  :src="activeImage"
+                  :src="mainImageSrc"
                   :alt="product.name"
                   class="h-full w-full object-cover transition-opacity duration-300"
                   loading="eager"
                   fetchpriority="high"
                   decoding="async"
-                  width="800"
-                  height="800"
+                  width="1200"
+                  height="1200"
                   @load="onMainImageLoad"
                 >
 
@@ -56,7 +56,7 @@
                 class="absolute left-[105%] top-0 z-30 hidden h-[480px] w-[480px] overflow-hidden border border-neutral-200 bg-white shadow-2xl xl:block"
               >
                 <img
-                  :src="activeImage"
+                  :src="zoomImageSrc"
                   alt=""
                   class="pointer-events-none absolute max-w-none select-none"
                   :style="zoomPanelStyle"
@@ -66,7 +66,7 @@
 
             <div class="space-y-8 lg:sticky lg:top-32 lg:space-y-10">
               <div>
-                <h1 class="mb-1 font-serif text-3xl uppercase tracking-wider text-luxury-matte-black sm:text-4xl md:text-5xl">
+                <h1 class="mb-1 text-3xl uppercase tracking-wider text-luxury-matte-black sm:text-4xl md:text-5xl">
                   {{ product.name }}
                 </h1>
                 <p class="font-sans text-xs uppercase tracking-widest text-luxury-muted">
@@ -79,7 +79,7 @@
                   <span class="text-xs font-semibold uppercase tracking-widest text-luxury-charcoal">
                     Variations
                   </span>
-                  <span class="font-serif text-xs italic text-luxury-brass-contrast">
+                  <span class="text-xs italic text-luxury-brass-contrast">
                     {{ selectedVariant.label }}
                   </span>
                 </div>
@@ -95,11 +95,15 @@
                     :title="variant.label"
                     @click="selectedVariantIdx = idx"
                   >
-                    <img
+                    <CatalogImage
                       :src="variant.image"
                       :alt="variant.label"
-                      class="h-full w-full object-cover"
-                    >
+                      aspect="square"
+                      :overlay="false"
+                      :hover-scale="false"
+                      size="thumbnail"
+                      container-class="h-full w-full"
+                    />
                   </button>
                 </div>
               </div>
@@ -124,23 +128,11 @@
             <h3 class="mb-8 text-center text-xs font-semibold uppercase tracking-widest text-luxury-charcoal sm:mb-12">
               Room Inspirations
             </h3>
-            <div
-              class="mx-auto grid max-w-6xl grid-cols-1 items-end gap-6 sm:gap-8"
-              :class="mockupGridClass"
-            >
-              <div
-                v-for="(mockup, index) in mockups"
-                :key="`${mockup}-${index}`"
-                :class="mockupItemClass(index)"
-              >
-                <CatalogImage
-                  :src="mockup"
-                  :alt="`Room inspiration ${index + 1}`"
-                  :aspect="mockupAspect(index)"
-                  :overlay="false"
-                />
-              </div>
-            </div>
+            <CategoryMockupMasonry
+              :mockups="productMockups"
+              alt="Room inspiration"
+              column-class="max-w-6xl mx-auto"
+            />
           </div>
         </template>
       </PageState>
@@ -154,17 +146,14 @@ const categorySlug = route.params.category as string
 const collectionSlug = route.params.collection as string
 const productSlug = route.params.product as string
 
-const { data: categories, pending, error } = await useCatalog()
+const { data: detail, pending, error } = await useProductDetail(categorySlug, collectionSlug, productSlug)
 
 const errorMessage = computed(() => error.value?.message ?? null)
+const category = computed(() => detail.value?.category ?? null)
+const collection = computed(() => detail.value?.collection ?? null)
+const product = computed(() => detail.value?.product ?? null)
 
-const category = computed(() => categories.value?.find(item => item.slug === categorySlug))
-const collection = computed(() =>
-  category.value?.collections.find(item => item.slug === collectionSlug),
-)
-const product = computed(() =>
-  collection.value?.products.find(item => item.sku.toLowerCase() === productSlug),
-)
+const $img = useImage()
 
 const variants = computed(() => {
   if (!product.value) {
@@ -184,46 +173,34 @@ const variants = computed(() => {
 const selectedVariantIdx = ref(0)
 const selectedVariant = computed(() => variants.value[selectedVariantIdx.value] ?? { label: 'Primary', image: '' })
 const activeImage = computed(() => selectedVariant.value.image || product.value?.image || '')
+const mainImageSrc = computed(() =>
+  activeImage.value
+    ? $img(activeImage.value, { width: 1200, quality: 85, format: 'webp' })
+    : '',
+)
+const zoomImageSrc = computed(() =>
+  activeImage.value
+    ? $img(activeImage.value, { width: 1920, quality: 85, format: 'webp' })
+    : '',
+)
 
 const mockups = computed(() => product.value?.mockupImages ?? [])
 
-const mockupGridClass = computed(() =>
-  mockups.value.length === 1 ? 'md:grid-cols-1' : 'md:grid-cols-12',
+const productMockups = computed(() =>
+  mockups.value.map((url, index) => ({
+    url,
+    createdAt: null,
+    orderIndex: mockups.value.length - index,
+  })),
 )
-
-function mockupItemClass(index: number) {
-  if (mockups.value.length === 1) {
-    return 'md:col-span-12'
-  }
-
-  return index === 0 ? 'md:col-span-5' : 'md:col-span-7'
-}
-
-function mockupAspect(index: number): '3/4' | '4/3' {
-  if (mockups.value.length === 1) {
-    return '4/3'
-  }
-
-  return index === 0 ? '3/4' : '4/3'
-}
 
 watch(product, () => {
   selectedVariantIdx.value = 0
 })
 
-watch([pending, categories], () => {
-  if (!pending.value && categories.value) {
-    if (!category.value) {
-      throw createError({ statusCode: 404, statusMessage: 'Category not found' })
-    }
-
-    if (!collection.value) {
-      throw createError({ statusCode: 404, statusMessage: 'Collection not found' })
-    }
-
-    if (!product.value) {
-      throw createError({ statusCode: 404, statusMessage: 'Product not found' })
-    }
+watch([pending, detail], () => {
+  if (!pending.value && detail.value === null) {
+    throw createError({ statusCode: 404, statusMessage: 'Product not found' })
   }
 })
 
@@ -329,7 +306,7 @@ useHead({
       : 'Product | Verve Luxury Interiors',
   ),
   link: computed(() => {
-    const href = activeImage.value
+    const href = mainImageSrc.value
     if (!href) {
       return []
     }

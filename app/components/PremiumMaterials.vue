@@ -9,6 +9,7 @@
             aspect="4/5"
             :overlay="false"
             :hover-scale="false"
+            size="card"
           />
           <div
             v-if="secondaryImage"
@@ -20,6 +21,7 @@
               aspect="square"
               :overlay="false"
               :hover-scale="false"
+              size="thumbnail"
             />
           </div>
         </div>
@@ -45,36 +47,8 @@
 </template>
 
 <script setup lang="ts">
-const { data: categories } = await useCatalog()
+const { data: images } = await usePremiumMaterialImages()
 
-const catalogImages = computed(() => {
-  if (!categories.value?.length) {
-    return []
-  }
-
-  const images: string[] = []
-
-  for (const category of categories.value) {
-    if (category.image) {
-      images.push(category.image)
-    }
-
-    for (const collection of category.collections) {
-      if (collection.heroImage) {
-        images.push(collection.heroImage)
-      }
-
-      for (const product of collection.products) {
-        if (product.image) {
-          images.push(product.image)
-        }
-      }
-    }
-  }
-
-  return images
-})
-
-const primaryImage = computed(() => catalogImages.value[0] ?? '')
-const secondaryImage = computed(() => catalogImages.value[1] ?? '')
+const primaryImage = computed(() => images.value?.[0] ?? '')
+const secondaryImage = computed(() => images.value?.[1] ?? '')
 </script>

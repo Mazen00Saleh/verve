@@ -1,4 +1,5 @@
-import type { Collection } from '~/data/catalog'
+import type { Collection, Product } from '~/types/catalog'
+import { mapCollectionSummary, mapProduct, type DbProduct } from '~/utils/catalogMappers'
 import { toSlug } from '~/utils/slug'
 
 export type CategorySummary = {
@@ -14,6 +15,12 @@ export type CollectionSummary = Collection & {
   categoryId: string
 }
 
+export type ProductDetailResult = {
+  category: CategorySummary
+  collection: CollectionSummary
+  product: Product
+}
+
 function mapCategorySummary(row: {
   id: string
   name: string
@@ -26,27 +33,6 @@ function mapCategorySummary(row: {
     slug: toSlug(row.name),
     description: row.description ?? '',
     image: row.image_url ?? '',
-  }
-}
-
-function mapCollectionSummary(row: {
-  id: string
-  name: string
-  description: string | null
-  image_url: string | null
-  category_id: string | null
-}): CollectionSummary {
-  const description = row.description ?? ''
-
-  return {
-    id: row.id,
-    categoryId: row.category_id ?? '',
-    title: row.name,
-    slug: toSlug(row.name),
-    description,
-    longDescription: description,
-    heroImage: row.image_url ?? '',
-    products: [],
   }
 }
 
@@ -82,4 +68,63 @@ export async function fetchCollectionBySlug(
 
   const row = (data ?? []).find(collection => toSlug(collection.name) === slug)
   return row ? mapCollectionSummary(row) : null
+}
+
+export async function fetchProductDetail(
+  categorySlug: string,
+  collectionSlug: string,
+  productSlug: string,
+): Promise<ProductDetailResult | null> {
+  const categoryRow = await fetchCategoryBySlug(categorySlug)
+  if (!categoryRow) {
+    return null
+  }
+
+  const collectionRow = await fetchCollectionBySlug(categoryRow.id, collectionSlug)
+  if (!collectionRow) {
+    return null
+  }
+
+  const client = useSupabaseClient()
+
+  const { data: products, error } = await client
+    .from('products')
+    .select(`
+      id,
+      name,
+      description,
+      primary_image,
+      product_images (
+        url,
+        order_index,
+        type
+      )
+    `)
+    .eq('collection_id', collectionRow.id)
+
+  if (error) {
+    throw error
+  }
+
+  const productRow = (products ?? []).find(product => toSlug(product.name) === productSlug)
+  if (!productRow) {
+    return null
+  }
+
+  return {
+    category: categoryRow,
+    collection: collectionRow,
+    product: mapProduct(productRow as DbProduct),
+  }
+}
+
+export function useProductDetail(
+  categorySlug: string,
+  collectionSlug: string,
+  productSlug: string,
+) {
+  return useAsyncData(
+    `product-${categorySlug}-${collectionSlug}-${productSlug}`,
+    () => fetchProductDetail(categorySlug, collectionSlug, productSlug),
+  )
 }

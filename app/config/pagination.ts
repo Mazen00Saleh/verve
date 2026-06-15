@@ -6,6 +6,7 @@ export const PAGINATION = {
   'admin-collections': 15,
   'admin-products': 15,
   'admin-brochures': 15,
+  'admin-brand-logos': 15,
   'admin-hero-slides': 15,
   'admin-contact': 10,
 } as const

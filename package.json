@@ -11,6 +11,7 @@
     "seed": "node scripts/seed-catalog.mjs"
   },
   "dependencies": {
+    "@nuxt/image": "^2.0.0",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/supabase": "^2.0.9",
     "@nuxtjs/tailwindcss": "^6.14.0",

@@ -1,4 +1,4 @@
-import type { PublicBrochure } from '~/data/catalog'
+import type { PublicBrochure } from '~/types/catalog'
 import { formatBrochureDate } from '~/utils/format-date'
 import { toSlug } from '~/utils/slug'
 

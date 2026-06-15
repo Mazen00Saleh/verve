@@ -80,7 +80,7 @@ onUnmounted(() => {
 
 <style scoped>
 .nav-link {
-  @apply border-b border-transparent pb-1 text-center text-[10px] uppercase tracking-widest text-luxury-ivory transition-colors duration-300 hover:text-luxury-brass-light sm:text-[11px];
+  @apply border-b border-transparent pb-1 text-center text-[13px] uppercase tracking-widest text-luxury-ivory transition-colors duration-300 hover:text-luxury-brass-light sm:text-sm;
 }
 
 .nav-link-active {

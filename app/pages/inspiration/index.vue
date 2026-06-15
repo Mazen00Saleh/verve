@@ -47,7 +47,7 @@
       >
         <div class="relative flex h-full max-h-[85vh] w-full max-w-6xl flex-col overflow-hidden rounded-sm bg-white shadow-2xl">
           <div class="flex items-center justify-between border-b border-luxury-brass/10 bg-luxury-matte-black px-4 py-4 text-luxury-ivory sm:px-6">
-            <h3 class="truncate pr-4 font-serif text-sm tracking-wide">
+            <h3 class="truncate pr-4 text-sm tracking-wide">
               {{ activeBrochureTitle }}
             </h3>
             <button
@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PublicBrochure } from '~/data/catalog'
+import type { PublicBrochure } from '~/types/catalog'
 
 const { data, pending, error, refresh } = await usePaginatedBrochures()
 const { setPage, pageSize } = useRoutePagination('brochures')

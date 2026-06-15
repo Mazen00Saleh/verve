@@ -28,25 +28,25 @@ export interface CompressionResult {
   savingsPercent: number
 }
 
+const MAX_UPLOAD_SIZE_BYTES = 100 * 1024
+const MAX_UPLOAD_SIZE_MB = MAX_UPLOAD_SIZE_BYTES / (1024 * 1024)
+
+// Sized to match public delivery (`app/utils/imageSizes.ts`) while staying under 100 KB as WebP.
 const PRESETS: Record<ImageUploadPreset, {
   maxWidthOrHeight: number
-  maxSizeMB: number
   quality: number
 }> = {
   primary: {
     maxWidthOrHeight: 1920,
-    maxSizeMB: 0.6,
-    quality: 0.75,
+    quality: 0.62,
   },
   gallery: {
     maxWidthOrHeight: 1600,
-    maxSizeMB: 0.5,
-    quality: 0.75,
+    quality: 0.62,
   },
   mockup: {
     maxWidthOrHeight: 1600,
-    maxSizeMB: 0.5,
-    quality: 0.75,
+    quality: 0.62,
   },
 }
 
@@ -96,23 +96,40 @@ export function useImageUpload() {
 
     try {
       const imageCompression = (await import('browser-image-compression')).default
-      const compressedFile = await imageCompression(file, {
-        maxSizeMB: options.maxSizeMB,
-        maxWidthOrHeight: options.maxWidthOrHeight,
-        useWebWorker: true,
-        initialQuality: options.quality,
-        fileType: OUTPUT_TYPE,
-      })
+      let quality = options.quality
+      let maxDimension = options.maxWidthOrHeight
+      let compressedFile = file
 
-      const compressedSize = compressedFile.size
+      for (let attempt = 0; attempt < 6; attempt++) {
+        compressedFile = await imageCompression(file, {
+          maxSizeMB: MAX_UPLOAD_SIZE_MB,
+          maxWidthOrHeight: maxDimension,
+          useWebWorker: true,
+          initialQuality: quality,
+          fileType: OUTPUT_TYPE,
+        })
 
-      return {
-        file: compressedFile,
-        originalSize,
-        compressedSize,
-        savingsPercent: savingsPercent(originalSize, compressedSize),
+        if (compressedFile.size < MAX_UPLOAD_SIZE_BYTES) {
+          return {
+            file: compressedFile,
+            originalSize,
+            compressedSize: compressedFile.size,
+            savingsPercent: savingsPercent(originalSize, compressedFile.size),
+          }
+        }
+
+        quality = Math.max(0.35, quality - 0.1)
+        maxDimension = Math.round(maxDimension * 0.85)
       }
+
+      throw new Error(
+        `Could not compress image below 100 KB (final size: ${formatBytes(compressedFile.size)}). Try a smaller source image.`,
+      )
     } catch (compressionError) {
+      if (compressionError instanceof Error && compressionError.message.startsWith('Could not compress')) {
+        throw compressionError
+      }
+
       throw new Error(`Image compression failed: ${getErrorMessage(compressionError)}`)
     }
   }

@@ -16,7 +16,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-normal;
+    @apply font-sans font-normal;
   }
 
   :focus {
@@ -47,7 +47,7 @@
   }
 
   .section-title {
-    @apply font-serif text-3xl text-luxury-matte-black sm:text-4xl md:text-5xl;
+    @apply font-sans text-3xl text-luxury-matte-black sm:text-4xl md:text-5xl;
   }
 
   .section-title-divider {
@@ -71,7 +71,7 @@
   }
 
   .catalog-card-title {
-    @apply font-serif text-xs leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass-contrast sm:text-sm md:text-base lg:text-lg;
+    @apply font-sans text-xs leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass-contrast sm:text-sm md:text-base lg:text-lg;
   }
 
   .catalog-card-description {

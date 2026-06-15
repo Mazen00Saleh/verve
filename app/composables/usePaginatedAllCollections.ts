@@ -1,5 +1,4 @@
-import type { FeaturedCollection } from '~/data/catalog'
-import { flattenCollections } from '~/composables/useCatalog'
+import type { FeaturedCollection } from '~/types/catalog'
 import { PAGINATION } from '~/config/pagination'
 import { buildPaginatedResult, getPaginationRange, normalizePage, parsePageQuery, type PaginatedResult } from '~/utils/pagination'
 import { toSlug } from '~/utils/slug'
@@ -26,7 +25,7 @@ function mapCollectionRow(row: {
   }
 }
 
-async function fetchAllCollectionsFromSupabase(page: number): Promise<PaginatedResult<FeaturedCollection> | null> {
+async function fetchAllCollectionsPage(page: number): Promise<PaginatedResult<FeaturedCollection>> {
   const pageSize = PAGINATION.collections
   const client = useSupabaseClient()
   const { from, to } = getPaginationRange(page, pageSize)
@@ -49,11 +48,6 @@ async function fetchAllCollectionsFromSupabase(page: number): Promise<PaginatedR
   }
 
   const total = count ?? 0
-
-  if (total === 0) {
-    return null
-  }
-
   const normalizedPage = normalizePage(page, total, pageSize)
 
   return buildPaginatedResult(
@@ -68,26 +62,6 @@ async function fetchAllCollectionsFromSupabase(page: number): Promise<PaginatedR
     normalizedPage,
     pageSize,
   )
-}
-
-async function fetchAllCollectionsFromCatalog(page: number): Promise<PaginatedResult<FeaturedCollection>> {
-  const pageSize = PAGINATION.collections
-  const { from, to } = getPaginationRange(page, pageSize)
-  const { categories } = await import('~/data/catalog')
-  const all = flattenCollections(categories)
-  const items = all.slice(from, to + 1)
-
-  return buildPaginatedResult(items, all.length, page, pageSize)
-}
-
-async function fetchAllCollectionsPage(page: number): Promise<PaginatedResult<FeaturedCollection>> {
-  const fromSupabase = await fetchAllCollectionsFromSupabase(page)
-
-  if (fromSupabase) {
-    return fromSupabase
-  }
-
-  return fetchAllCollectionsFromCatalog(page)
 }
 
 export function usePaginatedAllCollections() {

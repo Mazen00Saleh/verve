@@ -1,4 +1,4 @@
-import type { Collection } from '~/data/catalog'
+import type { Collection } from '~/types/catalog'
 import { PAGINATION } from '~/config/pagination'
 import { fetchCategoryBySlug } from '~/composables/useCatalogLookup'
 import { buildPaginatedResult, getPaginationRange, normalizePage, parsePageQuery, type PaginatedResult } from '~/utils/pagination'

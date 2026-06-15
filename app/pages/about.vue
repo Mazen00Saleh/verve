@@ -41,7 +41,7 @@
 
       <div class="mx-auto grid max-w-5xl grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16 md:gap-y-0">
         <article class="border-t border-neutral-200 pt-8">
-          <h2 class="mb-4 font-serif text-2xl text-luxury-matte-black sm:text-3xl">
+          <h2 class="mb-4 text-2xl text-luxury-matte-black sm:text-3xl">
             What We Do
           </h2>
           <p class="text-sm font-light leading-relaxed text-luxury-charcoal sm:text-base">
@@ -50,7 +50,7 @@
         </article>
 
         <article class="border-t border-neutral-200 pt-8">
-          <h2 class="mb-4 font-serif text-2xl text-luxury-matte-black sm:text-3xl">
+          <h2 class="mb-4 text-2xl text-luxury-matte-black sm:text-3xl">
             What We Offer
           </h2>
           <p class="text-sm font-light leading-relaxed text-luxury-charcoal sm:text-base">

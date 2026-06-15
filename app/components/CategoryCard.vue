@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Category } from '~/data/catalog'
+import type { Category } from '~/types/catalog'
 
 defineProps<{
   category: Category
