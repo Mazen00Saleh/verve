@@ -7,7 +7,7 @@
     <div class="mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-4 sm:gap-3.5 sm:px-6 lg:px-12">
       <NuxtLink to="/" class="flex w-full justify-center">
         <img
-          src="/images/verve-logo.png"
+          src="/images/verve-logo.webp"
           alt="Verve — Exclusive Home Collection"
           class="h-16 w-auto max-w-full object-contain sm:h-20 md:h-24"
           width="400"

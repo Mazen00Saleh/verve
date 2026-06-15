@@ -3,7 +3,7 @@
     <div class="mx-auto flex max-w-4xl flex-col items-center gap-5 px-6 sm:gap-6">
       <NuxtLink to="/" class="block" aria-label="Verve home">
         <img
-          src="/images/verve-footer-mark.png"
+          src="/images/verve-footer-mark.webp"
           alt="Verve"
           class="h-24 w-auto object-contain sm:h-28 md:h-32"
           width="120"

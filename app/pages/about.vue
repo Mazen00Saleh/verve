@@ -13,13 +13,13 @@
         <div class="w-full">
           <picture class="block w-full">
             <source
-              srcset="/images/about-hero.png 4500w"
+              srcset="/images/about-hero.webp 4500w"
               sizes="(min-width: 1024px) 512px, (min-width: 768px) 50vw, 100vw"
-              type="image/png"
+              type="image/webp"
             >
             <img
-              src="/images/about-hero.png"
-              srcset="/images/about-hero.png 4500w"
+              src="/images/about-hero.webp"
+              srcset="/images/about-hero.webp 4500w"
               sizes="(min-width: 1024px) 512px, (min-width: 768px) 50vw, 100vw"
               alt="Verve Exclusive Home Collection"
               class="h-auto w-full rounded-sm"
