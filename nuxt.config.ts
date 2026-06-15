@@ -35,5 +35,9 @@ export default defineNuxtConfig({
   routeRules: {
     '/admin/**': { ssr: true },
     '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/images/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/favicon.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/favicon1.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/robots.txt': { headers: { 'cache-control': 'public, max-age=86400' } },
   },
 })
