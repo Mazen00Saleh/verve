@@ -28,7 +28,7 @@ export interface CompressionResult {
   savingsPercent: number
 }
 
-const MAX_UPLOAD_SIZE_BYTES = 100 * 1024
+const MAX_UPLOAD_SIZE_BYTES = 50 * 1024
 const MAX_UPLOAD_SIZE_MB = MAX_UPLOAD_SIZE_BYTES / (1024 * 1024)
 
 // Sized to match public delivery (`app/utils/imageSizes.ts`) while staying under 100 KB as WebP.
