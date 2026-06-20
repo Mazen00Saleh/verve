@@ -15,6 +15,7 @@
         label="Brand Logo"
         hint="Required. Upload a new image to replace the current logo."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <div class="flex gap-3">
@@ -38,14 +39,13 @@ const route = useRoute()
 const brandLogoId = route.params.id as string
 
 const { fetchOne, update } = useBrandLogos()
-const { deleteByUrl } = useFileUpload()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const brandLogo = ref<BrandLogo | null>(null)
 const loading = ref(true)
 const submitting = ref(false)
 const logoImages = ref<UploadedImage[]>([])
-const previousLogoUrl = ref<string | null>(null)
 
 const isUploading = computed(() =>
   logoImages.value.some(image => image.status === 'compressing' || image.status === 'uploading'),
@@ -63,8 +63,6 @@ onMounted(async () => {
     await navigateTo('/admin/brand-logos')
     return
   }
-
-  previousLogoUrl.value = brandLogo.value.logo_url
 
   if (brandLogo.value.logo_url) {
     logoImages.value = [uploadedImageFromUrl(brandLogo.value.logo_url)]
@@ -88,9 +86,7 @@ async function handleSubmit() {
   submitting.value = true
 
   try {
-    if (previousLogoUrl.value && previousLogoUrl.value !== nextLogoUrl) {
-      await deleteByUrl(previousLogoUrl.value)
-    }
+    await flushPendingDeletions()
 
     const updated = await update(brandLogoId, {
       logo_url: nextLogoUrl,

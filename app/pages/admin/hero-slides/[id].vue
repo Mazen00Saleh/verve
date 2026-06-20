@@ -29,6 +29,7 @@
         folder="hero"
         preset="gallery"
         label="Left Image"
+        @remove-image="trackRemovedImage"
       />
 
       <AdminImageUploader
@@ -36,6 +37,7 @@
         folder="hero"
         preset="primary"
         label="Right Image"
+        @remove-image="trackRemovedImage"
       />
 
       <div class="flex gap-3">
@@ -59,7 +61,7 @@ const route = useRoute()
 const slideId = route.params.id as string
 
 const { fetchOne, update } = useHeroSlides()
-const { deleteByUrl } = useFileUpload()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const slide = ref<HeroSlide | null>(null)
@@ -67,8 +69,6 @@ const loading = ref(true)
 const submitting = ref(false)
 const leftImages = ref<UploadedImage[]>([])
 const rightImages = ref<UploadedImage[]>([])
-const previousLeftUrl = ref<string | null>(null)
-const previousRightUrl = ref<string | null>(null)
 
 const form = reactive({
   title: '',
@@ -95,9 +95,6 @@ onMounted(async () => {
   form.description = slide.value.description ?? ''
   form.is_active = slide.value.is_active
 
-  previousLeftUrl.value = slide.value.left_image_url
-  previousRightUrl.value = slide.value.right_image_url
-
   leftImages.value = [uploadedImageFromUrl(slide.value.left_image_url)]
   rightImages.value = [uploadedImageFromUrl(slide.value.right_image_url)]
 
@@ -120,13 +117,7 @@ async function handleSubmit() {
   submitting.value = true
 
   try {
-    if (previousLeftUrl.value && previousLeftUrl.value !== nextLeftUrl) {
-      await deleteByUrl(previousLeftUrl.value)
-    }
-
-    if (previousRightUrl.value && previousRightUrl.value !== nextRightUrl) {
-      await deleteByUrl(previousRightUrl.value)
-    }
+    await flushPendingDeletions()
 
     const updated = await update(slideId, {
       title: form.title.trim(),

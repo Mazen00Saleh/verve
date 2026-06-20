@@ -10,8 +10,10 @@ export type Category = Tables<'categories'>
 
 type CategoryTree = Category & {
   collections: Array<{
+    id: string
     image_url: string | null
     products: Array<{
+      id: string
       primary_image: string | null
       product_images: Array<{ url: string }>
     }>
@@ -155,8 +157,10 @@ export function useCategories() {
         .select(`
           image_url,
           collections (
+            id,
             image_url,
             products (
+              id,
               primary_image,
               product_images (url)
             )
@@ -171,6 +175,42 @@ export function useCategories() {
 
       if (categoryTree) {
         const urls = collectCategoryMediaUrls(categoryTree as CategoryTree)
+        const productIds = (categoryTree.collections ?? []).flatMap(collection =>
+          (collection.products ?? []).map(product => product.id),
+        )
+        const collectionIds = (categoryTree.collections ?? []).map(collection => collection.id)
+
+        if (productIds.length) {
+          const { error: removeImagesError } = await supabase
+            .from('product_images')
+            .delete()
+            .in('product_id', productIds)
+
+          if (removeImagesError) {
+            throw removeImagesError
+          }
+
+          const { error: removeProductsError } = await supabase
+            .from('products')
+            .delete()
+            .in('id', productIds)
+
+          if (removeProductsError) {
+            throw removeProductsError
+          }
+        }
+
+        if (collectionIds.length) {
+          const { error: removeCollectionsError } = await supabase
+            .from('collections')
+            .delete()
+            .in('id', collectionIds)
+
+          if (removeCollectionsError) {
+            throw removeCollectionsError
+          }
+        }
+
         await deleteByUrls(urls)
       }
 

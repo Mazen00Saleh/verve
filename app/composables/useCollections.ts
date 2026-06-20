@@ -14,6 +14,7 @@ export type CollectionWithCategory = Collection & {
 
 type CollectionTree = Collection & {
   products: Array<{
+    id: string
     primary_image: string | null
     product_images: Array<{ url: string }>
   }>
@@ -160,6 +161,7 @@ export function useCollections() {
         .select(`
           image_url,
           products (
+            id,
             primary_image,
             product_images (url)
           )
@@ -173,6 +175,28 @@ export function useCollections() {
 
       if (collectionTree) {
         const urls = collectCollectionMediaUrls(collectionTree as CollectionTree)
+        const productIds = (collectionTree.products ?? []).map(product => product.id)
+
+        if (productIds.length) {
+          const { error: removeImagesError } = await supabase
+            .from('product_images')
+            .delete()
+            .in('product_id', productIds)
+
+          if (removeImagesError) {
+            throw removeImagesError
+          }
+
+          const { error: removeProductsError } = await supabase
+            .from('products')
+            .delete()
+            .in('id', productIds)
+
+          if (removeProductsError) {
+            throw removeProductsError
+          }
+        }
+
         await deleteByUrls(urls)
       }
 

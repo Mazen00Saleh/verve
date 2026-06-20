@@ -21,6 +21,7 @@
         label="Cover Image"
         hint="Required. Upload a new image to replace the current cover."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <AdminFormField label="Brochure URL" hint="Link to the hosted PDF or flipbook." required>
@@ -57,14 +58,13 @@ const route = useRoute()
 const brochureId = route.params.id as string
 
 const { fetchOne, update } = useBrochures()
-const { deleteByUrl } = useFileUpload()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const brochure = ref<Brochure | null>(null)
 const loading = ref(true)
 const submitting = ref(false)
 const coverImages = ref<UploadedImage[]>([])
-const previousImageUrl = ref<string | null>(null)
 
 const form = reactive({
   name: '',
@@ -90,7 +90,6 @@ onMounted(async () => {
 
   form.name = brochure.value.name
   form.file_url = brochure.value.file_url ?? ''
-  previousImageUrl.value = brochure.value.image_url
 
   if (brochure.value.image_url) {
     coverImages.value = [uploadedImageFromUrl(brochure.value.image_url)]
@@ -114,9 +113,7 @@ async function handleSubmit() {
   submitting.value = true
 
   try {
-    if (previousImageUrl.value && previousImageUrl.value !== nextImageUrl) {
-      await deleteByUrl(previousImageUrl.value)
-    }
+    await flushPendingDeletions()
 
     const updated = await update(brochureId, {
       name: form.name.trim(),

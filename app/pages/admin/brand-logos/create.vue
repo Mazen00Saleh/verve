@@ -13,6 +13,7 @@
         label="Brand Logo"
         hint="Image is optimized in the browser before upload."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <div class="flex gap-3">
@@ -31,6 +32,7 @@ import type { UploadedImage } from '~/composables/useImageUpload'
 definePageMeta({ layout: 'admin' })
 
 const { create } = useBrandLogos()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const logoImages = ref<UploadedImage[]>([])
@@ -54,22 +56,28 @@ async function handleSubmit() {
 
   submitting.value = true
 
-  const created = await create({
+  try {
+    await flushPendingDeletions()
+
+    const created = await create({
     name: 'Brand Logo',
     logo_url: logoUrl,
     order_index: 0,
   })
 
-  submitting.value = false
+    if (!created) {
+      toast.error('Failed to create brand logo.')
+      return
+    }
 
-  if (!created) {
+    await clearNuxtData('public-brand-logos')
+    toast.success('Brand logo created successfully.')
+    await navigateTo('/admin/brand-logos')
+  } catch {
     toast.error('Failed to create brand logo.')
-    return
+  } finally {
+    submitting.value = false
   }
-
-  await clearNuxtData('public-brand-logos')
-  toast.success('Brand logo created successfully.')
-  await navigateTo('/admin/brand-logos')
 }
 
 useHead({ title: 'Create Brand Logo | Verve Admin' })

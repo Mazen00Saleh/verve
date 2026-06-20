@@ -29,6 +29,7 @@
         label="Left Image"
         hint="Texture or detail image shown on the left column (desktop)."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <AdminImageUploader
@@ -38,6 +39,7 @@
         label="Right Image"
         hint="Main lifestyle image shown on the right."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <div class="flex gap-3">
@@ -56,6 +58,7 @@ import type { UploadedImage } from '~/composables/useImageUpload'
 definePageMeta({ layout: 'admin' })
 
 const { create } = useHeroSlides()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const form = reactive({
@@ -85,7 +88,10 @@ async function handleSubmit() {
 
   submitting.value = true
 
-  const created = await create({
+  try {
+    await flushPendingDeletions()
+
+    const created = await create({
     title: form.title.trim(),
     description: form.description.trim() || null,
     left_image_url: leftImageUrl,
@@ -96,15 +102,18 @@ async function handleSubmit() {
     is_active: form.is_active,
   })
 
-  submitting.value = false
+    if (!created) {
+      toast.error('Failed to create hero slide.')
+      return
+    }
 
-  if (!created) {
+    toast.success('Hero slide created.')
+    await navigateTo('/admin/hero-slides')
+  } catch {
     toast.error('Failed to create hero slide.')
-    return
+  } finally {
+    submitting.value = false
   }
-
-  toast.success('Hero slide created.')
-  await navigateTo('/admin/hero-slides')
 }
 
 useHead({ title: 'Create Hero Slide | Verve Admin' })

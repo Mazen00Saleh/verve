@@ -19,6 +19,7 @@
         label="Cover Image"
         hint="Shown on the inspiration page. Image is optimized in the browser before upload."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <AdminFormField label="Brochure URL" hint="Link to the hosted PDF or flipbook (e.g. Supabase Storage or external URL)." required>
@@ -50,6 +51,7 @@ import type { UploadedImage } from '~/composables/useImageUpload'
 definePageMeta({ layout: 'admin' })
 
 const { create } = useBrochures()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const form = reactive({
@@ -78,23 +80,29 @@ async function handleSubmit() {
 
   submitting.value = true
 
-  const created = await create({
+  try {
+    await flushPendingDeletions()
+
+    const created = await create({
     name: form.name.trim(),
     description: null,
     image_url: imageUrl,
     file_url: form.file_url.trim(),
   })
 
-  submitting.value = false
+    if (!created) {
+      toast.error('Failed to create brochure.')
+      return
+    }
 
-  if (!created) {
+    await clearNuxtData('public-brochures')
+    toast.success('Brochure created successfully.')
+    await navigateTo('/admin/brochures')
+  } catch {
     toast.error('Failed to create brochure.')
-    return
+  } finally {
+    submitting.value = false
   }
-
-  await clearNuxtData('public-brochures')
-  toast.success('Brochure created successfully.')
-  await navigateTo('/admin/brochures')
 }
 
 useHead({ title: 'Create Brochure | Verve Admin' })

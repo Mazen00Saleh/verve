@@ -212,13 +212,13 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: UploadedImage[]]
   'remove-record': [recordId: string]
+  'remove-image': [image: UploadedImage]
 }>()
 
 const {
   isAcceptedImage,
   compressImage,
   uploadCompressedFile,
-  deleteImage,
   formatBytes,
 } = useImageUpload()
 
@@ -359,7 +359,7 @@ async function processFiles(files: File[]) {
   let workingImages = props.multiple ? [...images.value] : []
 
   if (!props.multiple && workingImages.length >= 1) {
-    await removeImage(workingImages[0], { skipConfirm: true })
+    removeImage(workingImages[0])
     workingImages = []
   }
 
@@ -430,19 +430,13 @@ async function processFiles(files: File[]) {
   isProcessing.value = false
 }
 
-async function removeImage(image: UploadedImage, options: { skipConfirm?: boolean } = {}) {
+function removeImage(image: UploadedImage) {
   if (image.previewUrl) {
     URL.revokeObjectURL(image.previewUrl)
   }
 
   if (image.path && image.status === 'complete') {
-    try {
-      await deleteImage(image)
-    } catch {
-      if (!options.skipConfirm) {
-        errorMessage.value = 'Image removed from the form, but storage cleanup failed.'
-      }
-    }
+    emit('remove-image', image)
   }
 
   if (image.recordId) {

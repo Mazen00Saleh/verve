@@ -36,6 +36,7 @@
         folder="products"
         preset="primary"
         label="Primary Image"
+        @remove-image="onRemoveImage"
       />
 
       <AdminImageUploader
@@ -44,6 +45,7 @@
         preset="gallery"
         label="Secondary Images"
         multiple
+        @remove-image="onRemoveImage"
         @remove-record="markImageRemoved"
       />
 
@@ -53,6 +55,7 @@
         preset="mockup"
         label="Room Mockups"
         multiple
+        @remove-image="onRemoveImage"
         @remove-record="markImageRemoved"
       />
 
@@ -79,6 +82,7 @@ const productId = route.params.id as string
 
 const { fetchAll: fetchCollections } = useCollections()
 const { fetchOne, update } = useProducts()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const collections = ref<CollectionWithCategory[]>([])
@@ -106,6 +110,14 @@ function markImageRemoved(recordId: string) {
   if (!removedImageIds.value.includes(recordId)) {
     removedImageIds.value.push(recordId)
   }
+}
+
+function onRemoveImage(image: UploadedImage) {
+  if (image.recordId || product.value?.primary_image === image.url) {
+    return
+  }
+
+  trackRemovedImage(image)
 }
 
 function newUploadUrls(images: UploadedImage[]) {
@@ -155,7 +167,10 @@ async function handleSubmit() {
 
   submitting.value = true
 
-  const updated = await update(productId, {
+  try {
+    await flushPendingDeletions()
+
+    const updated = await update(productId, {
     collection_id: form.collection_id,
     name: form.name,
     description: form.description,
@@ -165,15 +180,18 @@ async function handleSubmit() {
     removedImageIds: removedImageIds.value,
   }, product.value)
 
-  submitting.value = false
+    if (!updated) {
+      toast.error('Failed to update product.')
+      return
+    }
 
-  if (!updated) {
-    toast.error('Failed to update product.')
-    return
+    toast.success('Product updated successfully.')
+    await navigateTo('/admin/products')
+  } catch {
+    toast.error('Failed to update product images.')
+  } finally {
+    submitting.value = false
   }
-
-  toast.success('Product updated successfully.')
-  await navigateTo('/admin/products')
 }
 
 useHead({ title: 'Edit Product | Verve Admin' })

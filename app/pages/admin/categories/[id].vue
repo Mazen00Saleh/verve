@@ -20,6 +20,7 @@
         preset="primary"
         label="Cover Image"
         hint="Upload a new image to replace the current cover."
+        @remove-image="trackRemovedImage"
       />
 
       <div class="flex gap-3">
@@ -43,14 +44,13 @@ const route = useRoute()
 const categoryId = route.params.id as string
 
 const { fetchOne, update } = useCategories()
-const { deleteByUrl } = useFileUpload()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const category = ref<Category | null>(null)
 const loading = ref(true)
 const submitting = ref(false)
 const coverImages = ref<UploadedImage[]>([])
-const previousImageUrl = ref<string | null>(null)
 
 const form = reactive({
   name: '',
@@ -70,7 +70,6 @@ onMounted(async () => {
   }
 
   form.name = category.value.name
-  previousImageUrl.value = category.value.image_url
 
   if (category.value.image_url) {
     coverImages.value = [uploadedImageFromUrl(category.value.image_url)]
@@ -87,14 +86,9 @@ async function handleSubmit() {
   submitting.value = true
 
   try {
-    const nextImageUrl = coverImages.value.find(image => image.status === 'complete')?.url ?? null
+    await flushPendingDeletions()
 
-    if (
-      previousImageUrl.value
-      && previousImageUrl.value !== nextImageUrl
-    ) {
-      await deleteByUrl(previousImageUrl.value)
-    }
+    const nextImageUrl = coverImages.value.find(image => image.status === 'complete')?.url ?? null
 
     const updated = await update(categoryId, {
       name: form.name.trim(),

@@ -19,6 +19,7 @@
         label="Cover Image"
         hint="Image is optimized in the browser before upload."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <div class="flex gap-3">
@@ -37,6 +38,7 @@ import type { UploadedImage } from '~/composables/useImageUpload'
 definePageMeta({ layout: 'admin' })
 
 const { create } = useCategories()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const form = reactive({
@@ -60,21 +62,27 @@ async function handleSubmit() {
 
   submitting.value = true
 
-  const created = await create({
+  try {
+    await flushPendingDeletions()
+
+    const created = await create({
     name: form.name.trim(),
     description: null,
     image_url: imageUrl,
   })
 
-  submitting.value = false
+    if (!created) {
+      toast.error('Failed to create category.')
+      return
+    }
 
-  if (!created) {
+    toast.success('Category created successfully.')
+    await navigateTo('/admin/categories')
+  } catch {
     toast.error('Failed to create category.')
-    return
+  } finally {
+    submitting.value = false
   }
-
-  toast.success('Category created successfully.')
-  await navigateTo('/admin/categories')
 }
 
 useHead({ title: 'Create Category | Verve Admin' })

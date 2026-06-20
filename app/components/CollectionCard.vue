@@ -12,9 +12,6 @@
       overlay
       container-class="shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
     />
-    <div class="catalog-card-body text-center">
-      <h3 class="catalog-card-title">{{ collection.title }}</h3>
-    </div>
   </NuxtLink>
 </template>
 

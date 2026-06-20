@@ -61,7 +61,8 @@ export default defineNuxtConfig({
     download: true,
   },
   routeRules: {
-    '/admin/**': { ssr: true },
+    '/': { prerender: true },
+    '/admin/**': { ssr: false },
     '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     '/_ipx/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     '/images/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },

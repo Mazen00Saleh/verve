@@ -6,7 +6,7 @@
     <div class="relative">
     <CatalogImage
       :src="product.image"
-      :alt="product.name"
+      :alt="product.sku"
       aspect="square"
       :priority="priority"
       size="card"
@@ -18,9 +18,6 @@
           View Details
         </span>
       </div>
-    </div>
-    <div class="catalog-card-body text-center">
-      <h3 class="catalog-card-title">{{ product.name }}</h3>
     </div>
   </NuxtLink>
 </template>

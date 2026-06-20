@@ -30,6 +30,7 @@
         label="Cover Image"
         hint="Image is optimized in the browser before upload."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <div class="flex gap-3">
@@ -50,6 +51,7 @@ definePageMeta({ layout: 'admin' })
 
 const { fetchAll: fetchCategories } = useCategories()
 const { create } = useCollections()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const categories = ref<Category[]>([])
@@ -79,22 +81,28 @@ async function handleSubmit() {
 
   submitting.value = true
 
-  const created = await create({
+  try {
+    await flushPendingDeletions()
+
+    const created = await create({
     category_id: form.category_id,
     name: form.name.trim(),
     description: null,
     image_url: imageUrl,
   })
 
-  submitting.value = false
+    if (!created) {
+      toast.error('Failed to create collection.')
+      return
+    }
 
-  if (!created) {
+    toast.success('Collection created successfully.')
+    await navigateTo('/admin/collections')
+  } catch {
     toast.error('Failed to create collection.')
-    return
+  } finally {
+    submitting.value = false
   }
-
-  toast.success('Collection created successfully.')
-  await navigateTo('/admin/collections')
 }
 
 useHead({ title: 'Create Collection | Verve Admin' })

@@ -2,39 +2,6 @@ import { fetchCategoryBySlug } from '~/composables/useCatalogLookup'
 
 export type CategoryMockupImage = {
   url: string
-  createdAt: string | null
-  orderIndex: number
-}
-
-type DbMockupRow = {
-  url: string
-  order_index: number | null
-  products: {
-    created_at: string | null
-  } | {
-    created_at: string | null
-  }[] | null
-}
-
-function sortMockups(mockups: CategoryMockupImage[]) {
-  return [...mockups].sort((a, b) => {
-    const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0
-    const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0
-
-    if (bTime !== aTime) {
-      return bTime - aTime
-    }
-
-    return b.orderIndex - a.orderIndex
-  })
-}
-
-function normalizeProduct(row: DbMockupRow) {
-  if (!row.products) {
-    return null
-  }
-
-  return Array.isArray(row.products) ? row.products[0] ?? null : row.products
 }
 
 async function fetchMockupsForCategory(categoryId: string): Promise<CategoryMockupImage[]> {
@@ -44,9 +11,7 @@ async function fetchMockupsForCategory(categoryId: string): Promise<CategoryMock
     .from('product_images')
     .select(`
       url,
-      order_index,
       products!inner (
-        created_at,
         collections!inner (
           category_id
         )
@@ -60,11 +25,7 @@ async function fetchMockupsForCategory(categoryId: string): Promise<CategoryMock
     return []
   }
 
-  return sortMockups((data ?? []).map(row => ({
-    url: row.url,
-    createdAt: normalizeProduct(row as DbMockupRow)?.created_at ?? null,
-    orderIndex: row.order_index ?? 0,
-  })))
+  return (data ?? []).map(row => ({ url: row.url }))
 }
 
 async function loadCategoryMockups(categorySlug: string) {

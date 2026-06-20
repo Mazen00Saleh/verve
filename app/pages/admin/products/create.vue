@@ -36,6 +36,7 @@
         label="Primary Image"
         hint="Main product image shown on listings and detail pages."
         required
+        @remove-image="trackRemovedImage"
       />
 
       <AdminImageUploader
@@ -45,6 +46,7 @@
         label="Secondary Images"
         hint="Additional product views and detail shots."
         multiple
+        @remove-image="trackRemovedImage"
       />
 
       <AdminImageUploader
@@ -54,6 +56,7 @@
         label="Room Mockups"
         hint="In-room inspiration images for this product."
         multiple
+        @remove-image="trackRemovedImage"
       />
 
       <div class="flex gap-3">
@@ -74,6 +77,7 @@ definePageMeta({ layout: 'admin' })
 
 const { fetchAll: fetchCollections } = useCollections()
 const { create } = useProducts()
+const { trackRemovedImage, flushPendingDeletions } = usePendingImageDeletions()
 const toast = useToast()
 
 const collections = ref<CollectionWithCategory[]>([])
@@ -111,7 +115,10 @@ async function handleSubmit() {
 
   submitting.value = true
 
-  const created = await create({
+  try {
+    await flushPendingDeletions()
+
+    const created = await create({
     collection_id: form.collection_id,
     name: form.name,
     description: form.description,
@@ -120,15 +127,18 @@ async function handleSubmit() {
     mockupImageUrls: completedUrls(mockupImages.value),
   })
 
-  submitting.value = false
+    if (!created) {
+      toast.error('Failed to create product.')
+      return
+    }
 
-  if (!created) {
+    toast.success('Product created successfully.')
+    await navigateTo('/admin/products')
+  } catch {
     toast.error('Failed to create product.')
-    return
+  } finally {
+    submitting.value = false
   }
-
-  toast.success('Product created successfully.')
-  await navigateTo('/admin/products')
 }
 
 useHead({ title: 'Create Product | Verve Admin' })

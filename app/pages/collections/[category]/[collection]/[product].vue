@@ -29,7 +29,7 @@
                 <img
                   ref="mainImageRef"
                   :src="mainImageSrc"
-                  :alt="product.name"
+                  :alt="product.sku"
                   class="h-full w-full object-cover transition-opacity duration-300"
                   loading="eager"
                   fetchpriority="high"
@@ -65,16 +65,7 @@
             </div>
 
             <div class="space-y-8 lg:sticky lg:top-32 lg:space-y-10">
-              <div>
-                <h1 class="mb-1 text-3xl uppercase tracking-wider text-luxury-matte-black sm:text-4xl md:text-5xl">
-                  {{ product.name }}
-                </h1>
-                <p class="font-sans text-xs uppercase tracking-widest text-luxury-muted">
-                  {{ category.title }} · Verve
-                </p>
-              </div>
-
-              <div v-if="variants.length > 1" class="space-y-4 border-t border-neutral-100 pt-4">
+              <div v-if="variants.length > 1" class="space-y-4">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-semibold uppercase tracking-widest text-luxury-charcoal">
                     Variations
@@ -108,13 +99,6 @@
                 </div>
               </div>
 
-              <div class="py-2 font-mono text-xs uppercase tracking-widest text-luxury-charcoal">
-                Reference:
-                <span class="ml-2 font-sans font-semibold text-luxury-matte-black">
-                  {{ product.sku }}
-                </span>
-              </div>
-
               <p
                 v-if="product.description"
                 class="border-t border-neutral-100 pt-4 text-sm font-light leading-relaxed text-luxury-charcoal"
@@ -122,17 +106,6 @@
                 {{ product.description }}
               </p>
             </div>
-          </div>
-
-          <div v-if="mockups.length" class="mt-16 border-t border-neutral-200 pt-12 sm:mt-20 sm:pt-16">
-            <h3 class="mb-8 text-center text-xs font-semibold uppercase tracking-widest text-luxury-charcoal sm:mb-12">
-              Room Inspirations
-            </h3>
-            <CategoryMockupMasonry
-              :mockups="productMockups"
-              alt="Room inspiration"
-              column-class="max-w-6xl mx-auto"
-            />
           </div>
         </template>
       </PageState>
@@ -182,16 +155,6 @@ const zoomImageSrc = computed(() =>
   activeImage.value
     ? $img(activeImage.value, { width: 1920, quality: 85, format: 'webp' })
     : '',
-)
-
-const mockups = computed(() => product.value?.mockupImages ?? [])
-
-const productMockups = computed(() =>
-  mockups.value.map((url, index) => ({
-    url,
-    createdAt: null,
-    orderIndex: mockups.value.length - index,
-  })),
 )
 
 watch(product, () => {
@@ -301,8 +264,8 @@ watch(isZooming, (zooming) => {
 
 useHead({
   title: computed(() =>
-    product.value && collection.value
-      ? `${product.value.name} | ${collection.value.title} | Verve Luxury Interiors`
+    product.value
+      ? `${product.value.sku} | Verve Luxury Interiors`
       : 'Product | Verve Luxury Interiors',
   ),
   link: computed(() => {
