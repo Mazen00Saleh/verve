@@ -28,7 +28,7 @@ export interface CompressionResult {
   savingsPercent: number
 }
 
-const MAX_UPLOAD_SIZE_BYTES = 100 * 1024
+const MAX_UPLOAD_SIZE_BYTES = 150 * 1024
 const MAX_UPLOAD_SIZE_MB = MAX_UPLOAD_SIZE_BYTES / (1024 * 1024)
 
 // Sized to match public delivery (`app/utils/imageSizes.ts`) while staying under 100 KB as WebP.
@@ -38,15 +38,15 @@ const PRESETS: Record<ImageUploadPreset, {
 }> = {
   primary: {
     maxWidthOrHeight: 1920,
-    quality: 0.62,
+    quality: 0.7,
   },
   gallery: {
     maxWidthOrHeight: 1600,
-    quality: 0.62,
+    quality: 0.7,
   },
   mockup: {
     maxWidthOrHeight: 1600,
-    quality: 0.62,
+    quality: 0.7,
   },
 }
 
