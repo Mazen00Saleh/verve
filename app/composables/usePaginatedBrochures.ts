@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { PublicBrochure } from '~/types/catalog'
 import { PAGINATION } from '~/config/pagination'
 import { formatBrochureDate } from '~/utils/format-date'
@@ -23,9 +24,11 @@ function mapBrochure(row: {
   }
 }
 
-async function fetchBrochuresPage(page: number): Promise<PaginatedResult<PublicBrochure>> {
+async function fetchBrochuresPage(
+  client: SupabaseClient,
+  page: number,
+): Promise<PaginatedResult<PublicBrochure>> {
   const pageSize = PAGINATION.brochures
-  const client = useSupabaseClient()
   const { from, to } = getPaginationRange(page, pageSize)
 
   const { data, error, count } = await client
@@ -50,6 +53,7 @@ async function fetchBrochuresPage(page: number): Promise<PaginatedResult<PublicB
 }
 
 export function usePaginatedBrochures() {
+  const client = useSupabaseClient()
   const route = useRoute()
   const router = useRouter()
 
@@ -57,7 +61,7 @@ export function usePaginatedBrochures() {
 
   const result = useAsyncData(
     () => `paginated-brochures-${currentPage.value}`,
-    () => fetchBrochuresPage(currentPage.value),
+    () => fetchBrochuresPage(client, currentPage.value),
     { watch: [currentPage] },
   )
 

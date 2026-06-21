@@ -92,7 +92,7 @@
           <div>
             <h3 class="mb-4 text-xl text-luxury-matte-black">Contact Information</h3>
             <p class="mb-1 font-light text-luxury-charcoal">Telephone : 06-5925041</p>
-            <p class="mb-1 font-light text-luxury-charcoal">Mobile: 079 0202 838</p>
+            <p class="mb-1 font-light text-luxury-charcoal">Mobile: +962 79 0202 838</p>
             <a href="mailto:info@verve-group.com" class="block w-max border-b border-luxury-brass-contrast pb-1 text-luxury-brass-contrast transition-colors hover:text-luxury-matte-black">info@verve-group.com</a>
           </div>
           <div>

@@ -1,3 +1,5 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
+
 export type PublicBrandLogo = {
   id: string
   name: string
@@ -16,9 +18,7 @@ function mapBrandLogo(row: {
   }
 }
 
-async function fetchBrandLogosFromSupabase(): Promise<PublicBrandLogo[]> {
-  const client = useSupabaseClient()
-
+async function fetchBrandLogosFromSupabase(client: SupabaseClient): Promise<PublicBrandLogo[]> {
   const { data, error } = await client
     .from('brand_logos')
     .select('id, name, logo_url')
@@ -34,5 +34,7 @@ async function fetchBrandLogosFromSupabase(): Promise<PublicBrandLogo[]> {
 }
 
 export function usePublicBrandLogos() {
-  return useAsyncData('public-brand-logos', fetchBrandLogosFromSupabase)
+  const client = useSupabaseClient()
+
+  return useAsyncData('public-brand-logos', () => fetchBrandLogosFromSupabase(client))
 }

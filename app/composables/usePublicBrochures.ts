@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { PublicBrochure } from '~/types/catalog'
 import { formatBrochureDate } from '~/utils/format-date'
 import { toSlug } from '~/utils/slug'
@@ -21,9 +22,7 @@ function mapBrochure(row: {
   }
 }
 
-async function fetchBrochuresFromSupabase(): Promise<PublicBrochure[]> {
-  const client = useSupabaseClient()
-
+async function fetchBrochuresFromSupabase(client: SupabaseClient): Promise<PublicBrochure[]> {
   const { data, error } = await client
     .from('brochures')
     .select('id, name, description, file_url, image_url, created_at')
@@ -38,5 +37,7 @@ async function fetchBrochuresFromSupabase(): Promise<PublicBrochure[]> {
 }
 
 export function usePublicBrochures() {
-  return useAsyncData('public-brochures', fetchBrochuresFromSupabase)
+  const client = useSupabaseClient()
+
+  return useAsyncData('public-brochures', () => fetchBrochuresFromSupabase(client))
 }

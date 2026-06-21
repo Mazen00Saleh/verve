@@ -1,12 +1,14 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { fetchCategoryBySlug } from '~/composables/useCatalogLookup'
 
 export type CategoryMockupImage = {
   url: string
 }
 
-async function fetchMockupsForCategory(categoryId: string): Promise<CategoryMockupImage[]> {
-  const client = useSupabaseClient()
-
+async function fetchMockupsForCategory(
+  client: SupabaseClient,
+  categoryId: string,
+): Promise<CategoryMockupImage[]> {
   const { data, error } = await client
     .from('product_images')
     .select(`
@@ -28,14 +30,17 @@ async function fetchMockupsForCategory(categoryId: string): Promise<CategoryMock
   return (data ?? []).map(row => ({ url: row.url }))
 }
 
-async function loadCategoryMockups(categorySlug: string) {
-  const category = await fetchCategoryBySlug(categorySlug)
+async function loadCategoryMockups(
+  client: SupabaseClient,
+  categorySlug: string,
+) {
+  const category = await fetchCategoryBySlug(client, categorySlug)
 
   if (!category) {
     return { category: null, mockups: [] as CategoryMockupImage[] }
   }
 
-  const mockups = await fetchMockupsForCategory(category.id)
+  const mockups = await fetchMockupsForCategory(client, category.id)
 
   return {
     category: {
@@ -50,8 +55,10 @@ async function loadCategoryMockups(categorySlug: string) {
 }
 
 export function useCategoryMockups(categorySlug: string) {
+  const client = useSupabaseClient()
+
   return useAsyncData(
     `category-mockups-${categorySlug}`,
-    () => loadCategoryMockups(categorySlug),
+    () => loadCategoryMockups(client, categorySlug),
   )
 }

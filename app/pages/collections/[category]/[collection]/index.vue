@@ -62,6 +62,16 @@ const collectionSlug = route.params.collection as string
 const { data, pending, error, refresh } = await usePaginatedProducts(categorySlug, collectionSlug)
 const { setPage, pageSize } = useRoutePagination('products')
 
+if (data.value) {
+  if (!data.value.category) {
+    throw createError({ statusCode: 404, statusMessage: 'Category not found' })
+  }
+
+  if (!data.value.collection) {
+    throw createError({ statusCode: 404, statusMessage: 'Collection not found' })
+  }
+}
+
 const errorMessage = computed(() => error.value?.message ?? null)
 const category = computed(() => data.value?.category ?? null)
 const collection = computed(() => data.value?.collection ?? null)
@@ -69,18 +79,6 @@ const items = computed(() => data.value?.items ?? [])
 const total = computed(() => data.value?.total ?? 0)
 const page = computed(() => data.value?.page ?? 1)
 const totalPages = computed(() => data.value?.totalPages ?? 1)
-
-watch([pending, data], () => {
-  if (!pending.value && data.value) {
-    if (!data.value.category) {
-      throw createError({ statusCode: 404, statusMessage: 'Category not found' })
-    }
-
-    if (!data.value.collection) {
-      throw createError({ statusCode: 404, statusMessage: 'Collection not found' })
-    }
-  }
-})
 
 useHead({
   title: computed(() =>

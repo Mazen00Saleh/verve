@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { pickDailyRandom } from '~/utils/shuffle'
 import { toSlug } from '~/utils/slug'
 
@@ -24,9 +25,7 @@ type HeroCollectionCandidate = {
   rightImage: string
 }
 
-async function fetchHeroSlidesFromSupabase(): Promise<PublicHeroSlide[]> {
-  const client = useSupabaseClient()
-
+async function fetchHeroSlidesFromSupabase(client: SupabaseClient): Promise<PublicHeroSlide[]> {
   const { data, error } = await client
     .from('hero_slides')
     .select('id, title, description, left_image_url, right_image_url')
@@ -50,9 +49,10 @@ async function fetchHeroSlidesFromSupabase(): Promise<PublicHeroSlide[]> {
   }))
 }
 
-async function fetchPrimaryProductImage(collectionId: string): Promise<string | null> {
-  const client = useSupabaseClient()
-
+async function fetchPrimaryProductImage(
+  client: SupabaseClient,
+  collectionId: string,
+): Promise<string | null> {
   const { data, error } = await client
     .from('products')
     .select('primary_image')
@@ -68,9 +68,7 @@ async function fetchPrimaryProductImage(collectionId: string): Promise<string | 
   return data?.[0]?.primary_image ?? null
 }
 
-async function fetchHeroFallbackFromSupabase(): Promise<PublicHeroSlide[]> {
-  const client = useSupabaseClient()
-
+async function fetchHeroFallbackFromSupabase(client: SupabaseClient): Promise<PublicHeroSlide[]> {
   const { data, error } = await client
     .from('collections')
     .select(`
@@ -101,7 +99,7 @@ async function fetchHeroFallbackFromSupabase(): Promise<PublicHeroSlide[]> {
   const picked = pickDailyRandom(pool, 3, 'hero-fallback')
 
   await Promise.all(picked.map(async (collection) => {
-    const primaryImage = await fetchPrimaryProductImage(collection.id)
+    const primaryImage = await fetchPrimaryProductImage(client, collection.id)
     if (primaryImage) {
       collection.rightImage = primaryImage
     }
@@ -118,15 +116,17 @@ async function fetchHeroFallbackFromSupabase(): Promise<PublicHeroSlide[]> {
   }))
 }
 
-async function fetchPublicHeroSlides(): Promise<PublicHeroSlide[]> {
-  const cmsSlides = await fetchHeroSlidesFromSupabase()
+async function fetchPublicHeroSlides(client: SupabaseClient): Promise<PublicHeroSlide[]> {
+  const cmsSlides = await fetchHeroSlidesFromSupabase(client)
   if (cmsSlides.length) {
     return cmsSlides
   }
 
-  return fetchHeroFallbackFromSupabase()
+  return fetchHeroFallbackFromSupabase(client)
 }
 
 export function usePublicHeroSlides() {
-  return useAsyncData('public-hero-slides', fetchPublicHeroSlides)
+  const client = useSupabaseClient()
+
+  return useAsyncData('public-hero-slides', () => fetchPublicHeroSlides(client))
 }

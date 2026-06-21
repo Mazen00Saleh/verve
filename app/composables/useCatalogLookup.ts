@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Collection, Product } from '~/types/catalog'
 import { mapCollectionSummary, mapProduct, type DbProduct } from '~/utils/catalogMappers'
 import { toSlug } from '~/utils/slug'
@@ -36,9 +37,10 @@ function mapCategorySummary(row: {
   }
 }
 
-export async function fetchCategoryBySlug(slug: string): Promise<CategorySummary | null> {
-  const client = useSupabaseClient()
-
+export async function fetchCategoryBySlug(
+  client: SupabaseClient,
+  slug: string,
+): Promise<CategorySummary | null> {
   const { data, error } = await client
     .from('categories')
     .select('id, name, description, image_url')
@@ -52,11 +54,10 @@ export async function fetchCategoryBySlug(slug: string): Promise<CategorySummary
 }
 
 export async function fetchCollectionBySlug(
+  client: SupabaseClient,
   categoryId: string,
   slug: string,
 ): Promise<CollectionSummary | null> {
-  const client = useSupabaseClient()
-
   const { data, error } = await client
     .from('collections')
     .select('id, name, description, image_url, category_id')
@@ -71,21 +72,20 @@ export async function fetchCollectionBySlug(
 }
 
 export async function fetchProductDetail(
+  client: SupabaseClient,
   categorySlug: string,
   collectionSlug: string,
   productSlug: string,
 ): Promise<ProductDetailResult | null> {
-  const categoryRow = await fetchCategoryBySlug(categorySlug)
+  const categoryRow = await fetchCategoryBySlug(client, categorySlug)
   if (!categoryRow) {
     return null
   }
 
-  const collectionRow = await fetchCollectionBySlug(categoryRow.id, collectionSlug)
+  const collectionRow = await fetchCollectionBySlug(client, categoryRow.id, collectionSlug)
   if (!collectionRow) {
     return null
   }
-
-  const client = useSupabaseClient()
 
   const { data: products, error } = await client
     .from('products')
@@ -123,8 +123,10 @@ export function useProductDetail(
   collectionSlug: string,
   productSlug: string,
 ) {
+  const client = useSupabaseClient()
+
   return useAsyncData(
     `product-${categorySlug}-${collectionSlug}-${productSlug}`,
-    () => fetchProductDetail(categorySlug, collectionSlug, productSlug),
+    () => fetchProductDetail(client, categorySlug, collectionSlug, productSlug),
   )
 }

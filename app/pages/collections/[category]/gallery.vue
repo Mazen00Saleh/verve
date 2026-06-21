@@ -48,15 +48,13 @@ const categorySlug = route.params.category as string
 
 const { data, pending, error, refresh } = await useCategoryMockups(categorySlug)
 
+if (data.value && !data.value.category) {
+  throw createError({ statusCode: 404, statusMessage: 'Category not found' })
+}
+
 const errorMessage = computed(() => error.value?.message ?? null)
 const category = computed(() => data.value?.category ?? null)
 const mockups = computed(() => data.value?.mockups ?? [])
-
-watch([pending, data], () => {
-  if (!pending.value && data.value && !data.value.category) {
-    throw createError({ statusCode: 404, statusMessage: 'Category not found' })
-  }
-})
 
 useHead({
   title: computed(() =>

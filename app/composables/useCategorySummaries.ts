@@ -1,9 +1,8 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Category } from '~/types/catalog'
 import { mapCategorySummary } from '~/utils/catalogMappers'
 
-export async function fetchCategorySummaries(): Promise<Category[]> {
-  const client = useSupabaseClient()
-
+async function fetchCategorySummaries(client: SupabaseClient): Promise<Category[]> {
   const { data, error } = await client
     .from('categories')
     .select('id, name, description, image_url')
@@ -18,5 +17,7 @@ export async function fetchCategorySummaries(): Promise<Category[]> {
 }
 
 export function useCategorySummaries() {
-  return useAsyncData('category-summaries', fetchCategorySummaries)
+  const client = useSupabaseClient()
+
+  return useAsyncData('category-summaries', () => fetchCategorySummaries(client))
 }

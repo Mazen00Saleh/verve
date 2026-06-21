@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { FeaturedCollection } from '~/types/catalog'
 import { PAGINATION } from '~/config/pagination'
 import { buildPaginatedResult, getPaginationRange, normalizePage, parsePageQuery, type PaginatedResult } from '~/utils/pagination'
@@ -25,9 +26,11 @@ function mapCollectionRow(row: {
   }
 }
 
-async function fetchAllCollectionsPage(page: number): Promise<PaginatedResult<FeaturedCollection>> {
+async function fetchAllCollectionsPage(
+  client: SupabaseClient,
+  page: number,
+): Promise<PaginatedResult<FeaturedCollection>> {
   const pageSize = PAGINATION.collections
-  const client = useSupabaseClient()
   const { from, to } = getPaginationRange(page, pageSize)
 
   const { data, error, count } = await client
@@ -65,13 +68,14 @@ async function fetchAllCollectionsPage(page: number): Promise<PaginatedResult<Fe
 }
 
 export function usePaginatedAllCollections() {
+  const client = useSupabaseClient()
   const route = useRoute()
   const router = useRouter()
   const currentPage = computed(() => parsePageQuery(route.query.page))
 
   const result = useAsyncData(
     () => `paginated-all-collections-${currentPage.value}`,
-    () => fetchAllCollectionsPage(currentPage.value),
+    () => fetchAllCollectionsPage(client, currentPage.value),
     { watch: [currentPage] },
   )
 

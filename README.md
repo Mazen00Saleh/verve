@@ -1,149 +1,169 @@
 # Verve
 
-Luxury interiors catalog website for wallpapers, fabrics, and wallcoverings. Public marketing site + Supabase-backed admin CMS.
+Verve is a luxury interiors catalog and CMS built with Nuxt and Supabase.
 
-**Stack:** Nuxt 4 · Vue 3 · TypeScript · Tailwind CSS · Supabase · Vercel
+The repository includes:
+- a public marketing/catalog website
+- an authenticated admin panel for content management
+- Supabase-backed database/auth/storage
 
----
+## Tech Stack
 
-## Quick start
+- Nuxt 4 (Vue 3 + TypeScript)
+- Tailwind CSS
+- Supabase (Database, Auth, Storage, Edge Functions)
+- Nuxt Image (`@nuxt/image`)
 
-**Requirements:** Node.js 20+, a Supabase project
+## Requirements
+
+- Node.js 20+
+- npm
+- A Supabase project
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and fill values:
+
+```bash
+cp .env.example .env
+```
+
+Required at runtime:
+- `NUXT_PUBLIC_SUPABASE_URL`
+- `NUXT_PUBLIC_SUPABASE_KEY`
+
+Server-side/ops variables:
+- `SUPABASE_SERVICE_ROLE_KEY` (server-only)
+- `RESEND_API_KEY` (optional, for contact email sending)
+- `CONTACT_TO_EMAIL` (optional)
+- `CONTACT_FROM_EMAIL` (optional)
+
+## Local Development
 
 ```bash
 npm install
-cp .env.example .env   # fill in Supabase keys
-npm run dev            # http://localhost:3000
+npm run dev
 ```
 
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `NUXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project URL |
-| `NUXT_PUBLIC_SUPABASE_KEY` | Yes | Supabase publishable (anon) key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Seed only | `npm run seed` — never commit or expose client-side |
+App URL: `http://localhost:3000`
 
----
-
-## Project structure
-
-```
-app/
-├── assets/css/          # Global styles (Tailwind layers)
-├── components/          # Public UI components
-├── components/admin/    # Admin-only components
-├── composables/         # Data fetching & business logic
-├── config/              # App config (pagination sizes)
-├── data/catalog.ts      # Static catalog fallback (dev/offline)
-├── layouts/             # default (public) · admin
-├── middleware/          # Admin route protection
-├── pages/               # File-based routing
-│   ├── admin/           # CMS (auth required)
-│   └── …                # Public pages
-├── types/               # Supabase generated types
-└── utils/               # Shared helpers
-
-supabase/
-├── migrations/          # SQL schema changes
-├── functions/           # Edge functions (contact form)
-└── seed/                # Catalog seed SQL
-
-scripts/seed-catalog.mjs # Programmatic seed script
-```
-
-**Convention:** Data logic lives in composables (`useCategories`, `useProducts`, etc.). Pages stay thin — fetch, render, handle actions.
-
----
-
-## Data model
-
-Catalog hierarchy (managed in admin):
-
-```
-categories → collections → products → product_images
-```
-
-Other tables: `brochures`, `hero_slides`, `contact_submissions`, `profiles`
-
-- **Public site** reads from Supabase via composables. If Supabase returns empty data, `useCatalog` falls back to `app/data/catalog.ts`.
-- **Types** are in `app/types/database.types.ts`. Regenerate after schema changes via Supabase CLI.
-- **RLS** is enabled. Public reads use the anon key; admin writes require an authenticated user with `profiles.role = 'admin'`.
-
----
-
-## Public site
-
-| Route | Description |
-|-------|-------------|
-| `/` | Homepage — hero, categories, featured collections |
-| `/collections` | Category listing |
-| `/collections/:category` | Collections in a category (paginated) |
-| `/collections/:category/:collection` | Products in a collection (paginated) |
-| `/collections/:category/:collection/:product` | Product detail |
-| `/inspiration` | Brochures (paginated) |
-| `/about`, `/contact` | Static content pages |
-
-Pagination uses `?page=` query params. Page sizes are in `app/config/pagination.ts`.
-
----
-
-## Admin
-
-**URL:** `/admin` · **Login:** `/admin/login`
-
-Protected by `app/middleware/admin.global.ts`. Access requires a Supabase Auth account with `role = 'admin'` in the `profiles` table.
-
-| Section | Path |
-|---------|------|
-| Categories | `/admin/categories` |
-| Collections | `/admin/collections` |
-| Products | `/admin/products` |
-| Brochures | `/admin/brochures` |
-| Hero slides | `/admin/hero-slides` |
-| Contact messages | `/admin/contact` |
-
-All list pages are paginated via `useAdminPaginatedList`. Image uploads use Supabase Storage through `useImageUpload` / `useFileUpload`.
-
-### Granting admin access
-
-1. Create a user in Supabase Auth (Dashboard → Authentication).
-2. Insert or update their row in `profiles` with `role = 'admin'`.
-
----
-
-## Common tasks
+Other scripts:
 
 ```bash
-npm run dev       # Development server
-npm run build     # Production build
-npm run preview   # Preview production build locally
-npm run seed      # Seed catalog data (needs service role key)
+npm run build
+npm run preview
+npm run generate
 ```
 
-**Seed data:** `npm run seed` or run `supabase/seed/catalog.sql` in the Supabase SQL editor. Creates collections, products, and brochures for pagination testing.
+## Project Structure
 
-**Contact form:** Submits via Supabase Edge Function (`supabase/functions/contact-form`). Configure `RESEND_API_KEY` and email secrets in the Supabase dashboard.
+```text
+app/
+  assets/css/              Global styles and shared utility classes
+  components/              Public UI components
+  components/admin/        Admin UI components
+  composables/             Data access and business logic
+  config/                  App configuration (pagination, etc.)
+  layouts/                 Public/admin layouts
+  middleware/              Route guards (admin auth)
+  pages/                   Public + admin routes
+  types/                   Generated Supabase database types
+  utils/                   Shared helpers
 
-**Migrations:** Apply SQL files in `supabase/migrations/` through the Supabase SQL editor or CLI before expecting new tables/features to work locally.
+supabase/
+  functions/contact-form/  Contact form edge function
+  migrations/              SQL migrations
+  seed/catalog.sql         Seed SQL
+```
 
----
+## Public Routes
 
-## Key patterns for contributors
+- `/`
+- `/collections`
+- `/collections/:category`
+- `/collections/:category/:collection`
+- `/collections/:category/:collection/:product`
+- `/collections/:category/gallery`
+- `/inspiration`
+- `/inspiration/:slug`
+- `/brochures`
+- `/about`
+- `/contact`
 
-- **Composables over page logic** — add `fetchPage` / CRUD methods in `app/composables/`, not inline in pages.
-- **Pagination** — public lists use `useRoutePagination` + `usePaginated*` composables; admin lists use `useAdminPaginatedList`.
-- **SSR-safe code** — guard browser-only APIs with `import.meta.client`. No `setInterval` / `window` during SSR.
-- **Images** — use `CatalogImage` with `priority` for LCP candidates; admin uploads go through `ImageUploader`.
-- **Styling** — Tailwind with custom `luxury-*` tokens in `tailwind.config.ts`. Shared classes in `app/assets/css/main.css`.
-- **Slugs** — generated from names via `app/utils/slug.ts` (`toSlug`).
+## Admin Routes
 
----
+- `/admin/login`
+- `/admin`
+- `/admin/categories`
+- `/admin/collections`
+- `/admin/products`
+- `/admin/brochures`
+- `/admin/hero-slides`
+- `/admin/brand-logos`
+- `/admin/contact`
+
+Admin access is protected by `app/middleware/admin.global.ts` and `useAdminAuth()`.
+Users must have `profiles.role = 'admin'`.
+
+## Data Model (High Level)
+
+Primary hierarchy:
+
+```text
+categories -> collections -> products -> product_images
+```
+
+Additional entities:
+- `brochures`
+- `hero_slides`
+- `brand_logos`
+- `contact_submissions`
+- `profiles`
+
+## Image Behavior
+
+### Public rendering
+
+Public images are rendered via Nuxt Image (`NuxtImg` / `useImage`) and transformed to WebP.
+
+### Product detail + zoom
+
+In `app/pages/collections/[category]/[collection]/[product].vue`:
+- main preview uses transformed image around `1200w`
+- zoom preview uses transformed image around `1920w`
+- zoom panel pans a transformed image (not tiled server crops)
+- zoom preview panel appears under Variations on desktop
+
+### Admin upload lifecycle
+
+Admin uploaders compress and upload selected files to Supabase Storage.
+
+Current behavior:
+- selecting files uploads to Storage
+- removing from the form queues a deletion
+- storage deletion executes only when save/create is submitted
+- canceling without save does not flush queued deletions
+
+## Delete/Cascade Behavior
+
+Parent delete flows are explicit in composables and include storage cleanup:
+
+- deleting a **collection** removes child `product_images`, then child `products`, then collection media URLs from storage, then the collection row
+- deleting a **category** removes nested `product_images`, `products`, `collections`, related media URLs from storage, then the category row
+
+## Supabase Notes
+
+- Keep service role keys server-side only
+- Apply SQL migrations before testing new database features
+- Contact edge function is at `supabase/functions/contact-form/index.ts`
 
 ## Deployment
 
-Hosted on **Vercel**. Set the same env vars as `.env.example` in the Vercel project settings.
+Build for production:
 
 ```bash
-npm run build   # must pass before deploying
+npm run build
+npm run preview
 ```
 
-`@vercel/analytics` and `@vercel/speed-insights` are included. The `package.json` overrides for `vue-router` are required for Nuxt 4 compatibility — do not remove them.
+Before deploying, set the required environment variables in your hosting environment and confirm the production build succeeds.

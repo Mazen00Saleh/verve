@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="-mt-px">
     <HeroSection />
     <HomeCategories />
     <LazyPremiumMaterials hydrate-on-visible />

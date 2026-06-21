@@ -1,8 +1,7 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { pickDailyRandom } from '~/utils/shuffle'
 
-async function fetchPremiumMaterialImages(): Promise<string[]> {
-  const client = useSupabaseClient()
-
+async function fetchPremiumMaterialImages(client: SupabaseClient): Promise<string[]> {
   const { data, error } = await client
     .from('collections')
     .select('image_url')
@@ -27,5 +26,7 @@ async function fetchPremiumMaterialImages(): Promise<string[]> {
 }
 
 export function usePremiumMaterialImages() {
-  return useAsyncData('premium-material-images', fetchPremiumMaterialImages)
+  const client = useSupabaseClient()
+
+  return useAsyncData('premium-material-images', () => fetchPremiumMaterialImages(client))
 }

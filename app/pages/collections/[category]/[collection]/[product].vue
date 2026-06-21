@@ -51,17 +51,6 @@
                 />
               </div>
 
-              <div
-                v-if="isZooming && zoomPanelStyle"
-                class="absolute left-[105%] top-0 z-30 hidden h-[480px] w-[480px] overflow-hidden border border-neutral-200 bg-white shadow-2xl xl:block"
-              >
-                <img
-                  :src="zoomImageSrc"
-                  alt=""
-                  class="pointer-events-none absolute max-w-none select-none"
-                  :style="zoomPanelStyle"
-                >
-              </div>
             </div>
 
             <div class="space-y-8 lg:sticky lg:top-32 lg:space-y-10">
@@ -99,6 +88,18 @@
                 </div>
               </div>
 
+              <div
+                v-if="isZooming && zoomPanelStyle"
+                class="relative hidden h-[480px] w-[480px] overflow-hidden border border-neutral-200 bg-white shadow-2xl xl:block"
+              >
+                <img
+                  :src="zoomImageSrc"
+                  alt=""
+                  class="pointer-events-none absolute max-w-none select-none"
+                  :style="zoomPanelStyle"
+                >
+              </div>
+
               <p
                 v-if="product.description"
                 class="border-t border-neutral-100 pt-4 text-sm font-light leading-relaxed text-luxury-charcoal"
@@ -120,6 +121,10 @@ const collectionSlug = route.params.collection as string
 const productSlug = route.params.product as string
 
 const { data: detail, pending, error } = await useProductDetail(categorySlug, collectionSlug, productSlug)
+
+if (detail.value === null) {
+  throw createError({ statusCode: 404, statusMessage: 'Product not found' })
+}
 
 const errorMessage = computed(() => error.value?.message ?? null)
 const category = computed(() => detail.value?.category ?? null)
@@ -148,12 +153,12 @@ const selectedVariant = computed(() => variants.value[selectedVariantIdx.value] 
 const activeImage = computed(() => selectedVariant.value.image || product.value?.image || '')
 const mainImageSrc = computed(() =>
   activeImage.value
-    ? $img(activeImage.value, { width: 1200, quality: 85, format: 'webp' })
+    ? $img(activeImage.value, { width: 1200, quality: 100, format: 'webp' })
     : '',
 )
 const zoomImageSrc = computed(() =>
   activeImage.value
-    ? $img(activeImage.value, { width: 1920, quality: 85, format: 'webp' })
+    ? $img(activeImage.value, { width: 1920, quality: 100, format: 'webp' })
     : '',
 )
 
@@ -161,13 +166,7 @@ watch(product, () => {
   selectedVariantIdx.value = 0
 })
 
-watch([pending, detail], () => {
-  if (!pending.value && detail.value === null) {
-    throw createError({ statusCode: 404, statusMessage: 'Product not found' })
-  }
-})
-
-const LENS_SIZE = 180
+const LENS_SIZE = 260
 const PANEL_SIZE = 480
 const ZOOM_RATIO = PANEL_SIZE / LENS_SIZE
 

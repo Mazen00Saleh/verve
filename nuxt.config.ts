@@ -23,8 +23,6 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxtjs/supabase',
     '@nuxt/image',
-    '@vercel/analytics/nuxt',
-    '@vercel/speed-insights/nuxt',
   ],
   supabase: {
     redirect: false,

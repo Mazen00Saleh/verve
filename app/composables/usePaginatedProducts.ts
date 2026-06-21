@@ -22,11 +22,11 @@ function mapProduct(row: {
 }
 
 async function fetchProductsPage(
+  client: ReturnType<typeof useSupabaseClient>,
   collectionId: string,
   page: number,
 ): Promise<PaginatedResult<Product>> {
   const pageSize = PAGINATION.products
-  const client = useSupabaseClient()
   const { from, to } = getPaginationRange(page, pageSize)
 
   const { data, error, count } = await client
@@ -52,6 +52,7 @@ async function fetchProductsPage(
 }
 
 export function usePaginatedProducts(categorySlug: string, collectionSlug: string) {
+  const client = useSupabaseClient()
   const route = useRoute()
   const router = useRouter()
   const currentPage = computed(() => parsePageQuery(route.query.page))
@@ -59,7 +60,7 @@ export function usePaginatedProducts(categorySlug: string, collectionSlug: strin
   const result = useAsyncData(
     () => `paginated-products-${categorySlug}-${collectionSlug}-${currentPage.value}`,
     async () => {
-      const category = await fetchCategoryBySlug(categorySlug)
+      const category = await fetchCategoryBySlug(client, categorySlug)
 
       if (!category) {
         return {
@@ -69,7 +70,7 @@ export function usePaginatedProducts(categorySlug: string, collectionSlug: strin
         }
       }
 
-      const collection = await fetchCollectionBySlug(category.id, collectionSlug)
+      const collection = await fetchCollectionBySlug(client, category.id, collectionSlug)
 
       if (!collection) {
         return {
@@ -79,7 +80,7 @@ export function usePaginatedProducts(categorySlug: string, collectionSlug: strin
         }
       }
 
-      const products = await fetchProductsPage(collection.id, currentPage.value)
+      const products = await fetchProductsPage(client, collection.id, currentPage.value)
 
       return {
         category,
