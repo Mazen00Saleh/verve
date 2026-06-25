@@ -17,7 +17,7 @@
       <AdminImageUploader
         v-model="coverImages"
         folder="brochures"
-        preset="primary"
+        preset="catalog"
         label="Cover Image"
         hint="Required. Upload a new image to replace the current cover."
         required

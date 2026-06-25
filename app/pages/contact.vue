@@ -124,23 +124,15 @@
         </div>
 
         <div class="overflow-hidden border border-luxury-warm-beige/30 bg-luxury-warm-beige/10 shadow-sm">
-          <ClientOnly>
-            <div class="relative aspect-[4/3] w-full sm:aspect-[16/9]">
-              <iframe
-                :src="mapsEmbedUrl"
-                title="Verve showroom location on Google Maps"
-                class="absolute inset-0 h-full w-full border-0"
-                loading="lazy"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"
-              />
-            </div>
-            <template #fallback>
-              <div class="flex aspect-[4/3] w-full items-center justify-center bg-luxury-warm-beige/20 sm:aspect-[16/9]">
-                <p class="text-sm font-light text-luxury-muted">Loading map…</p>
-              </div>
-            </template>
-          </ClientOnly>
+          <div class="relative aspect-[4/3] w-full sm:aspect-[16/9]">
+            <iframe
+              :src="mapsEmbedUrl"
+              title="Verve showroom location on Google Maps"
+              class="absolute inset-0 h-full w-full border-0"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+            />
+          </div>
         </div>
       </section>
     </div>
@@ -148,9 +140,10 @@
 </template>
 
 <script setup lang="ts">
-// Official Google Maps listing for VERVE showroom (fabric store, Al-Swaifyeh)
-const mapsEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3386.85417570248!2d35.8681432!3d31.955486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151ca1026694633b%3A0xcddacdf59402220!2sVERVE!5e0!3m2!1sen!2sjo!4v1749686400000!5m2!1sen!2sjo'
-const mapsDirectionsUrl = 'https://www.google.com/maps/place/VERVE/@31.955486,35.870518,17z/data=!4m6!3m5!1s0x151ca1026694633b:0xcddacdf59402220!8m2!3d31.955486!4d35.870518!16s%2Fg%2F11b7l81lj5'
+import { getGoogleMapsEmbedUrl, mapsDirectionsUrl } from '~/utils/googleMaps'
+
+const config = useRuntimeConfig()
+const mapsEmbedUrl = computed(() => getGoogleMapsEmbedUrl(config.public.googleMapsApiKey))
 
 const { submit, submitting, error, success, reset } = useContactForm()
 

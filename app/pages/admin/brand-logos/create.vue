@@ -9,7 +9,7 @@
       <AdminImageUploader
         v-model="logoImages"
         folder="brands"
-        preset="gallery"
+        preset="catalog"
         label="Brand Logo"
         hint="Image is optimized in the browser before upload."
         required

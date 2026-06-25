@@ -1,42 +1,32 @@
 <template>
-  <div>
-    <div
-      class="columns-2 gap-3 sm:columns-3 sm:gap-4 lg:columns-4 lg:gap-5"
-      :class="columnClass"
-    >
-      <button
-        v-for="(mockup, index) in visibleMockups"
-        :key="mockup.id"
-        type="button"
-        class="group relative mb-3 block w-full break-inside-avoid rounded-sm bg-luxury-warm-beige/20 text-left sm:mb-4"
-        :aria-label="alt ? `View ${alt} ${index + 1}` : `View image ${index + 1}`"
-        @click="openModal(index)"
-      >
-        <NuxtImg
-          :src="mockup.url"
-          :alt="alt ? `${alt} ${index + 1}` : ''"
-          :width="mockupPreset.width"
-          :sizes="mockupPreset.sizes"
-          fit="inside"
-          format="webp"
-          class="h-auto w-full rounded-sm transition-transform duration-500 group-hover:scale-[1.02]"
-          :loading="index < initialBatch ? 'eager' : 'lazy'"
-          decoding="async"
-        />
-        <div
-          class="pointer-events-none absolute inset-0 rounded-sm bg-black/0 transition-colors duration-300 group-hover:bg-black/10"
-          aria-hidden="true"
-        />
-      </button>
+  <section
+    v-if="images.length"
+    class="mt-16 border-t border-neutral-100 pt-12 sm:mt-20 sm:pt-16"
+  >
+    <div class="mb-8 text-center sm:mb-10">
+      <h2 class="section-eyebrow">Room Inspiration</h2>
     </div>
 
-    <div
-      v-if="hasMore"
-      ref="sentinelRef"
-      class="flex items-center justify-center py-10"
-      aria-hidden="true"
-    >
-      <span class="text-xs uppercase tracking-widest text-luxury-muted">Loading more…</span>
+    <div class="columns-2 gap-3 sm:columns-3 sm:gap-4 lg:columns-4 lg:gap-5">
+      <button
+        v-for="(url, index) in images"
+        :key="`${url}-${index}`"
+        type="button"
+        class="group relative mb-3 block w-full break-inside-avoid rounded-sm bg-luxury-warm-beige/20 text-left sm:mb-4"
+        :aria-label="`View room inspiration ${index + 1} for ${productName}`"
+        @click="openModal(index)"
+      >
+        <CatalogImage
+          :src="url"
+          :alt="`${productName} room inspiration ${index + 1}`"
+          aspect="auto"
+          :overlay="false"
+          :hover-scale="true"
+          size="mockup"
+          container-class="rounded-sm"
+          image-class="rounded-sm"
+        />
+      </button>
     </div>
 
     <Transition name="gallery-fade">
@@ -45,7 +35,7 @@
         class="fixed inset-0 z-50 flex items-center justify-center bg-luxury-matte-black/90 p-4 backdrop-blur-md sm:p-6 md:p-10"
         role="dialog"
         aria-modal="true"
-        :aria-label="alt ? `${alt} preview` : 'Image preview'"
+        :aria-label="`Room inspiration preview for ${productName}`"
         @click.self="closeModal"
       >
         <button
@@ -80,50 +70,37 @@
 
         <div class="relative flex max-h-[85vh] w-full max-w-5xl items-center justify-center">
           <img
-            v-if="activeMockup"
+            v-if="activeImage"
             :src="modalImageSrc"
-            :alt="alt ? `${alt} ${activeIndex! + 1}` : ''"
+            :alt="`${productName} room inspiration ${activeIndex! + 1}`"
             class="max-h-[85vh] w-auto max-w-full object-contain"
             decoding="async"
           >
         </div>
       </div>
     </Transition>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import type { CategoryMockupImage } from '~/composables/useCategoryMockups'
-import { PAGINATION } from '~/config/pagination'
-import { getImagePreset } from '~/utils/imageSizes'
-
 const props = defineProps<{
-  mockups: CategoryMockupImage[]
-  alt?: string
-  columnClass?: string
+  images: string[]
+  productName: string
 }>()
 
-const initialBatch = PAGINATION.galleryBatch
-const mockupPreset = getImagePreset('mockup')
-const visibleCount = ref(initialBatch)
-const sentinelRef = ref<HTMLElement | null>(null)
 const activeIndex = ref<number | null>(null)
-
 const $img = useImage()
 
-const visibleMockups = computed(() => props.mockups.slice(0, visibleCount.value))
-const hasMore = computed(() => visibleCount.value < props.mockups.length)
-
-const activeMockup = computed(() =>
-  activeIndex.value !== null ? props.mockups[activeIndex.value] ?? null : null,
+const activeImage = computed(() =>
+  activeIndex.value !== null ? props.images[activeIndex.value] ?? null : null,
 )
 
 const modalImageSrc = computed(() => {
-  if (!activeMockup.value) {
+  if (!activeImage.value) {
     return ''
   }
 
-  return $img(activeMockup.value.url, {
+  return $img(activeImage.value, {
     width: 1600,
     quality: 100,
     format: 'webp',
@@ -132,16 +109,8 @@ const modalImageSrc = computed(() => {
 
 const canGoPrev = computed(() => activeIndex.value !== null && activeIndex.value > 0)
 const canGoNext = computed(() =>
-  activeIndex.value !== null && activeIndex.value < props.mockups.length - 1,
+  activeIndex.value !== null && activeIndex.value < props.images.length - 1,
 )
-
-function loadMore() {
-  if (!hasMore.value) {
-    return
-  }
-
-  visibleCount.value = Math.min(visibleCount.value + initialBatch, props.mockups.length)
-}
 
 function openModal(index: number) {
   activeIndex.value = index
@@ -160,7 +129,7 @@ function goPrev() {
 }
 
 function goNext() {
-  if (activeIndex.value !== null && activeIndex.value < props.mockups.length - 1) {
+  if (activeIndex.value !== null && activeIndex.value < props.images.length - 1) {
     activeIndex.value += 1
   }
 }
@@ -187,41 +156,15 @@ function onKeydown(event: KeyboardEvent) {
   }
 }
 
-watch(() => props.mockups, () => {
-  visibleCount.value = initialBatch
+watch(() => props.images, () => {
   closeModal()
 })
 
-let observer: IntersectionObserver | null = null
-
 onMounted(() => {
-  if (typeof IntersectionObserver === 'undefined') {
-    visibleCount.value = props.mockups.length
-    return
-  }
-
-  observer = new IntersectionObserver(
-    (entries) => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        loadMore()
-      }
-    },
-    { rootMargin: '200px' },
-  )
-
-  watch(sentinelRef, (element) => {
-    observer?.disconnect()
-
-    if (element) {
-      observer?.observe(element)
-    }
-  }, { immediate: true })
-
   window.addEventListener('keydown', onKeydown)
 })
 
 onUnmounted(() => {
-  observer?.disconnect()
   window.removeEventListener('keydown', onKeydown)
   setBodyScrollLocked(false)
 })

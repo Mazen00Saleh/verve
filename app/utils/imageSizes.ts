@@ -1,4 +1,4 @@
-export type ImageSizePreset = 'thumbnail' | 'card' | 'mosaic' | 'product' | 'mockup'
+export type ImageSizePreset = 'thumbnail' | 'card' | 'mosaic' | 'product' | 'mockup' | 'feature' | 'accent'
 
 const PRESETS: Record<ImageSizePreset, { width: number, height?: number, sizes: string }> = {
   thumbnail: {
@@ -22,8 +22,18 @@ const PRESETS: Record<ImageSizePreset, { width: number, height?: number, sizes: 
     sizes: '(max-width: 1024px) 100vw, 50vw',
   },
   mockup: {
-    width: 800,
-    sizes: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw',
+    width: 1600,
+    sizes: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 480px',
+  },
+  feature: {
+    width: 1200,
+    height: 1500,
+    sizes: '(max-width: 1024px) 100vw, 448px',
+  },
+  accent: {
+    width: 1200,
+    height: 1500,
+    sizes: '(max-width: 1024px) 60vw, 336px',
   },
 }
 

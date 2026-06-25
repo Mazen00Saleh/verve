@@ -14,7 +14,7 @@
       :loading="priority ? 'eager' : 'lazy'"
       :fetchpriority="priority ? 'high' : 'auto'"
       format="webp"
-      quality="80"
+      :quality="resolvedQuality"
       decoding="async"
       class="transition-transform duration-700"
       :class="[imageObjectClass, imageClass, hoverScale && !usesNaturalAspect ? 'group-hover:scale-105' : '']"
@@ -44,6 +44,7 @@ const props = withDefaults(defineProps<{
   hoverScale?: boolean
   priority?: boolean
   size?: ImageSizePreset
+  quality?: number
   width?: number
   height?: number
   sizes?: string
@@ -73,6 +74,17 @@ const resolvedHeight = computed(() => {
   return usesNaturalAspect.value ? undefined : preset.value.height
 })
 const resolvedSizes = computed(() => props.sizes ?? preset.value.sizes)
+const resolvedQuality = computed(() => {
+  if (props.quality !== undefined) {
+    return props.quality
+  }
+
+  if (props.size === 'mockup' || props.size === 'feature' || props.size === 'accent') {
+    return 95
+  }
+
+  return 80
+})
 const resolvedFit = computed(() => (usesNaturalAspect.value ? 'inside' : undefined))
 
 const imageObjectClass = computed(() =>

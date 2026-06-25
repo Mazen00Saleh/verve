@@ -34,7 +34,7 @@ async function fetchCollectionsPage(
     .from('collections')
     .select('id, name, description, image_url, created_at', { count: 'exact' })
     .eq('category_id', categoryId)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: false })
     .range(from, to)
 
   if (error) {

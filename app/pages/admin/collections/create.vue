@@ -26,7 +26,7 @@
       <AdminImageUploader
         v-model="coverImages"
         folder="collections"
-        preset="primary"
+        preset="catalog"
         label="Cover Image"
         hint="Image is optimized in the browser before upload."
         required

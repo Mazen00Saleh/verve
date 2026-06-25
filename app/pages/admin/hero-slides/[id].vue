@@ -27,16 +27,18 @@
       <AdminImageUploader
         v-model="leftImages"
         folder="hero"
-        preset="gallery"
+        preset="hero"
         label="Left Image"
+        hint="Texture or detail image for the left column (desktop). Optimized up to 2560px."
         @remove-image="trackRemovedImage"
       />
 
       <AdminImageUploader
         v-model="rightImages"
         folder="hero"
-        preset="primary"
+        preset="hero"
         label="Right Image"
+        hint="Main lifestyle image for the right panel. Optimized up to 2560px."
         @remove-image="trackRemovedImage"
       />
 

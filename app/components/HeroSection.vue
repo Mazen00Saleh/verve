@@ -26,7 +26,7 @@
           >
             <div class="relative hidden h-full w-[22%] overflow-hidden lg:block">
               <img
-                :src="heroImageUrl(slide.leftImage, 500, 750)"
+                :src="heroImageUrl(slide.leftImage, 1200)"
                 alt=""
                 aria-hidden="true"
                 class="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-[8000ms] ease-out"
@@ -36,8 +36,7 @@
                 :loading="index === 0 ? 'eager' : 'lazy'"
                 :fetchpriority="index === 0 ? 'high' : 'auto'"
                 decoding="async"
-                width="500"
-                height="750"
+                width="1200"
               >
               <div class="absolute inset-0 bg-black/10" />
               <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-luxury-ivory/60 to-transparent md:h-28" />
@@ -84,7 +83,7 @@
 
             <div class="relative h-full min-w-0 flex-grow overflow-hidden">
               <img
-                :src="heroImageUrl(slide.rightImage, 1600, 1067)"
+                :src="heroImageUrl(slide.rightImage, 2400)"
                 :alt="slide.title"
                 class="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-[8000ms] ease-out"
                 :style="{
@@ -93,8 +92,7 @@
                 :loading="index === 0 ? 'eager' : 'lazy'"
                 :fetchpriority="index === 0 ? 'high' : 'auto'"
                 decoding="async"
-                width="1600"
-                height="1067"
+                width="2400"
               >
               <div class="absolute inset-0 bg-black/[0.03]" />
               <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-luxury-ivory/70 via-luxury-ivory/15 to-transparent md:h-32" />
@@ -161,11 +159,10 @@ const errorMessage = computed(() => error.value?.message ?? null)
 const $img = useImage()
 const lcpImage = computed(() => slides.value[0]?.rightImage ?? null)
 
-function heroImageUrl(src: string, width: number, height?: number) {
+function heroImageUrl(src: string, width: number) {
   return $img(src, {
     width,
-    height,
-    quality: 80,
+    quality: 100,
     format: 'webp',
   })
 }
@@ -180,7 +177,7 @@ useHead({
     return [{
       rel: 'preload',
       as: 'image',
-      href: heroImageUrl(src, 1600, 1067),
+      href: heroImageUrl(src, 2400),
       fetchpriority: 'high',
     }]
   }),

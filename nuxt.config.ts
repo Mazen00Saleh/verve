@@ -17,6 +17,12 @@ function getImageDomains(): string[] {
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: process.env.NODE_ENV === 'development' },
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+      googleMapsApiKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+    },
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
@@ -43,7 +49,7 @@ export default defineNuxtConfig({
     },
   },
   image: {
-    quality: 80,
+    quality: 100,
     format: ['webp'],
     domains: getImageDomains(),
     screens: {
@@ -52,7 +58,7 @@ export default defineNuxtConfig({
       md: 768,
       lg: 1024,
       xl: 1280,
-      xxl: 1536,
+      xxl: 1920,
     },
   },
   css: ['~/assets/css/main.css'],
@@ -77,7 +83,7 @@ export default defineNuxtConfig({
     '/': { swr: 300 },
     // Marketing pages: no Supabase — safe to prerender.
     '/about': { prerender: true },
-    '/contact': { prerender: true },
+    '/contact': { swr: 3600 },
     // Public catalog: edge SWR (public, non-personalised CMS content).
     '/collections': { swr: 300 },
     '/collections/**': { swr: 300 },
@@ -91,5 +97,6 @@ export default defineNuxtConfig({
     '/images/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     '/favicon.ico': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     '/robots.txt': { headers: { 'cache-control': 'public, max-age=86400' } },
+    '/sitemap.xml': { swr: 3600 },
   },
 })

@@ -34,7 +34,7 @@
       <AdminImageUploader
         v-model="primaryImages"
         folder="products"
-        preset="primary"
+        preset="catalog"
         label="Primary Image"
         @remove-image="onRemoveImage"
       />
@@ -42,7 +42,7 @@
       <AdminImageUploader
         v-model="secondaryImages"
         folder="products"
-        preset="gallery"
+        preset="catalog"
         label="Secondary Images"
         multiple
         @remove-image="onRemoveImage"
@@ -52,7 +52,7 @@
       <AdminImageUploader
         v-model="mockupImages"
         folder="products"
-        preset="mockup"
+        preset="catalog"
         label="Room Mockups"
         multiple
         @remove-image="onRemoveImage"

@@ -2,7 +2,7 @@ import { MEDIA_BUCKET, getStoragePathFromUrl } from '~/utils/storage'
 import { formatBytes, savingsPercent } from '~/utils/format-bytes'
 import { getErrorMessage } from '~/utils/errors'
 
-export type ImageUploadPreset = 'primary' | 'gallery' | 'mockup'
+export type ImageUploadPreset = 'catalog' | 'hero'
 
 export type UploadStatus = 'idle' | 'compressing' | 'uploading' | 'complete' | 'error'
 
@@ -28,25 +28,24 @@ export interface CompressionResult {
   savingsPercent: number
 }
 
-const MAX_UPLOAD_SIZE_BYTES = 150 * 1024
-const MAX_UPLOAD_SIZE_MB = MAX_UPLOAD_SIZE_BYTES / (1024 * 1024)
+const CATALOG_MAX_SIZE_BYTES = 300 * 1024
 
-// Sized to match public delivery (`app/utils/imageSizes.ts`) while staying under 100 KB as WebP.
+// Unified catalog upload preset (primary, gallery, mockup, categories, etc.).
+// Sized to the largest public delivery width (mockup 1600w) while staying under 300 KB.
 const PRESETS: Record<ImageUploadPreset, {
   maxWidthOrHeight: number
   quality: number
+  maxSizeBytes: number
 }> = {
-  primary: {
-    maxWidthOrHeight: 1920,
-    quality: 0.7,
-  },
-  gallery: {
+  catalog: {
     maxWidthOrHeight: 1600,
-    quality: 0.7,
+    quality: 0.74,
+    maxSizeBytes: CATALOG_MAX_SIZE_BYTES,
   },
-  mockup: {
-    maxWidthOrHeight: 1600,
-    quality: 0.7,
+  hero: {
+    maxWidthOrHeight: 2560,
+    quality: 0.88,
+    maxSizeBytes: 500 * 1024,
   },
 }
 
@@ -86,13 +85,15 @@ export function useImageUpload() {
     return `${crypto.randomUUID()}-${baseName}.webp`
   }
 
-  async function compressImage(file: File, preset: ImageUploadPreset = 'primary'): Promise<CompressionResult> {
+  async function compressImage(file: File, preset: ImageUploadPreset = 'catalog'): Promise<CompressionResult> {
     if (!isAcceptedImage(file)) {
       throw new Error('Unsupported file type. Please upload a JPEG, PNG, WebP, or GIF image.')
     }
 
     const options = PRESETS[preset]
     const originalSize = file.size
+    const maxSizeBytes = options.maxSizeBytes
+    const maxSizeMB = maxSizeBytes / (1024 * 1024)
 
     try {
       const imageCompression = (await import('browser-image-compression')).default
@@ -102,14 +103,14 @@ export function useImageUpload() {
 
       for (let attempt = 0; attempt < 6; attempt++) {
         compressedFile = await imageCompression(file, {
-          maxSizeMB: MAX_UPLOAD_SIZE_MB,
+          maxSizeMB,
           maxWidthOrHeight: maxDimension,
           useWebWorker: true,
           initialQuality: quality,
           fileType: OUTPUT_TYPE,
         })
 
-        if (compressedFile.size < MAX_UPLOAD_SIZE_BYTES) {
+        if (compressedFile.size < maxSizeBytes) {
           return {
             file: compressedFile,
             originalSize,
@@ -123,7 +124,7 @@ export function useImageUpload() {
       }
 
       throw new Error(
-        `Could not compress image below 100 KB (final size: ${formatBytes(compressedFile.size)}). Try a smaller source image.`,
+        `Could not compress image below ${formatBytes(maxSizeBytes)} (final size: ${formatBytes(compressedFile.size)}). Try a smaller source image.`,
       )
     } catch (compressionError) {
       if (compressionError instanceof Error && compressionError.message.startsWith('Could not compress')) {
@@ -172,7 +173,7 @@ export function useImageUpload() {
   async function uploadImage(
     file: File,
     folder: string,
-    preset: ImageUploadPreset = 'primary',
+    preset: ImageUploadPreset = 'catalog',
   ): Promise<UploadedImage> {
     const compressed = await compressImage(file, preset)
     return uploadCompressedFile(compressed.file, folder, file.name, compressed)
@@ -181,7 +182,7 @@ export function useImageUpload() {
   async function uploadImages(
     files: File[],
     folder: string,
-    preset: ImageUploadPreset = 'primary',
+    preset: ImageUploadPreset = 'catalog',
   ): Promise<UploadedImage[]> {
     const results: UploadedImage[] = []
 

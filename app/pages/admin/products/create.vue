@@ -32,7 +32,7 @@
       <AdminImageUploader
         v-model="primaryImages"
         folder="products"
-        preset="primary"
+        preset="catalog"
         label="Primary Image"
         hint="Main product image shown on listings and detail pages."
         required
@@ -42,7 +42,7 @@
       <AdminImageUploader
         v-model="secondaryImages"
         folder="products"
-        preset="gallery"
+        preset="catalog"
         label="Secondary Images"
         hint="Additional product views and detail shots."
         multiple
@@ -52,7 +52,7 @@
       <AdminImageUploader
         v-model="mockupImages"
         folder="products"
-        preset="mockup"
+        preset="catalog"
         label="Room Mockups"
         hint="In-room inspiration images for this product."
         multiple

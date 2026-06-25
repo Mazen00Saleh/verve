@@ -25,8 +25,8 @@ async function fetchMockupsForCategory(
     `)
     .eq('type', 'mockup')
     .eq('products.collections.category_id', categoryId)
-    .order('order_index', { ascending: true })
-    .order('url', { ascending: true })
+    .order('created_at', { referencedTable: 'products', ascending: false })
+    .order('order_index', { ascending: false })
     .limit(PAGINATION.mockups)
 
   if (error) {

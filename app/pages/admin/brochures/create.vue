@@ -15,7 +15,7 @@
       <AdminImageUploader
         v-model="coverImages"
         folder="brochures"
-        preset="primary"
+        preset="catalog"
         label="Cover Image"
         hint="Shown on the inspiration page. Image is optimized in the browser before upload."
         required

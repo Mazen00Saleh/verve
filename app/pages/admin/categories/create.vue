@@ -15,7 +15,7 @@
       <AdminImageUploader
         v-model="coverImages"
         folder="categories"
-        preset="primary"
+        preset="catalog"
         label="Cover Image"
         hint="Image is optimized in the browser before upload."
         required

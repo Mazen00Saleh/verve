@@ -28,7 +28,7 @@
       <AdminImageUploader
         v-model="coverImages"
         folder="collections"
-        preset="primary"
+        preset="catalog"
         label="Cover Image"
         hint="Upload a new image to replace the current cover."
         @remove-image="trackRemovedImage"

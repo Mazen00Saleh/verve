@@ -204,7 +204,7 @@ const props = withDefaults(defineProps<{
   required: false,
   multiple: false,
   maxFiles: undefined,
-  preset: 'primary',
+  preset: 'catalog',
   modelValue: () => [],
   disabled: false,
 })

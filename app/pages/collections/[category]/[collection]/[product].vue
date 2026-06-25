@@ -108,6 +108,11 @@
               </p>
             </div>
           </div>
+
+          <ProductRoomInspiration
+            :images="product.mockupImages"
+            :product-name="product.name"
+          />
         </template>
       </PageState>
     </div>

@@ -11,7 +11,7 @@
       <AdminImageUploader
         v-model="logoImages"
         folder="brands"
-        preset="gallery"
+        preset="catalog"
         label="Brand Logo"
         hint="Required. Upload a new image to replace the current logo."
         required
