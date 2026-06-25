@@ -124,16 +124,23 @@
         </div>
 
         <div class="overflow-hidden border border-luxury-warm-beige/30 bg-luxury-warm-beige/10 shadow-sm">
-          <div class="relative aspect-[4/3] w-full sm:aspect-[16/9]">
-            <iframe
-              :src="mapsEmbedUrl"
-              title="Verve showroom location on Google Maps"
-              class="absolute inset-0 h-full w-full border-0"
-              loading="lazy"
-              allowfullscreen
-              referrerpolicy="no-referrer-when-downgrade"
-            />
-          </div>
+          <ClientOnly>
+            <div class="relative aspect-[4/3] w-full sm:aspect-[16/9]">
+              <iframe
+                :src="mapsEmbedUrl"
+                title="Verve showroom location on Google Maps"
+                class="absolute inset-0 h-full w-full border-0"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <template #fallback>
+              <div class="flex aspect-[4/3] w-full items-center justify-center bg-luxury-warm-beige/20 sm:aspect-[16/9]">
+                <p class="text-sm font-light text-luxury-muted">Loading map…</p>
+              </div>
+            </template>
+          </ClientOnly>
         </div>
       </section>
     </div>

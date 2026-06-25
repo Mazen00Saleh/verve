@@ -24,9 +24,23 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@nuxt/image',
   ],
+  experimental: {
+    // Extracts async data payloads into separate JSON files to shrink HTML on navigation.
+    payloadExtraction: true,
+    // Serialises payloads as JSON instead of devalue for faster parsing in the browser.
+    renderJsonPayloads: true,
+  },
   supabase: {
     redirect: false,
     useSsrCookies: true,
+  },
+  nitro: {
+    // Targets Cloudflare Pages Functions for SSR at the edge.
+    preset: process.env.NITRO_PRESET || 'cloudflare-pages',
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true,
+    },
   },
   image: {
     quality: 80,
@@ -59,7 +73,18 @@ export default defineNuxtConfig({
     download: true,
   },
   routeRules: {
-    '/': { prerender: true },
+    // Homepage: edge SWR so CMS updates appear without a full rebuild.
+    '/': { swr: 300 },
+    // Marketing pages: no Supabase — safe to prerender.
+    '/about': { prerender: true },
+    '/contact': { prerender: true },
+    // Public catalog: edge SWR (public, non-personalised CMS content).
+    '/collections': { swr: 300 },
+    '/collections/**': { swr: 300 },
+    '/inspiration': { swr: 600 },
+    '/inspiration/**': { swr: 600 },
+    '/brochures': { redirect: { to: '/inspiration', statusCode: 301 } },
+    // Admin SPA — never cache.
     '/admin/**': { ssr: false },
     '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     '/_ipx/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },

@@ -22,6 +22,18 @@ export type ProductDetailResult = {
   product: Product
 }
 
+const PRODUCT_DETAIL_SELECT = `
+  id,
+  name,
+  description,
+  primary_image,
+  product_images (
+    url,
+    order_index,
+    type
+  )
+`
+
 function mapCategorySummary(row: {
   id: string
   name: string
@@ -71,6 +83,23 @@ export async function fetchCollectionBySlug(
   return row ? mapCollectionSummary(row) : null
 }
 
+async function fetchProductById(
+  client: SupabaseClient,
+  productId: string,
+): Promise<DbProduct | null> {
+  const { data, error } = await client
+    .from('products')
+    .select(PRODUCT_DETAIL_SELECT)
+    .eq('id', productId)
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  return data as DbProduct | null
+}
+
 export async function fetchProductDetail(
   client: SupabaseClient,
   categorySlug: string,
@@ -87,26 +116,22 @@ export async function fetchProductDetail(
     return null
   }
 
-  const { data: products, error } = await client
+  // Lightweight slug lookup — avoids loading product_images for every product in the collection.
+  const { data: productIndex, error: indexError } = await client
     .from('products')
-    .select(`
-      id,
-      name,
-      description,
-      primary_image,
-      product_images (
-        url,
-        order_index,
-        type
-      )
-    `)
+    .select('id, name')
     .eq('collection_id', collectionRow.id)
 
-  if (error) {
-    throw error
+  if (indexError) {
+    throw indexError
   }
 
-  const productRow = (products ?? []).find(product => toSlug(product.name) === productSlug)
+  const matchedProduct = (productIndex ?? []).find(product => toSlug(product.name) === productSlug)
+  if (!matchedProduct) {
+    return null
+  }
+
+  const productRow = await fetchProductById(client, matchedProduct.id)
   if (!productRow) {
     return null
   }
@@ -114,8 +139,17 @@ export async function fetchProductDetail(
   return {
     category: categoryRow,
     collection: collectionRow,
-    product: mapProduct(productRow as DbProduct),
+    product: mapProduct(productRow),
   }
+}
+
+export function useCategoryBySlug(slug: string) {
+  const client = useSupabaseClient()
+
+  return useAsyncData(
+    `category-by-slug-${slug}`,
+    () => fetchCategoryBySlug(client, slug),
+  )
 }
 
 export function useProductDetail(

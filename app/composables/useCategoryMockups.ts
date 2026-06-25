@@ -1,7 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { PAGINATION } from '~/config/pagination'
 import { fetchCategoryBySlug } from '~/composables/useCatalogLookup'
 
 export type CategoryMockupImage = {
+  id: string
   url: string
 }
 
@@ -12,7 +14,9 @@ async function fetchMockupsForCategory(
   const { data, error } = await client
     .from('product_images')
     .select(`
+      id,
       url,
+      order_index,
       products!inner (
         collections!inner (
           category_id
@@ -21,13 +25,16 @@ async function fetchMockupsForCategory(
     `)
     .eq('type', 'mockup')
     .eq('products.collections.category_id', categoryId)
+    .order('order_index', { ascending: true })
+    .order('url', { ascending: true })
+    .limit(PAGINATION.mockups)
 
   if (error) {
     console.warn('[useCategoryMockups] Supabase fetch failed:', error.message)
     return []
   }
 
-  return (data ?? []).map(row => ({ url: row.url }))
+  return (data ?? []).map(row => ({ id: row.id, url: row.url }))
 }
 
 async function loadCategoryMockups(

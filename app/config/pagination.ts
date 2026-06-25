@@ -2,6 +2,10 @@ export const PAGINATION = {
   collections: 12,
   products: 12,
   brochures: 12,
+  /** Max mockup images loaded per category gallery page. */
+  mockups: 200,
+  /** Mockups revealed per scroll batch on the gallery page. */
+  galleryBatch: 12,
   'admin-categories': 15,
   'admin-collections': 15,
   'admin-products': 15,

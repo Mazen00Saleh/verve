@@ -5,6 +5,7 @@
 .nitro
 .cache
 .vercel
+.wrangler
 dist
 
 # Node dependencies

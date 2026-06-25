@@ -49,23 +49,33 @@ async function fetchHeroSlidesFromSupabase(client: SupabaseClient): Promise<Publ
   }))
 }
 
-async function fetchPrimaryProductImage(
+async function fetchPrimaryProductImagesByCollection(
   client: SupabaseClient,
-  collectionId: string,
-): Promise<string | null> {
-  const { data, error } = await client
-    .from('products')
-    .select('primary_image')
-    .eq('collection_id', collectionId)
-    .not('primary_image', 'is', null)
-    .order('created_at', { ascending: true })
-    .limit(1)
-
-  if (error) {
-    return null
+  collectionIds: string[],
+): Promise<Map<string, string>> {
+  if (!collectionIds.length) {
+    return new Map()
   }
 
-  return data?.[0]?.primary_image ?? null
+  const { data, error } = await client
+    .from('products')
+    .select('collection_id, primary_image')
+    .in('collection_id', collectionIds)
+    .not('primary_image', 'is', null)
+    .order('created_at', { ascending: true })
+
+  if (error) {
+    return new Map()
+  }
+
+  const imagesByCollection = new Map<string, string>()
+  for (const row of data ?? []) {
+    if (!imagesByCollection.has(row.collection_id) && row.primary_image) {
+      imagesByCollection.set(row.collection_id, row.primary_image)
+    }
+  }
+
+  return imagesByCollection
 }
 
 async function fetchHeroFallbackFromSupabase(client: SupabaseClient): Promise<PublicHeroSlide[]> {
@@ -97,13 +107,17 @@ async function fetchHeroFallbackFromSupabase(client: SupabaseClient): Promise<Pu
   }))
 
   const picked = pickDailyRandom(pool, 3, 'hero-fallback')
+  const primaryImages = await fetchPrimaryProductImagesByCollection(
+    client,
+    picked.map(collection => collection.id),
+  )
 
-  await Promise.all(picked.map(async (collection) => {
-    const primaryImage = await fetchPrimaryProductImage(client, collection.id)
+  for (const collection of picked) {
+    const primaryImage = primaryImages.get(collection.id)
     if (primaryImage) {
       collection.rightImage = primaryImage
     }
-  }))
+  }
 
   return picked.map((collection, index) => ({
     id: `catalog-fallback-${index}`,

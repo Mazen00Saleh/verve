@@ -54,21 +54,18 @@
 const route = useRoute()
 const slug = route.params.slug as string
 
-const { data: brochures, pending, error } = await usePublicBrochures()
+const { data: brochure, pending, error } = await useBrochureBySlug(slug)
+
+if (brochure.value === null && !pending.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Brochure not found' })
+}
 
 const errorMessage = computed(() => error.value?.message ?? null)
-const brochure = computed(() => brochures.value?.find(item => item.slug === slug))
-
-watch([pending, brochures], () => {
-  if (!pending.value && brochures.value && !brochure.value) {
-    throw createError({ statusCode: 404, statusMessage: 'Brochure not found' })
-  }
-})
 
 useHead({
   title: computed(() =>
     brochure.value
-      ? `${brochure.title} | Verve Inspiration`
+      ? `${brochure.value.title} | Verve Inspiration`
       : 'Brochure | Verve Inspiration',
   ),
 })

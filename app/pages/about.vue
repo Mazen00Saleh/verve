@@ -13,18 +13,17 @@
         <div class="w-full">
           <picture class="block w-full">
             <source
-              srcset="/images/about-hero.webp 4500w"
+              srcset="/images/about-hero.webp"
               sizes="(min-width: 1024px) 512px, (min-width: 768px) 50vw, 100vw"
               type="image/webp"
             >
             <img
               src="/images/about-hero.webp"
-              srcset="/images/about-hero.webp 4500w"
               sizes="(min-width: 1024px) 512px, (min-width: 768px) 50vw, 100vw"
               alt="Verve Exclusive Home Collection"
               class="h-auto w-full rounded-sm"
-              width="4500"
-              height="2130"
+              width="1200"
+              height="568"
               loading="eager"
               fetchpriority="high"
               decoding="async"
@@ -71,7 +70,6 @@ useHead({
       as: 'image',
       href: '/images/about-hero.webp',
       type: 'image/webp',
-      imagesrcset: '/images/about-hero.webp 4500w',
       imagesizes: '(min-width: 1024px) 512px, (min-width: 768px) 50vw, 100vw',
     },
   ],
