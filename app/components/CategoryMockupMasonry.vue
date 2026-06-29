@@ -34,9 +34,12 @@
       v-if="hasMore"
       ref="sentinelRef"
       class="flex items-center justify-center py-10"
-      aria-hidden="true"
+      role="status"
+      aria-label="Loading more"
     >
-      <span class="text-xs uppercase tracking-widest text-luxury-muted">Loading more…</span>
+      <div class="flex h-10 w-10 items-center justify-center bg-luxury-brass">
+        <div class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+      </div>
     </div>
 
     <Transition name="gallery-fade">

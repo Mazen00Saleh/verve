@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { PAGINATION } from '~/config/pagination'
 import { fetchCategoryBySlug } from '~/composables/useCatalogLookup'
+import { shuffleArray } from '~/utils/shuffle'
 
 export type CategoryMockupImage = {
   id: string
@@ -47,7 +48,7 @@ async function loadCategoryMockups(
     return { category: null, mockups: [] as CategoryMockupImage[] }
   }
 
-  const mockups = await fetchMockupsForCategory(client, category.id)
+  const mockups = shuffleArray(await fetchMockupsForCategory(client, category.id))
 
   return {
     category: {

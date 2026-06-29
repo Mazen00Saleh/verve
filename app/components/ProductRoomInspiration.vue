@@ -7,12 +7,12 @@
       <h2 class="section-eyebrow">Room Inspiration</h2>
     </div>
 
-    <div class="columns-2 gap-3 sm:columns-3 sm:gap-4 lg:columns-4 lg:gap-5">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-start justify-center gap-3 sm:gap-4 lg:gap-5">
       <button
         v-for="(url, index) in images"
         :key="`${url}-${index}`"
         type="button"
-        class="group relative mb-3 block w-full break-inside-avoid rounded-sm bg-luxury-warm-beige/20 text-left sm:mb-4"
+        class="group relative w-[calc(50%-0.375rem)] rounded-sm bg-luxury-warm-beige/20 text-left sm:w-[calc(33.333%-0.67rem)] lg:w-[calc(25%-0.9375rem)]"
         :aria-label="`View room inspiration ${index + 1} for ${productName}`"
         @click="openModal(index)"
       >
