@@ -89,7 +89,7 @@ export default defineNuxtConfig({
     // '/collections/**': { swr: 300 },
     // '/inspiration': { swr: 600 },
     // '/inspiration/**': { swr: 600 },
-    // '/brochures': { redirect: { to: '/inspiration', statusCode: 301 } },
+    '/brochures': { redirect: { to: '/inspiration', statusCode: 301 } },
     // Admin SPA — never cache.
     '/admin/**': { ssr: false },
     '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
