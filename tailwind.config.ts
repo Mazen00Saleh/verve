@@ -14,17 +14,17 @@ export default {
     extend: {
       colors: {
         luxury: {
-          ivory: '#FFFFFF',
-          champagne: '#F7E7CE',
-          'warm-beige': '#D8C3A5',
+          ivory: '#F0E8DC',
+          champagne: '#E0BE9A',
+          'warm-beige': '#C49A72',
           'matte-black': '#1A1A1A',
           charcoal: '#333333',
           muted: '#4A4A4A',
           taupe: '#483C32',
           brass: {
-            DEFAULT: '#BCA153',
-            contrast: '#7A6220',
-            light: '#E2C875',
+            DEFAULT: '#9A662F',
+            contrast: '#603610',
+            light: '#C4843F',
           },
         }
       },

@@ -1,12 +1,12 @@
 <template>
-  <section class="relative overflow-hidden border-b border-t border-luxury-warm-beige bg-luxury-ivory py-10 md:py-12">
+  <section class="relative overflow-hidden bg-luxury-ivory py-10 md:py-12">
     <div class="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-32 bg-gradient-to-r from-luxury-ivory to-transparent" />
     <div class="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-32 bg-gradient-to-l from-luxury-ivory to-transparent" />
 
     <div v-if="brands?.length" class="relative">
       <button
         type="button"
-        class="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white/95 text-luxury-charcoal shadow-sm transition-colors hover:border-luxury-brass hover:text-luxury-matte-black md:left-4"
+        class="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white/95 text-luxury-charcoal shadow-sm transition-colors hover:border-neutral-300 hover:text-luxury-matte-black md:left-4"
         aria-label="Scroll brands left"
         @click="scrollBy(-1)"
       >
@@ -15,7 +15,7 @@
 
       <button
         type="button"
-        class="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white/95 text-luxury-charcoal shadow-sm transition-colors hover:border-luxury-brass hover:text-luxury-matte-black md:right-4"
+        class="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white/95 text-luxury-charcoal shadow-sm transition-colors hover:border-neutral-300 hover:text-luxury-matte-black md:right-4"
         aria-label="Scroll brands right"
         @click="scrollBy(1)"
       >

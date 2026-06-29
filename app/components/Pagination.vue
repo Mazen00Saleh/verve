@@ -97,7 +97,7 @@ function emitPageChange(page: number) {
 
 <style scoped>
 .pagination-btn {
-  @apply inline-flex min-h-10 min-w-[4.5rem] items-center justify-center gap-1 rounded-sm border border-neutral-200 px-3 text-xs uppercase tracking-widest text-luxury-matte-black transition-colors hover:border-luxury-brass-contrast hover:text-luxury-brass-contrast disabled:cursor-not-allowed disabled:opacity-40;
+  @apply inline-flex min-h-10 min-w-[4.5rem] items-center justify-center gap-1 rounded-sm border border-neutral-200 px-3 text-xs uppercase tracking-widest text-luxury-matte-black transition-colors hover:border-luxury-brass hover:text-luxury-brass disabled:cursor-not-allowed disabled:opacity-40;
 }
 
 .pagination-page {
@@ -105,6 +105,6 @@ function emitPageChange(page: number) {
 }
 
 .pagination-page-active {
-  @apply border-luxury-brass-contrast bg-luxury-brass/10 font-medium text-luxury-matte-black;
+  @apply border-luxury-brass bg-luxury-brass/10 font-medium text-luxury-matte-black;
 }
 </style>

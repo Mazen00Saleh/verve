@@ -28,11 +28,11 @@
             <h3 class="contact-info-heading">Contact Number</h3>
             <p class="contact-info-text">
               Tell:
-              <a href="tel:+96265925041" class="transition-colors hover:text-luxury-brass-contrast">06-5925041</a>
+              <a href="tel:+96265925041" class="transition-colors hover:text-luxury-brass underline">06-5925041</a>
             </p>
             <p class="contact-info-text">
               Mobile:
-              <a href="tel:+962790202838" class="transition-colors hover:text-luxury-brass-contrast">079 0202 838</a>
+              <a href="tel:+962790202838" class="transition-colors hover:text-luxury-brass underline">079 0202 838</a>
             </p>
           </div>
 
@@ -40,7 +40,7 @@
             <h3 class="contact-info-heading">Email</h3>
             <a
               href="mailto:info@verve-group.com"
-              class="contact-info-text transition-colors hover:text-luxury-brass-contrast"
+              class="contact-info-text transition-colors hover:text-luxury-brass underline"
             >
               info@verve-group.com
             </a>
@@ -53,14 +53,14 @@
                 href="https://facebook.com/VerveHome"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-luxury-charcoal transition-colors hover:text-luxury-brass-contrast"
+                class="text-luxury-charcoal transition-colors hover:text-luxury-brass"
                 aria-label="Facebook"
               >
                 <Icon name="lucide:facebook" size="16" />
               </a>
               <a
                 href="mailto:info@verve-group.com"
-                class="text-luxury-charcoal transition-colors hover:text-luxury-brass-contrast"
+                class="text-luxury-charcoal transition-colors hover:text-luxury-brass"
                 aria-label="Email"
               >
                 <Icon name="lucide:mail" size="16" />
@@ -70,7 +70,7 @@
                 href="https://instagram.com/vervegroup"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-luxury-charcoal transition-colors hover:text-luxury-brass-contrast"
+                class="text-luxury-charcoal transition-colors hover:text-luxury-brass"
                 aria-label="Instagram"
               >
                 <Icon name="lucide:instagram" size="16" />
@@ -79,7 +79,7 @@
                 href="https://wa.me/962790202838"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-luxury-charcoal transition-colors hover:text-luxury-brass-contrast"
+                class="text-luxury-charcoal transition-colors hover:text-luxury-brass"
                 aria-label="WhatsApp"
               >
                 <Icon name="lucide:message-circle" size="16" />
@@ -274,7 +274,7 @@ useHead({
 }
 
 .contact-input {
-  @apply w-full border border-luxury-warm-beige/50 bg-white px-2.5 py-1.5 text-sm text-luxury-matte-black outline-none transition-colors focus:border-luxury-brass-contrast disabled:opacity-60;
+  @apply w-full border border-luxury-warm-beige/50 bg-white px-2.5 py-1.5 text-sm text-luxury-matte-black outline-none transition-colors focus:border-luxury-brass disabled:opacity-60;
 }
 
 .contact-submit {

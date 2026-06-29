@@ -93,7 +93,7 @@ const whatWeOffer =
 }
 
 .premium-materials-link {
-  @apply mt-3 inline-block text-xs text-luxury-charcoal underline decoration-luxury-charcoal/50 underline-offset-2 transition-colors hover:text-luxury-brass-contrast hover:decoration-luxury-brass-contrast sm:text-sm;
+  @apply mt-3 inline-block text-xs text-luxury-charcoal underline decoration-luxury-charcoal/50 underline-offset-2 transition-colors hover:text-luxury-brass hover:decoration-luxury-brass sm:text-sm;
 }
 
 .premium-materials-image {

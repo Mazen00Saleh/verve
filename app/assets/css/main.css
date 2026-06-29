@@ -29,7 +29,7 @@
 
   :focus-visible {
     @apply outline-2 outline-offset-2;
-    outline-color: theme('colors.luxury.brass.contrast');
+    outline-color: theme('colors.luxury.brass.DEFAULT');
   }
 }
 
@@ -75,7 +75,7 @@
   }
 
   .catalog-card-title {
-    @apply font-sans text-sm font-medium leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass-contrast sm:text-base md:text-lg lg:text-xl;
+    @apply font-sans text-sm font-medium leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass sm:text-base md:text-lg lg:text-xl;
   }
 
   .catalog-card-description {
@@ -83,7 +83,7 @@
   }
 
   .catalog-card-cta {
-    @apply hidden border-b border-luxury-matte-black pb-0.5 text-[10px] uppercase tracking-widest text-luxury-matte-black transition-colors group-hover:border-luxury-brass-contrast group-hover:text-luxury-brass-contrast sm:inline-block sm:text-[11px];
+    @apply hidden border-b border-luxury-matte-black pb-0.5 text-[10px] uppercase tracking-widest text-luxury-matte-black transition-colors group-hover:border-luxury-brass group-hover:text-luxury-brass sm:inline-block sm:text-[11px];
   }
 
   .catalog-card-meta {
@@ -107,7 +107,7 @@
   }
 
   .back-link {
-    @apply inline-flex items-center text-xs uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass-contrast;
+    @apply inline-flex items-center text-xs uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass;
   }
 }
 
@@ -116,13 +116,13 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #FFFFFF;
+  background: #F0E8DC;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D8C3A5;
+  background: #C49A72;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #BCA153;
+  background: #9A662F;
 }
 
 html {

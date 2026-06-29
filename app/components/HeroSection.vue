@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full">
-    <section class="relative h-[70vh] min-h-[520px] w-full overflow-hidden bg-luxury-matte-black sm:h-[75vh] lg:h-[80vh]">
+    <section class="relative h-[56vh] min-h-[400px] w-full overflow-hidden bg-luxury-matte-black sm:h-[75vh] sm:min-h-[520px] lg:h-[80vh]">
       <PageState
         v-if="pending"
         :pending="true"
@@ -24,54 +24,56 @@
               currentSlide === index ? 'pointer-events-auto z-10 opacity-100' : 'pointer-events-none z-0 opacity-0',
             ]"
           >
-            <div class="relative hidden h-full w-[20%] shrink-0 overflow-hidden md:block lg:w-[24%]">
-              <img
-                :src="heroImageUrl(slide.leftImage, 1200)"
-                alt=""
-                aria-hidden="true"
-                class="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-[8000ms] ease-out"
-                :style="{
-                  transform: currentSlide === index ? 'scale(1.05)' : 'scale(1.15)',
-                }"
-                :loading="index === 0 ? 'eager' : 'lazy'"
-                :fetchpriority="index === 0 ? 'high' : 'auto'"
-                decoding="async"
-                width="1200"
-              >
-              <div class="absolute inset-0 bg-black/10" />
-              <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-luxury-ivory/60 to-transparent md:h-28" />
-            </div>
+            <div class="flex h-full w-full flex-row md:contents">
+              <div class="relative h-full w-[34%] shrink-0 overflow-hidden sm:w-[30%] md:w-[20%] lg:w-[24%]">
+                <img
+                  :src="heroImageUrl(slide.leftImage, 1200)"
+                  alt=""
+                  aria-hidden="true"
+                  class="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-[8000ms] ease-out"
+                  :style="{
+                    transform: currentSlide === index ? 'scale(1.05)' : 'scale(1.15)',
+                  }"
+                  :loading="index === 0 ? 'eager' : 'lazy'"
+                  :fetchpriority="index === 0 ? 'high' : 'auto'"
+                  decoding="async"
+                  width="1200"
+                >
+                <div class="absolute inset-0 bg-black/10" />
+                <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-luxury-ivory/60 to-transparent sm:h-16 md:h-28" />
+              </div>
 
-            <div
-              class="relative z-20 flex w-full shrink-0 flex-col items-center justify-center overflow-y-auto bg-luxury-ivory px-5 py-12 text-center transition-all duration-1000 delay-300 sm:px-6 md:w-[30%] lg:w-[20%] lg:px-7"
-              :style="{
-                transform: currentSlide === index ? 'translateY(0)' : 'translateY(20px)',
-                opacity: currentSlide === index ? '1' : '0',
-              }"
-            >
-              <div class="flex w-full flex-col items-center justify-center space-y-4 sm:space-y-4.5">
-                <h2
-                  class="w-full text-xl uppercase leading-tight tracking-wide text-luxury-matte-black transition-all duration-700 delay-500 sm:text-2xl lg:text-3xl"
-                  :style="{
-                    transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
-                    opacity: currentSlide === index ? '1' : '0',
-                  }"
-                >
-                  {{ slide.title }}
-                </h2>
-                <p
-                  class="w-full text-xs font-normal leading-relaxed text-luxury-charcoal transition-all duration-700 delay-700 sm:text-sm"
-                  :style="{
-                    transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
-                    opacity: currentSlide === index ? '1' : '0',
-                  }"
-                >
-                  {{ slide.description }}
-                </p>
+              <div
+                class="relative z-20 flex min-w-0 flex-1 flex-col items-center justify-center overflow-y-auto bg-luxury-ivory px-4 py-8 text-center transition-all duration-1000 delay-300 sm:px-5 sm:py-10 md:h-full md:w-[30%] md:flex-none md:shrink-0 md:px-6 lg:w-[20%] lg:px-7"
+                :style="{
+                  transform: currentSlide === index ? 'translateY(0)' : 'translateY(20px)',
+                  opacity: currentSlide === index ? '1' : '0',
+                }"
+              >
+                <div class="flex w-full flex-col items-center justify-center space-y-3 sm:space-y-4">
+                  <h2
+                    class="w-full text-base uppercase leading-tight tracking-wide text-luxury-matte-black transition-all duration-700 delay-500 sm:text-xl md:text-2xl lg:text-3xl"
+                    :style="{
+                      transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
+                      opacity: currentSlide === index ? '1' : '0',
+                    }"
+                  >
+                    {{ slide.title }}
+                  </h2>
+                  <p
+                    class="w-full text-[11px] font-normal leading-relaxed text-luxury-charcoal transition-all duration-700 delay-700 sm:text-xs md:text-sm"
+                    :style="{
+                      transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
+                      opacity: currentSlide === index ? '1' : '0',
+                    }"
+                  >
+                    {{ slide.description }}
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div class="relative h-full min-w-0 flex-grow overflow-hidden">
+            <div class="relative hidden h-full min-w-0 flex-grow overflow-hidden md:block">
               <img
                 :src="heroImageUrl(slide.rightImage, 2400)"
                 :alt="slide.title"

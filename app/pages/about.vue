@@ -201,7 +201,7 @@ useHead({
 }
 
 .about-accordion-trigger-active {
-  @apply text-luxury-brass-contrast;
+  @apply text-luxury-brass;
 }
 
 .about-accordion-icon {
@@ -245,6 +245,6 @@ useHead({
 }
 
 .about-careers-link {
-  @apply underline decoration-luxury-charcoal/40 underline-offset-2 transition-colors hover:text-luxury-brass-contrast hover:decoration-luxury-brass-contrast;
+  @apply underline decoration-luxury-charcoal/40 underline-offset-2 transition-colors hover:text-luxury-brass hover:decoration-luxury-brass;
 }
 </style>

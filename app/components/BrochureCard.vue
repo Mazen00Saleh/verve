@@ -34,6 +34,6 @@ defineEmits<{
 
 <style scoped>
 .brochure-card-title {
-  @apply font-sans text-xs font-medium leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass-contrast sm:text-sm md:text-base;
+  @apply font-sans text-xs font-medium leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass sm:text-sm md:text-base;
 }
 </style>

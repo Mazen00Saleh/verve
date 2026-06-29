@@ -19,12 +19,6 @@
         :retry="refresh"
       >
         <template v-if="category">
-          <div class="mx-auto mb-10 max-w-3xl animate-fade-in text-center sm:mb-14">
-            <span class="section-eyebrow">Gallery</span>
-            <h1 class="section-title">{{ category.title }}</h1>
-            <div class="section-title-divider" />
-          </div>
-
           <PageState
             :empty="!mockups.length"
             empty-title="No room inspirations yet"
