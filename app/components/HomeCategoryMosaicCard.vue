@@ -37,7 +37,7 @@
 
     <div class="absolute bottom-4 left-4 z-10 flex items-center gap-3 md:bottom-5 md:left-5 lg:bottom-6 lg:left-6">
       <span class="h-7 w-px shrink-0 bg-white md:h-8" aria-hidden="true" />
-      <span class="font-sans text-sm font-normal tracking-wide text-white drop-shadow-sm md:text-base lg:text-lg">
+      <span class="font-sans text-sm font-medium tracking-wide text-white drop-shadow-sm md:text-base lg:text-lg">
         {{ label }}
       </span>
     </div>

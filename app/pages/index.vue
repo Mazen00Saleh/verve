@@ -2,16 +2,12 @@
   <div class="-mt-px">
     <HeroSection />
     <HomeCategories />
-    <LazyPremiumMaterials :images="premiumImages" hydrate-on-visible />
+    <LazyPremiumMaterials hydrate-on-visible />
     <LazyPartnerLogos hydrate-on-visible />
   </div>
 </template>
 
 <script setup lang="ts">
-const { data: premiumMaterialImages } = await usePremiumMaterialImages()
-
-const premiumImages = computed(() => premiumMaterialImages.value ?? [])
-
 useHead({
   title: 'Verve | Luxury Wallpapers & Fabrics',
   meta: [

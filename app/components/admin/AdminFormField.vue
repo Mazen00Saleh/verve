@@ -7,7 +7,7 @@
 
     <slot :input-id="inputId" />
 
-    <p v-if="hint" class="mt-2 text-xs font-light text-luxury-charcoal/70">{{ hint }}</p>
+    <p v-if="hint" class="mt-2 text-xs font-normal text-luxury-charcoal/70">{{ hint }}</p>
   </div>
 </template>
 

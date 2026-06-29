@@ -2,7 +2,7 @@
   <div class="mb-8 flex flex-wrap items-start justify-between gap-4">
     <div>
       <h2 class="text-3xl text-luxury-matte-black">{{ title }}</h2>
-      <p v-if="description" class="mt-2 max-w-2xl text-sm font-light text-luxury-charcoal">
+      <p v-if="description" class="mt-2 max-w-2xl text-sm font-normal text-luxury-charcoal">
         {{ description }}
       </p>
     </div>

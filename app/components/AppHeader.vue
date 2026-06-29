@@ -1,7 +1,7 @@
 <template>
   <header
     ref="headerRef"
-    class="site-header fixed top-0 z-50 w-full bg-luxury-matte-black pt-4 pb-2 shadow-sm transition-all duration-300 sm:pt-5 sm:pb-2.5 md:pt-5 md:pb-3"
+    class="site-header fixed top-0 z-50 w-full bg-black pt-4 pb-2 shadow-sm transition-all duration-300 sm:pt-5 sm:pb-2.5 md:pt-5 md:pb-3"
     :class="{ 'shadow-md shadow-black/20': scrolled }"
   >
     <div class="mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-4 sm:gap-3.5 sm:px-6 lg:px-12">

@@ -1,12 +1,6 @@
 <template>
   <div class="page-shell">
     <div class="page-container py-8 sm:py-12 md:py-16">
-      <div class="mb-12 text-center sm:mb-16">
-        <span class="section-eyebrow">Inspiration</span>
-        <h1 class="section-title">Brochures</h1>
-        <div class="section-title-divider" />
-      </div>
-
       <PageState
         :pending="pending"
         :error-message="errorMessage"
@@ -52,7 +46,7 @@
             </h3>
             <button
               type="button"
-              class="flex shrink-0 items-center space-x-1.5 text-xs font-semibold uppercase tracking-widest text-luxury-brass-light transition-colors hover:text-white"
+              class="flex shrink-0 items-center space-x-1.5 text-xs font-medium uppercase tracking-widest text-luxury-brass-light transition-colors hover:text-white"
               @click="closeBrochure"
             >
               <span>Close</span>

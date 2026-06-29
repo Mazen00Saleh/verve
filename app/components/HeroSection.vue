@@ -24,7 +24,7 @@
               currentSlide === index ? 'pointer-events-auto z-10 opacity-100' : 'pointer-events-none z-0 opacity-0',
             ]"
           >
-            <div class="relative hidden h-full w-[22%] overflow-hidden lg:block">
+            <div class="relative hidden h-full w-[20%] shrink-0 overflow-hidden md:block lg:w-[24%]">
               <img
                 :src="heroImageUrl(slide.leftImage, 1200)"
                 alt=""
@@ -43,15 +43,15 @@
             </div>
 
             <div
-              class="relative z-20 flex w-full flex-col justify-center bg-luxury-ivory px-8 py-16 text-left transition-all duration-1000 delay-300 sm:px-12 md:w-[40%] lg:w-[26%] lg:px-16"
+              class="relative z-20 flex w-full shrink-0 flex-col items-center justify-center overflow-y-auto bg-luxury-ivory px-5 py-12 text-center transition-all duration-1000 delay-300 sm:px-6 md:w-[30%] lg:w-[20%] lg:px-7"
               :style="{
                 transform: currentSlide === index ? 'translateY(0)' : 'translateY(20px)',
                 opacity: currentSlide === index ? '1' : '0',
               }"
             >
-              <div class="flex min-h-[280px] flex-col justify-center space-y-6 sm:min-h-[300px]">
+              <div class="flex w-full flex-col items-center justify-center space-y-4 sm:space-y-4.5">
                 <h2
-                  class="line-clamp-3 min-h-[4.5rem] text-2xl uppercase leading-tight tracking-wide text-luxury-matte-black transition-all duration-700 delay-500 sm:min-h-[5.25rem] sm:text-3xl lg:min-h-[6rem] lg:text-4xl"
+                  class="w-full text-xl uppercase leading-tight tracking-wide text-luxury-matte-black transition-all duration-700 delay-500 sm:text-2xl lg:text-3xl"
                   :style="{
                     transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
                     opacity: currentSlide === index ? '1' : '0',
@@ -60,7 +60,7 @@
                   {{ slide.title }}
                 </h2>
                 <p
-                  class="line-clamp-4 min-h-[4.5rem] text-xs font-light leading-relaxed text-luxury-charcoal transition-all duration-700 delay-700 sm:min-h-[5rem] sm:text-sm"
+                  class="w-full text-xs font-normal leading-relaxed text-luxury-charcoal transition-all duration-700 delay-700 sm:text-sm"
                   :style="{
                     transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
                     opacity: currentSlide === index ? '1' : '0',
@@ -68,16 +68,6 @@
                 >
                   {{ slide.description }}
                 </p>
-                <NuxtLink
-                  :to="slide.link"
-                  class="btn-outline inline-block transition-all duration-700 delay-1000"
-                  :style="{
-                    transform: currentSlide === index ? 'translateY(0)' : 'translateY(15px)',
-                    opacity: currentSlide === index ? '1' : '0',
-                  }"
-                >
-                  {{ slide.ctaLabel }}
-                </NuxtLink>
               </div>
             </div>
 

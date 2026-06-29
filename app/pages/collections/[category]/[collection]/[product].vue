@@ -56,7 +56,7 @@
             <div class="space-y-8 lg:sticky lg:top-32 lg:space-y-10">
               <div v-if="variants.length > 1" class="space-y-4">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold uppercase tracking-widest text-luxury-charcoal">
+                  <span class="text-xs font-medium uppercase tracking-widest text-luxury-charcoal">
                     Variations
                   </span>
                   <span class="text-xs italic text-luxury-brass-contrast">
@@ -102,7 +102,7 @@
 
               <p
                 v-if="product.description"
-                class="border-t border-neutral-100 pt-4 text-sm font-light leading-relaxed text-luxury-charcoal"
+                class="border-t border-neutral-100 pt-4 text-sm font-normal leading-relaxed text-luxury-charcoal"
               >
                 {{ product.description }}
               </p>

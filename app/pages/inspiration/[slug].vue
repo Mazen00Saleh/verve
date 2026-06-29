@@ -22,7 +22,7 @@
             <span class="section-eyebrow">Brochure</span>
             <h1 class="section-title">{{ brochure.title }}</h1>
             <div class="section-title-divider" />
-            <p v-if="brochure.date" class="mt-3 text-sm font-light text-luxury-muted">
+            <p v-if="brochure.date" class="mt-3 text-sm font-normal text-luxury-muted">
               {{ brochure.date }}
             </p>
             <p v-if="brochure.description" class="section-intro mx-auto mt-4 max-w-2xl text-sm sm:text-base">
@@ -40,7 +40,7 @@
           </div>
 
           <div v-else class="mx-auto max-w-lg border border-neutral-200 bg-white px-6 py-10 text-center">
-            <p class="text-sm font-light text-luxury-charcoal">
+            <p class="text-sm font-normal text-luxury-charcoal">
               This brochure does not have a viewable file yet.
             </p>
           </div>

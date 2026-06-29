@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="text-3xl text-luxury-matte-black">Dashboard</h2>
-    <p class="mt-3 max-w-2xl text-sm font-light text-luxury-charcoal">
+    <p class="mt-3 max-w-2xl text-sm font-normal text-luxury-charcoal">
       Welcome to the Verve admin area. Use the navigation to manage catalog content, hero slides, and contact messages.
     </p>
 
@@ -13,7 +13,7 @@
         class="border border-neutral-200 bg-white p-6 transition-colors hover:border-luxury-brass"
       >
         <h3 class="text-xl">{{ item.label }}</h3>
-        <p class="mt-2 text-sm font-light text-luxury-charcoal">{{ item.description }}</p>
+        <p class="mt-2 text-sm font-normal text-luxury-charcoal">{{ item.description }}</p>
       </NuxtLink>
     </div>
   </div>

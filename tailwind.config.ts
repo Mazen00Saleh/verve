@@ -14,7 +14,7 @@ export default {
     extend: {
       colors: {
         luxury: {
-          ivory: '#FFFFF0',
+          ivory: '#FFFFFF',
           champagne: '#F7E7CE',
           'warm-beige': '#D8C3A5',
           'matte-black': '#1A1A1A',

@@ -8,9 +8,12 @@ const LEGACY_EMBED_URL =
 export const mapsDirectionsUrl =
   'https://www.google.com/maps/place/VERVE/@31.955486,35.870518,17z/data=!4m6!3m5!1s0x151ca1026694633b:0xcddacdf59402220!8m2!3d31.955486!4d35.870518!16s%2Fg%2F11b7l81lj5'
 
+/** Share-link embed (no API key). Reliable default for iframe embeds. */
+export const mapsEmbedUrl = LEGACY_EMBED_URL
+
 export function getGoogleMapsEmbedUrl(apiKey?: string) {
   const trimmedKey = apiKey?.trim()
-  if (!trimmedKey) {
+  if (!trimmedKey || trimmedKey === 'your-google-maps-api-key') {
     return LEGACY_EMBED_URL
   }
 

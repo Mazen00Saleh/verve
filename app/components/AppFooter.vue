@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-luxury-matte-black py-8 text-white sm:py-10">
+  <footer class="bg-black py-8 text-white sm:py-10">
     <div class="mx-auto flex max-w-4xl flex-col items-center gap-5 px-6 sm:gap-6">
       <NuxtLink to="/" class="block" aria-label="Verve home">
         <img
@@ -50,7 +50,7 @@
         </a>
       </div>
 
-      <p class="text-[10px] font-light tracking-wide text-white/90 sm:text-[11px]">
+      <p class="text-[10px] font-normal tracking-wide text-white/90 sm:text-[11px]">
         &copy; {{ year }} All rights Reserved @VERVE
       </p>
     </div>

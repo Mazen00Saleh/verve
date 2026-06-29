@@ -50,7 +50,7 @@
       >
         <button
           type="button"
-          class="absolute right-4 top-4 z-10 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-luxury-brass-light transition-colors hover:text-white sm:right-6 sm:top-6"
+          class="absolute right-4 top-4 z-10 flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-luxury-brass-light transition-colors hover:text-white sm:right-6 sm:top-6"
           aria-label="Close preview"
           @click="closeModal"
         >

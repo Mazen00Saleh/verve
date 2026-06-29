@@ -58,7 +58,7 @@
             </div>
           </div>
 
-          <p class="mt-4 whitespace-pre-wrap text-sm font-light leading-relaxed text-luxury-charcoal">
+          <p class="mt-4 whitespace-pre-wrap text-sm font-normal leading-relaxed text-luxury-charcoal">
             {{ submission.message }}
           </p>
         </article>

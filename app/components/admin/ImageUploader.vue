@@ -68,7 +68,7 @@
                 <p class="text-sm font-medium text-luxury-matte-black">
                   {{ dropZoneTitle }}
                 </p>
-                <p class="mt-2 text-xs font-light text-luxury-charcoal">
+                <p class="mt-2 text-xs font-normal text-luxury-charcoal">
                   Drag and drop to replace, or
                   <button
                     type="button"
@@ -136,7 +136,7 @@
               <p class="text-sm font-medium text-luxury-matte-black">
                 {{ dropZoneTitle }}
               </p>
-              <p class="mt-2 text-xs font-light text-luxury-charcoal">
+              <p class="mt-2 text-xs font-normal text-luxury-charcoal">
                 Drag and drop more images here, or
                 <button
                   type="button"
@@ -157,7 +157,7 @@
             <p class="text-sm font-medium text-luxury-matte-black">
               {{ dropZoneTitle }}
             </p>
-            <p class="mt-2 text-xs font-light text-luxury-charcoal">
+            <p class="mt-2 text-xs font-normal text-luxury-charcoal">
               Drag and drop {{ multiple ? 'images' : 'an image' }} here, or
               <button
                 type="button"

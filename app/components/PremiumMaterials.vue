@@ -1,52 +1,59 @@
 <template>
-  <section
-    v-if="primaryImage"
-    class="relative bg-luxury-warm-beige/20 py-10 sm:py-12 md:py-14"
-  >
+  <section class="premium-materials bg-luxury-ivory py-10 sm:py-12 md:py-14">
     <div class="page-container">
-      <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-10">
-        <div class="order-2 mx-auto mb-12 w-full max-w-sm sm:max-w-md lg:order-1 lg:mx-0 lg:mb-16 lg:max-w-[22rem] xl:max-w-md">
-          <div class="relative">
-            <CatalogImage
-              :src="primaryImage"
-              alt="Premium materials and craftsmanship"
-              aspect="4/5"
-              :overlay="false"
-              :hover-scale="false"
-              size="feature"
-              priority
-              container-class="relative z-0"
-            />
-            <div
-              v-if="secondaryImage"
-              class="absolute -bottom-6 -right-4 z-20 hidden aspect-[4/5] w-2/3 overflow-hidden border-4 border-luxury-ivory shadow-lg md:block lg:-bottom-8 lg:-right-5"
-            >
-              <CatalogImage
-                :src="secondaryImage"
-                alt="Texture details"
-                aspect="4/5"
-                :overlay="false"
-                :hover-scale="false"
-                size="accent"
-              />
+      <div class="premium-materials-grid">
+        <div class="premium-materials-content">
+          <div class="premium-materials-block">
+            <h2 class="premium-materials-heading">
+              WHAT WE OFFER?
+            </h2>
+            <p class="premium-materials-body">
+              {{ whatWeOffer }}
+            </p>
+          </div>
+
+          <div class="premium-materials-columns">
+            <div class="premium-materials-block">
+              <h3 class="premium-materials-heading">
+                WHO WE ARE?
+              </h3>
+              <p class="premium-materials-body">
+                {{ whoWeAre }}
+              </p>
+            </div>
+
+            <div class="premium-materials-block">
+              <h3 class="premium-materials-heading">
+                WHAT WE DO?
+              </h3>
+              <p class="premium-materials-body">
+                {{ whatWeDo }}
+                <NuxtLink to="/about" class="premium-materials-body underline">
+                  Read More..
+                </NuxtLink>
+              </p>
             </div>
           </div>
         </div>
 
-        <div class="order-1 lg:order-2">
-          <span class="section-eyebrow">Uncompromising Quality</span>
-          <h2 class="section-title mb-4 text-2xl sm:mb-5 sm:text-3xl md:text-4xl">
-            Premium Materials &amp; Masterful Craftsmanship
-          </h2>
-          <p class="section-intro mb-4 text-sm sm:mb-5 sm:text-base">
-            Every roll of wallpaper and yard of fabric we produce reflects our dedication to excellence. We source only the finest raw materials, from pure silks and natural linens to sustainable, heavy-weight paper stocks.
-          </p>
-          <p class="section-intro mb-6 text-sm sm:mb-7 sm:text-base">
-            Our artisans employ time-honored techniques alongside cutting-edge technology to create textures that demand to be touched and colors that captivate the eye.
-          </p>
-          <NuxtLink to="/about" class="btn-outline">
-            Discover Our Story
-          </NuxtLink>
+        <div class="premium-materials-image">
+          <picture class="block w-full">
+            <source
+              srcset="/images/about-home.webp"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              type="image/webp"
+            >
+            <img
+              src="/images/about-home.webp"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              alt="Verve Exclusive Home Collection showroom interior"
+              class="h-auto w-full"
+              width="1200"
+              height="568"
+              loading="lazy"
+              decoding="async"
+            >
+          </picture>
         </div>
       </div>
     </div>
@@ -54,10 +61,42 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  images: string[]
-}>()
+const whoWeAre =
+  "Established in 2006, Verve designs and wholesales furnishing fabrics, and wallpapers in all the MENA region. Verve's business philosophy is to combine creativity and innovation with the highest levels of quality: quality of design, product, service and people."
 
-const primaryImage = computed(() => props.images[0] ?? '')
-const secondaryImage = computed(() => props.images[1] ?? '')
+const whatWeDo =
+  "Take a step through the gateway to inspired interiors. By offering a style-packed diversity of fabrics for curtains, blinds, upholstery and accessories – not to mention a range of truly stunning wallpapers – Verve Group can always support and assist with enticing new ideas for home interiors."
+
+const whatWeOffer =
+  "A top notch and super elite fabric provider offer an Exquisite taste, elevated quality and a refined sense of luxury – these are the principals on which verve was founded. Using modern and classic references as a starting point but always infusing them with an elegant, contemporary touch, 'verve Group' describes the ebullience of our past endeavors. It sketches the outline of our future. A collective through more than ten quintessentially luxury interior brands, We aim and succeed in providing a variety of Lavish, Opulent and exquisite luxury brands that are specialized in Fabric, Wall-coverings and Wallpaper to match different styles and tastes giving you a feel of your perfect home!"
 </script>
+
+<style scoped>
+.premium-materials-grid {
+  @apply grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-14;
+}
+
+.premium-materials-content {
+  @apply flex flex-col gap-8 sm:gap-10;
+}
+
+.premium-materials-columns {
+  @apply grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:gap-8;
+}
+
+.premium-materials-heading {
+  @apply mb-3 text-base uppercase tracking-wide text-luxury-matte-black sm:mb-4 sm:text-lg;
+}
+
+.premium-materials-body {
+  @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
+}
+
+.premium-materials-link {
+  @apply mt-3 inline-block text-xs text-luxury-charcoal underline decoration-luxury-charcoal/50 underline-offset-2 transition-colors hover:text-luxury-brass-contrast hover:decoration-luxury-brass-contrast sm:text-sm;
+}
+
+.premium-materials-image {
+  @apply w-full lg:max-w-none;
+}
+</style>

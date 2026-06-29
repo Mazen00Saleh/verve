@@ -13,7 +13,7 @@
       container-class="shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-500 sm:group-hover:-translate-y-1 sm:group-hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)]"
     />
     <div class="catalog-card-body">
-      <h3 class="catalog-card-title">
+      <h3 class="brochure-card-title">
         {{ brochure.title }}
       </h3>
     </div>
@@ -31,3 +31,9 @@ defineEmits<{
   open: [brochure: PublicBrochure]
 }>()
 </script>
+
+<style scoped>
+.brochure-card-title {
+  @apply font-sans text-xs font-medium leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass-contrast sm:text-sm md:text-base;
+}
+</style>

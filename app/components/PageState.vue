@@ -8,8 +8,8 @@
 
   <div v-else-if="errorMessage" :class="wrapperClass">
     <div class="mx-auto max-w-lg border border-red-200 bg-red-50 px-6 py-8 text-center">
-      <p class="text-xl text-luxury-matte-black">{{ errorTitle }}</p>
-      <p class="mt-3 text-sm font-light text-luxury-charcoal">{{ errorMessage }}</p>
+      <p class="text-xl font-medium text-luxury-matte-black">{{ errorTitle }}</p>
+      <p class="mt-3 text-sm font-normal text-luxury-charcoal">{{ errorMessage }}</p>
       <button
         v-if="retry"
         type="button"
@@ -23,8 +23,8 @@
 
   <div v-else-if="empty" :class="wrapperClass">
     <div class="mx-auto max-w-lg text-center">
-      <p class="text-2xl text-luxury-matte-black">{{ emptyTitle }}</p>
-      <p class="mt-3 text-sm font-light text-luxury-charcoal">{{ emptyMessage }}</p>
+      <p class="text-2xl font-medium text-luxury-matte-black">{{ emptyTitle }}</p>
+      <p class="mt-3 text-sm font-normal text-luxury-charcoal">{{ emptyMessage }}</p>
       <slot name="empty-action" />
     </div>
   </div>

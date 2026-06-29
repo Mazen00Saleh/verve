@@ -4,7 +4,7 @@
       <div class="mb-8 text-center">
         <p class="text-xs uppercase tracking-[0.3em] text-luxury-brass">Verve Admin</p>
         <h1 class="mt-3 text-3xl text-luxury-matte-black">Sign in</h1>
-        <p class="mt-2 text-sm font-light text-luxury-charcoal">
+        <p class="mt-2 text-sm font-normal text-luxury-charcoal">
           Use your administrator credentials to access the dashboard.
         </p>
       </div>

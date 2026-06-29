@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply font-sans;
+  }
+
   body {
-    @apply bg-luxury-ivory text-luxury-matte-black font-sans antialiased;
+    @apply bg-luxury-ivory text-luxury-matte-black font-sans font-normal antialiased;
   }
 
   :root {
@@ -16,7 +20,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-normal;
+    @apply font-sans font-medium;
   }
 
   :focus {
@@ -43,11 +47,11 @@
   }
 
   .section-eyebrow {
-    @apply mb-3 block text-[10px] font-semibold uppercase tracking-[0.25em] text-luxury-brass-contrast sm:mb-4 sm:text-xs sm:tracking-[0.2em];
+    @apply mb-3 block text-[10px] font-medium uppercase tracking-[0.25em] text-luxury-brass-contrast sm:mb-4 sm:text-xs sm:tracking-[0.2em];
   }
 
   .section-title {
-    @apply font-sans text-3xl text-luxury-matte-black sm:text-4xl md:text-5xl;
+    @apply font-sans text-4xl font-medium text-luxury-matte-black sm:text-5xl md:text-6xl;
   }
 
   .section-title-divider {
@@ -55,7 +59,7 @@
   }
 
   .section-intro {
-    @apply font-light leading-relaxed text-luxury-charcoal;
+    @apply font-normal leading-relaxed text-luxury-charcoal;
   }
 
   .catalog-grid {
@@ -71,11 +75,11 @@
   }
 
   .catalog-card-title {
-    @apply font-sans text-xs leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass-contrast sm:text-sm md:text-base lg:text-lg;
+    @apply font-sans text-sm font-medium leading-tight text-luxury-matte-black transition-colors duration-300 group-hover:text-luxury-brass-contrast sm:text-base md:text-lg lg:text-xl;
   }
 
   .catalog-card-description {
-    @apply mx-auto mb-1 mt-1 line-clamp-2 max-w-sm font-light text-[10px] leading-snug text-luxury-charcoal sm:mb-4 sm:mt-2 sm:line-clamp-none sm:text-sm md:text-base;
+    @apply mx-auto mb-1 mt-1 line-clamp-2 max-w-sm font-normal text-[10px] leading-snug text-luxury-charcoal sm:mb-4 sm:mt-2 sm:line-clamp-none sm:text-sm md:text-base;
   }
 
   .catalog-card-cta {
@@ -83,11 +87,11 @@
   }
 
   .catalog-card-meta {
-    @apply mt-1 font-sans text-[10px] font-light tracking-wide text-luxury-muted sm:mt-1.5 sm:text-xs;
+    @apply mt-1 font-sans text-[10px] font-normal tracking-wide text-luxury-muted sm:mt-1.5 sm:text-xs;
   }
 
   .catalog-card-eyebrow {
-    @apply mb-0.5 text-[8px] uppercase tracking-[0.15em] text-luxury-brass-contrast sm:mb-1 sm:text-[10px] sm:tracking-[0.2em];
+    @apply mb-0.5 text-[8px] font-medium uppercase tracking-[0.15em] text-luxury-brass-contrast sm:mb-1 sm:text-[10px] sm:tracking-[0.2em];
   }
 
   .page-shell {
@@ -112,7 +116,7 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #FFFFF0;
+  background: #FFFFFF;
 }
 ::-webkit-scrollbar-thumb {
   background: #D8C3A5;
