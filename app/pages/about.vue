@@ -14,12 +14,12 @@
         <div class="about-hero-image">
           <picture class="block w-full">
             <source
-              srcset="/images/about-hero.webp"
+              srcset="/images/about-hero1.webp"
               sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
               type="image/webp"
             >
             <img
-              src="/images/about-hero.webp"
+              src="/images/about-hero1.webp"
               sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
               alt="Verve Exclusive Home Collection showroom interior"
               class="about-hero-img"
