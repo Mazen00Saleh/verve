@@ -19,6 +19,7 @@
         :retry="refresh"
       >
         <template v-if="category">
+          <h1 class="sr-only">{{ category.title }} Collections</h1>
           <CatalogGridSkeleton v-if="pending" grid-class="lg:grid-cols-3" />
 
           <PageState
@@ -56,6 +57,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const categorySlug = route.params.category as string
+const { public: { siteUrl } } = useRuntimeConfig()
 
 const { data, pending, error, refresh } = await usePaginatedCollections(categorySlug)
 const { setPage, pageSize } = useRoutePagination('collections')
@@ -71,11 +73,35 @@ const total = computed(() => data.value?.total ?? 0)
 const page = computed(() => data.value?.page ?? 1)
 const totalPages = computed(() => data.value?.totalPages ?? 1)
 
-useHead({
-  title: computed(() =>
-    category.value
-      ? `${category.value.title} Collections | Verve Luxury Interiors`
-      : 'Collections | Verve Luxury Interiors',
-  ),
+const seoTitle = computed(() =>
+  category.value
+    ? `${category.value.title} Collections | Verve Luxury Interiors`
+    : 'Collections | Verve Luxury Interiors',
+)
+
+const seoDescription = computed(() => {
+  if (category.value?.description) {
+    return category.value.description
+  }
+
+  return `Explore ${category.value?.title ?? 'luxury'} collections from Verve — premium wallpapers, fabrics, and wallcoverings for refined interiors.`
+})
+
+usePageSeo({
+  title: seoTitle,
+  description: seoDescription,
+  path: computed(() => buildCanonicalPath(`/collections/${categorySlug}`, page.value)),
+  image: computed(() => category.value?.image || undefined),
+  jsonLd: computed(() => {
+    if (!category.value) {
+      return null
+    }
+
+    return buildBreadcrumbJsonLd(siteUrl, [
+      { name: 'Home', path: '/' },
+      { name: 'Collections', path: '/collections' },
+      { name: category.value.title, path: `/collections/${categorySlug}` },
+    ])
+  }),
 })
 </script>

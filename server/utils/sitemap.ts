@@ -2,6 +2,12 @@ import type { H3Event } from 'h3'
 import { serverSupabaseClient } from '#supabase/server'
 import { toSlug } from '~/utils/slug'
 
+type SitemapEntry = {
+  path: string
+  priority?: string
+  changefreq?: string
+}
+
 function escapeXml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -11,11 +17,23 @@ function escapeXml(value: string): string {
     .replace(/'/g, '&apos;')
 }
 
-export function buildSitemapXml(baseUrl: string, paths: string[]): string {
+export function buildSitemapXml(baseUrl: string, entries: SitemapEntry[]): string {
   const origin = baseUrl.replace(/\/$/, '')
-  const urls = paths.map((path) => {
-    const loc = path === '/' ? origin : `${origin}${path}`
-    return `  <url>\n    <loc>${escapeXml(loc)}</loc>\n  </url>`
+  const urls = entries.map((entry) => {
+    const loc = entry.path === '/' ? origin : `${origin}${entry.path}`
+    const lines = [`  <url>`, `    <loc>${escapeXml(loc)}</loc>`]
+
+    if (entry.changefreq) {
+      lines.push(`    <changefreq>${escapeXml(entry.changefreq)}</changefreq>`)
+    }
+
+    if (entry.priority) {
+      lines.push(`    <priority>${escapeXml(entry.priority)}</priority>`)
+    }
+
+    lines.push('  </url>')
+
+    return lines.join('\n')
   })
 
   return [
@@ -26,15 +44,23 @@ export function buildSitemapXml(baseUrl: string, paths: string[]): string {
   ].join('\n')
 }
 
-export async function getSitemapPaths(event: H3Event): Promise<string[]> {
+function entry(path: string, priority?: string, changefreq?: string): SitemapEntry {
+  return { path, priority, changefreq }
+}
+
+export async function getSitemapPaths(event: H3Event): Promise<SitemapEntry[]> {
   const client = await serverSupabaseClient(event)
-  const paths = new Set<string>([
-    '/',
-    '/about',
-    '/contact',
-    '/collections',
-    '/inspiration',
+  const entries = new Map<string, SitemapEntry>([
+    ['/', entry('/', '1.0', 'weekly')],
+    ['/about', entry('/about', '0.8', 'monthly')],
+    ['/contact', entry('/contact', '0.8', 'monthly')],
+    ['/collections', entry('/collections', '0.9', 'weekly')],
+    ['/inspiration', entry('/inspiration', '0.8', 'weekly')],
   ])
+
+  const addEntry = (path: string, priority = '0.6', changefreq = 'weekly') => {
+    entries.set(path, entry(path, priority, changefreq))
+  }
 
   const { data: categories, error: categoriesError } = await client
     .from('categories')
@@ -45,8 +71,8 @@ export async function getSitemapPaths(event: H3Event): Promise<string[]> {
   } else {
     for (const category of categories ?? []) {
       const categorySlug = toSlug(category.name)
-      paths.add(`/collections/${categorySlug}`)
-      paths.add(`/collections/${categorySlug}/gallery`)
+      addEntry(`/collections/${categorySlug}`, '0.7')
+      addEntry(`/collections/${categorySlug}/gallery`, '0.6')
     }
   }
 
@@ -63,7 +89,7 @@ export async function getSitemapPaths(event: H3Event): Promise<string[]> {
       const collectionSlug = toSlug(collection.name)
 
       if (categorySlug) {
-        paths.add(`/collections/${categorySlug}/${collectionSlug}`)
+        addEntry(`/collections/${categorySlug}/${collectionSlug}`)
       }
     }
   }
@@ -86,7 +112,7 @@ export async function getSitemapPaths(event: H3Event): Promise<string[]> {
       const productSlug = toSlug(product.name)
 
       if (categorySlug && collectionSlug) {
-        paths.add(`/collections/${categorySlug}/${collectionSlug}/${productSlug}`)
+        addEntry(`/collections/${categorySlug}/${collectionSlug}/${productSlug}`, '0.5')
       }
     }
   }
@@ -99,9 +125,9 @@ export async function getSitemapPaths(event: H3Event): Promise<string[]> {
     console.warn('[sitemap] brochures fetch failed:', brochuresError.message)
   } else {
     for (const brochure of brochures ?? []) {
-      paths.add(`/inspiration/${toSlug(brochure.name)}`)
+      addEntry(`/inspiration/${toSlug(brochure.name)}`, '0.6')
     }
   }
 
-  return [...paths].sort()
+  return [...entries.values()].sort((a, b) => a.path.localeCompare(b.path))
 }

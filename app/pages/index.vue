@@ -1,5 +1,6 @@
 <template>
   <div class="-mt-px">
+    <h1 class="sr-only">Verve | Luxury Wallpapers &amp; Fabrics</h1>
     <HeroSection />
     <HomeCategories />
     <LazyPremiumMaterials hydrate-on-visible />
@@ -8,10 +9,15 @@
 </template>
 
 <script setup lang="ts">
-useHead({
+const { public: { siteUrl } } = useRuntimeConfig()
+
+usePageSeo({
   title: 'Verve | Luxury Wallpapers & Fabrics',
-  meta: [
-    { name: 'description', content: 'Discover Verve: the pinnacle of luxury wallpapers, fabrics, posters, and wallcoverings for sophisticated spaces.' },
-  ],
+  description: 'Discover Verve: the pinnacle of luxury wallpapers, fabrics, posters, and wallcoverings for sophisticated spaces.',
+  path: '/',
+  jsonLd: computed(() => [
+    buildOrganizationJsonLd(siteUrl),
+    buildWebSiteJsonLd(siteUrl),
+  ]),
 })
 </script>

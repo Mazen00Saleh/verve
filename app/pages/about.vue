@@ -137,114 +137,22 @@ function togglePanel(id: AccordionPanelId) {
   openPanel.value = openPanel.value === id ? null : id
 }
 
-useHead({
+usePageSeo({
   title: 'About | Verve Luxury Interiors',
+  description: 'Established in 2006, Verve designs and wholesales luxury furnishing fabrics and wallpapers across the MENA region with uncompromising quality.',
+  path: '/about',
+  image: '/images/about-hero1.webp',
+})
+
+useHead({
   link: [
     {
       rel: 'preload',
       as: 'image',
-      href: '/images/about-hero.webp',
+      href: '/images/about-hero1.webp',
       type: 'image/webp',
       imagesizes: '(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw',
     },
   ],
 })
 </script>
-
-<style scoped>
-.about-page {
-  @apply min-h-0 pb-12 pt-8 sm:pb-16 sm:pt-10 md:pt-12;
-}
-
-.about-page-container {
-  @apply max-w-7xl py-4 sm:py-6;
-}
-
-.about-hero {
-  @apply mb-12 grid grid-cols-1 items-start gap-8 md:mb-16 md:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] md:gap-8 lg:gap-10;
-}
-
-.about-hero-heading {
-  @apply mb-3 text-lg uppercase tracking-wide text-luxury-matte-black sm:mb-4 sm:text-xl;
-}
-
-.about-hero-body {
-  @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
-}
-
-.about-hero-image {
-  @apply w-full;
-}
-
-.about-hero-img {
-  @apply h-auto w-full;
-}
-
-.about-bottom {
-  @apply grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-12 xl:gap-16;
-}
-
-.about-services-heading {
-  @apply mb-5 text-lg text-luxury-matte-black sm:mb-6 sm:text-xl;
-}
-
-.about-accordion {
-  @apply border border-neutral-200;
-}
-
-.about-accordion-item + .about-accordion-item {
-  @apply border-t border-neutral-200;
-}
-
-.about-accordion-trigger {
-  @apply flex w-full items-center gap-3 px-4 py-3.5 text-left text-sm text-luxury-charcoal transition-colors sm:px-5 sm:py-4 sm:text-base;
-}
-
-.about-accordion-trigger-active {
-  @apply text-luxury-brass;
-}
-
-.about-accordion-icon {
-  @apply inline-flex w-4 shrink-0 justify-center text-base leading-none;
-}
-
-.about-accordion-panel {
-  @apply border-t border-neutral-200 px-4 py-4 sm:px-5 sm:py-5;
-}
-
-.about-accordion-body {
-  @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
-}
-
-.about-sidebar-heading {
-  @apply mb-3 text-base text-luxury-muted sm:text-lg;
-}
-
-.about-hours {
-  @apply space-y-1.5;
-}
-
-.about-hours-row {
-  @apply grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 text-xs font-normal text-luxury-charcoal sm:text-sm;
-}
-
-.about-hours-row dt {
-  @apply text-luxury-muted;
-}
-
-.about-hours-row dd {
-  @apply text-right;
-}
-
-.about-careers {
-  @apply mt-8 sm:mt-10;
-}
-
-.about-careers-text {
-  @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
-}
-
-.about-careers-link {
-  @apply underline decoration-luxury-charcoal/40 underline-offset-2 transition-colors hover:text-luxury-brass hover:decoration-luxury-brass;
-}
-</style>

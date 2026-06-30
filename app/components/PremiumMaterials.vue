@@ -70,33 +70,3 @@ const whatWeDo =
 const whatWeOffer =
   "A top notch and super elite fabric provider offer an Exquisite taste, elevated quality and a refined sense of luxury – these are the principals on which verve was founded. Using modern and classic references as a starting point but always infusing them with an elegant, contemporary touch, 'verve Group' describes the ebullience of our past endeavors. It sketches the outline of our future. A collective through more than ten quintessentially luxury interior brands, We aim and succeed in providing a variety of Lavish, Opulent and exquisite luxury brands that are specialized in Fabric, Wall-coverings and Wallpaper to match different styles and tastes giving you a feel of your perfect home!"
 </script>
-
-<style scoped>
-.premium-materials-grid {
-  @apply grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-14;
-}
-
-.premium-materials-content {
-  @apply flex flex-col gap-8 sm:gap-10;
-}
-
-.premium-materials-columns {
-  @apply grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:gap-8;
-}
-
-.premium-materials-heading {
-  @apply mb-3 text-base uppercase tracking-wide text-luxury-matte-black sm:mb-4 sm:text-lg;
-}
-
-.premium-materials-body {
-  @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
-}
-
-.premium-materials-link {
-  @apply mt-3 inline-block text-xs text-luxury-charcoal underline decoration-luxury-charcoal/50 underline-offset-2 transition-colors hover:text-luxury-brass hover:decoration-luxury-brass sm:text-sm;
-}
-
-.premium-materials-image {
-  @apply w-full lg:max-w-none;
-}
-</style>

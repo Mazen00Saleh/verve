@@ -18,6 +18,7 @@
         empty-message="This product may have been removed or is not yet available."
       >
         <template v-if="category && collection && product">
+          <h1 class="sr-only">{{ product.sku }}</h1>
           <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
             <div class="relative aspect-square w-full select-none border border-neutral-100 bg-luxury-warm-beige/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
               <div
@@ -29,7 +30,7 @@
                 <img
                   ref="mainImageRef"
                   :src="mainImageSrc"
-                  :alt="product.sku"
+                  :alt="productImageAlt"
                   class="h-full w-full object-cover transition-opacity duration-300"
                   loading="eager"
                   fetchpriority="high"
@@ -135,6 +136,16 @@ const errorMessage = computed(() => error.value?.message ?? null)
 const category = computed(() => detail.value?.category ?? null)
 const collection = computed(() => detail.value?.collection ?? null)
 const product = computed(() => detail.value?.product ?? null)
+const productImageAlt = computed(() => {
+  if (!product.value) {
+    return 'Product image'
+  }
+
+  return product.value.name
+    ? `${product.value.name} (${product.value.sku})`
+    : product.value.sku
+})
+const productPath = computed(() => `/collections/${categorySlug}/${collectionSlug}/${productSlug}`)
 
 const $img = useImage()
 
@@ -266,12 +277,58 @@ watch(isZooming, (zooming) => {
   }
 })
 
+const { public: { siteUrl } } = useRuntimeConfig()
+
+const seoTitle = computed(() =>
+  product.value
+    ? `${product.value.sku} | Verve Luxury Interiors`
+    : 'Product | Verve Luxury Interiors',
+)
+
+const seoDescription = computed(() => {
+  if (product.value?.description) {
+    return product.value.description
+  }
+
+  if (product.value && collection.value) {
+    return `View ${product.value.sku} from the ${collection.value.title} collection — luxury wallpaper and fabric by Verve.`
+  }
+
+  return 'Explore this luxury wallpaper or fabric product from Verve.'
+})
+
+usePageSeo({
+  title: seoTitle,
+  description: seoDescription,
+  path: productPath,
+  type: 'product',
+  image: computed(() => activeImage.value || undefined),
+  jsonLd: computed(() => {
+    if (!product.value || !category.value || !collection.value) {
+      return null
+    }
+
+    return [
+      buildProductJsonLd({
+        siteUrl,
+        name: product.value.name || product.value.sku,
+        sku: product.value.sku,
+        description: product.value.description || undefined,
+        image: activeImage.value || undefined,
+        path: productPath.value,
+      }),
+      buildBreadcrumbJsonLd(siteUrl, [
+        { name: 'Home', path: '/' },
+        { name: 'Collections', path: '/collections' },
+        { name: category.value.title, path: `/collections/${categorySlug}` },
+        { name: collection.value.title, path: `/collections/${categorySlug}/${collectionSlug}` },
+        { name: product.value.sku, path: productPath.value },
+      ]),
+    ]
+  }),
+})
+
 useHead({
-  title: computed(() =>
-    product.value
-      ? `${product.value.sku} | Verve Luxury Interiors`
-      : 'Product | Verve Luxury Interiors',
-  ),
   link: computed(() => {
     const href = mainImageSrc.value
     if (!href) {

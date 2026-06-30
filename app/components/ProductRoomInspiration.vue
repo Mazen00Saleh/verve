@@ -169,15 +169,3 @@ onUnmounted(() => {
   setBodyScrollLocked(false)
 })
 </script>
-
-<style scoped>
-.gallery-fade-enter-active,
-.gallery-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.gallery-fade-enter-from,
-.gallery-fade-leave-to {
-  opacity: 0;
-}
-</style>

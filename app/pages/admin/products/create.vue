@@ -143,9 +143,3 @@ async function handleSubmit() {
 
 useHead({ title: 'Create Product | Verve Admin' })
 </script>
-
-<style scoped>
-.admin-input {
-  @apply w-full border border-neutral-200 px-4 py-3 text-sm outline-none focus:border-luxury-brass;
-}
-</style>

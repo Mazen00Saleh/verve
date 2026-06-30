@@ -109,6 +109,267 @@
   .back-link {
     @apply inline-flex items-center text-xs uppercase tracking-widest text-luxury-matte-black transition-colors duration-300 hover:text-luxury-brass;
   }
+
+  .about-page {
+    @apply min-h-0 pb-12 pt-8 sm:pb-16 sm:pt-10 md:pt-12;
+  }
+
+  .about-page-container {
+    @apply max-w-7xl py-4 sm:py-6;
+  }
+
+  .about-hero {
+    @apply mb-12 grid grid-cols-1 items-start gap-8 md:mb-16 md:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] md:gap-8 lg:gap-10;
+  }
+
+  .about-hero-heading {
+    @apply mb-3 text-lg uppercase tracking-wide text-luxury-matte-black sm:mb-4 sm:text-xl;
+  }
+
+  .about-hero-body {
+    @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
+  }
+
+  .about-hero-image {
+    @apply w-full;
+  }
+
+  .about-hero-img {
+    @apply h-auto w-full;
+  }
+
+  .about-bottom {
+    @apply grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-12 xl:gap-16;
+  }
+
+  .about-services-heading {
+    @apply mb-5 text-lg text-luxury-matte-black sm:mb-6 sm:text-xl;
+  }
+
+  .about-accordion {
+    @apply border border-neutral-200;
+  }
+
+  .about-accordion-item + .about-accordion-item {
+    @apply border-t border-neutral-200;
+  }
+
+  .about-accordion-trigger {
+    @apply flex w-full items-center gap-3 px-4 py-3.5 text-left text-sm text-luxury-charcoal transition-colors sm:px-5 sm:py-4 sm:text-base;
+  }
+
+  .about-accordion-trigger-active {
+    @apply text-luxury-brass;
+  }
+
+  .about-accordion-icon {
+    @apply inline-flex w-4 shrink-0 justify-center text-base leading-none;
+  }
+
+  .about-accordion-panel {
+    @apply border-t border-neutral-200 px-4 py-4 sm:px-5 sm:py-5;
+  }
+
+  .about-accordion-body {
+    @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
+  }
+
+  .about-sidebar-heading {
+    @apply mb-3 text-base text-luxury-muted sm:text-lg;
+  }
+
+  .about-hours {
+    @apply space-y-1.5;
+  }
+
+  .about-hours-row {
+    @apply grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 text-xs font-normal text-luxury-charcoal sm:text-sm;
+  }
+
+  .about-hours-row dt {
+    @apply text-luxury-muted;
+  }
+
+  .about-hours-row dd {
+    @apply text-right;
+  }
+
+  .about-careers {
+    @apply mt-8 sm:mt-10;
+  }
+
+  .about-careers-text {
+    @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
+  }
+
+  .about-careers-link {
+    @apply underline decoration-luxury-charcoal/40 underline-offset-2 transition-colors hover:text-luxury-brass hover:decoration-luxury-brass;
+  }
+
+  .contact-page {
+    @apply min-h-0 pb-8 pt-8 sm:pb-10 sm:pt-10 lg:pb-12 lg:pt-12;
+  }
+
+  .contact-page-container {
+    @apply py-4 sm:py-6 lg:py-8;
+  }
+
+  .contact-layout {
+    @apply grid grid-cols-1 gap-5 lg:grid-cols-[40%_1fr] lg:gap-6 lg:h-[calc(100dvh-var(--site-header-height)-10rem)] lg:max-h-[calc(100dvh-var(--site-header-height)-10rem)];
+  }
+
+  .contact-map {
+    @apply relative min-h-[280px] w-full overflow-hidden sm:min-h-[320px] lg:min-h-0 lg:h-full;
+  }
+
+  .contact-map-iframe {
+    @apply absolute inset-0 h-full w-full border-0;
+  }
+
+  .contact-content {
+    @apply flex min-h-0 flex-col lg:overflow-y-auto lg:pr-1;
+  }
+
+  .contact-info-grid {
+    @apply grid grid-cols-2 gap-x-4 gap-y-4 sm:gap-x-6 sm:gap-y-4;
+  }
+
+  .contact-info-heading {
+    @apply mb-1 text-base text-luxury-matte-black sm:text-lg;
+  }
+
+  .contact-info-text {
+    @apply text-xs font-normal leading-snug text-luxury-charcoal sm:text-sm;
+  }
+
+  .contact-form-section {
+    @apply mt-8 border-t border-luxury-warm-beige/40 pt-8 sm:mt-10 sm:pt-10;
+  }
+
+  .contact-form-title {
+    @apply text-xl text-luxury-matte-black sm:text-2xl;
+  }
+
+  .contact-form-intro {
+    @apply mt-1.5 max-w-xl text-xs font-normal leading-snug text-luxury-charcoal sm:text-sm;
+  }
+
+  .contact-form {
+    @apply mt-3 space-y-3;
+  }
+
+  .contact-form-row {
+    @apply grid grid-cols-1 gap-3 sm:grid-cols-2;
+  }
+
+  .contact-label {
+    @apply mb-1 block text-sm text-luxury-charcoal;
+  }
+
+  .contact-input {
+    @apply w-full border border-luxury-warm-beige/50 bg-white px-2.5 py-1.5 text-sm text-luxury-matte-black outline-none transition-colors focus:border-luxury-brass disabled:opacity-60;
+  }
+
+  .contact-submit {
+    @apply px-6 py-2 text-xs;
+  }
+
+  .contact-footer-text {
+    @apply mt-auto pt-4 text-[9px] font-normal leading-snug text-luxury-charcoal sm:text-[10px];
+  }
+
+  .collections-page-shell {
+    @apply min-h-0 pb-0 pt-0;
+  }
+
+  .collections-page-container {
+    @apply pb-8 sm:pb-10 md:pb-12;
+  }
+
+  .collections-page-title {
+    @apply my-8 text-center font-sans text-xl font-medium text-luxury-matte-black sm:my-10 sm:text-2xl md:my-12;
+  }
+
+  .admin-input {
+    @apply w-full border border-neutral-200 px-4 py-3 text-sm outline-none focus:border-luxury-brass;
+  }
+
+  .admin-toggle {
+    @apply relative inline-flex h-8 w-14 shrink-0 items-center rounded-full border-2 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+    outline-color: theme('colors.luxury.brass.contrast');
+  }
+
+  .admin-toggle--on {
+    @apply border-emerald-600 bg-emerald-500;
+  }
+
+  .admin-toggle--off {
+    @apply border-neutral-300 bg-neutral-200;
+  }
+
+  .admin-toggle-thumb {
+    @apply pointer-events-none block h-6 w-6 rounded-full bg-white shadow-md transition-transform duration-200;
+  }
+
+  .premium-materials-grid {
+    @apply grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-14;
+  }
+
+  .premium-materials-content {
+    @apply flex flex-col gap-8 sm:gap-10;
+  }
+
+  .premium-materials-columns {
+    @apply grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:gap-8;
+  }
+
+  .premium-materials-heading {
+    @apply mb-3 text-base uppercase tracking-wide text-luxury-matte-black sm:mb-4 sm:text-lg;
+  }
+
+  .premium-materials-body {
+    @apply text-xs font-normal leading-relaxed text-luxury-charcoal sm:text-sm;
+  }
+
+  .premium-materials-link {
+    @apply mt-3 inline-block text-xs text-luxury-charcoal underline decoration-luxury-charcoal/50 underline-offset-2 transition-colors hover:text-luxury-brass hover:decoration-luxury-brass sm:text-sm;
+  }
+
+  .premium-materials-image {
+    @apply w-full lg:max-w-none;
+  }
+
+  .pagination-btn {
+    @apply inline-flex min-h-10 min-w-[4.5rem] items-center justify-center gap-1 rounded-sm border border-neutral-200 px-3 text-xs uppercase tracking-widest text-luxury-matte-black transition-colors hover:border-luxury-brass hover:text-luxury-brass disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .pagination-page {
+    @apply inline-flex h-10 min-w-10 items-center justify-center rounded-sm border border-transparent px-2 text-sm text-luxury-charcoal transition-colors hover:border-neutral-200 hover:text-luxury-matte-black;
+  }
+
+  .pagination-page-active {
+    @apply border-luxury-brass bg-luxury-brass/10 font-medium text-luxury-matte-black;
+  }
+
+  .nav-link {
+    @apply border-b border-transparent pb-1 text-center text-sm uppercase tracking-widest text-luxury-ivory transition-colors duration-300 hover:text-luxury-brass;
+  }
+
+  .nav-link-active {
+    @apply border-luxury-brass text-luxury-brass;
+  }
+
+  .mobile-nav-link {
+    @apply block rounded-sm px-3 py-3 text-sm uppercase tracking-widest text-luxury-ivory transition-colors hover:bg-white/5 hover:text-luxury-brass;
+  }
+
+  .mobile-nav-link-active {
+    @apply text-luxury-brass;
+  }
+
+  .header-social-link {
+    @apply text-luxury-ivory transition-colors duration-300 hover:text-luxury-brass;
+  }
 }
 
 /* Custom scrollbar */
@@ -154,4 +415,45 @@ html {
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
+}
+
+.overlay-fade-enter-active,
+.overlay-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.overlay-fade-enter-from,
+.overlay-fade-leave-to {
+  opacity: 0;
+}
+
+.gallery-fade-enter-active,
+.gallery-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.gallery-fade-enter-from,
+.gallery-fade-leave-to {
+  opacity: 0;
+}
+
+.mobile-nav-enter-active,
+.mobile-nav-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.mobile-nav-enter-active nav,
+.mobile-nav-leave-active nav {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.mobile-nav-enter-from,
+.mobile-nav-leave-to {
+  opacity: 0;
+}
+
+.mobile-nav-enter-from nav,
+.mobile-nav-leave-to nav {
+  opacity: 0;
+  transform: translateY(-8px);
 }

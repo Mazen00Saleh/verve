@@ -90,7 +90,5 @@ async function handleSubmit() {
   }
 }
 
-useHead({
-  title: 'Admin Login | Verve',
-})
+useAdminSeo('Admin Login | Verve')
 </script>

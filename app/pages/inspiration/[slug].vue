@@ -62,11 +62,27 @@ if (brochure.value === null && !pending.value) {
 
 const errorMessage = computed(() => error.value?.message ?? null)
 
-useHead({
-  title: computed(() =>
-    brochure.value
-      ? `${brochure.value.title} | Verve Inspiration`
-      : 'Brochure | Verve Inspiration',
-  ),
+const seoTitle = computed(() =>
+  brochure.value
+    ? `${brochure.value.title} | Verve Inspiration`
+    : 'Brochure | Verve Inspiration',
+)
+
+const seoDescription = computed(() => {
+  if (brochure.value?.description) {
+    return brochure.value.description
+  }
+
+  return brochure.value
+    ? `Browse the ${brochure.value.title} brochure from Verve for luxury wallpaper and fabric design inspiration.`
+    : 'Explore Verve inspiration brochures for premium interior design ideas.'
+})
+
+usePageSeo({
+  title: seoTitle,
+  description: seoDescription,
+  path: computed(() => `/inspiration/${slug}`),
+  type: 'article',
+  image: computed(() => brochure.value?.coverImage || undefined),
 })
 </script>

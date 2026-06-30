@@ -19,6 +19,7 @@
         :retry="refresh"
       >
         <template v-if="category">
+          <h1 class="sr-only">{{ category.title }} Gallery</h1>
           <PageState
             :empty="!mockups.length"
             empty-title="No room inspirations yet"
@@ -39,6 +40,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const categorySlug = route.params.category as string
+const { public: { siteUrl } } = useRuntimeConfig()
 
 const { data, pending, error, refresh } = await useCategoryMockups(categorySlug)
 
@@ -50,11 +52,32 @@ const errorMessage = computed(() => error.value?.message ?? null)
 const category = computed(() => data.value?.category ?? null)
 const mockups = computed(() => data.value?.mockups ?? [])
 
-useHead({
-  title: computed(() =>
-    category.value
-      ? `${category.value.title} Gallery | Verve Luxury Interiors`
-      : 'Gallery | Verve Luxury Interiors',
-  ),
+const seoTitle = computed(() =>
+  category.value
+    ? `${category.value.title} Gallery | Verve Luxury Interiors`
+    : 'Gallery | Verve Luxury Interiors',
+)
+
+const seoDescription = computed(() =>
+  `Browse room inspiration and mockup images from Verve's ${category.value?.title ?? 'luxury'} collection — premium interior design ideas.`,
+)
+
+usePageSeo({
+  title: seoTitle,
+  description: seoDescription,
+  path: computed(() => `/collections/${categorySlug}/gallery`),
+  image: computed(() => category.value?.image || undefined),
+  jsonLd: computed(() => {
+    if (!category.value) {
+      return null
+    }
+
+    return buildBreadcrumbJsonLd(siteUrl, [
+      { name: 'Home', path: '/' },
+      { name: 'Collections', path: '/collections' },
+      { name: category.value.title, path: `/collections/${categorySlug}` },
+      { name: 'Gallery', path: `/collections/${categorySlug}/gallery` },
+    ])
+  }),
 })
 </script>
