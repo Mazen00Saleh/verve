@@ -80,15 +80,15 @@ export default defineNuxtConfig({
   },
   routeRules: {
     // Homepage: edge SWR so CMS updates appear without a full rebuild.
-    // '/': { swr: 300 },
+    '/': { swr: 300 },
     // Marketing pages: no Supabase — safe to prerender.
-    // '/about': { prerender: true },
-    // '/contact': { swr: 3600 },
+    '/about': { prerender: true },
+    '/contact': { prerender: true },
     // Public catalog: edge SWR (public, non-personalised CMS content).
-    // '/collections': { swr: 300 },
-    // '/collections/**': { swr: 300 },
-    // '/inspiration': { swr: 600 },
-    // '/inspiration/**': { swr: 600 },
+    '/collections': { swr: 300 },
+    '/collections/**': { swr: 300 },
+    '/inspiration': { swr: 600 },
+    '/inspiration/**': { swr: 600 },
     '/brochures': { redirect: { to: '/inspiration', statusCode: 301 } },
     // Admin SPA — never cache.
     '/admin/**': { ssr: false },
