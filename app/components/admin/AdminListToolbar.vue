@@ -9,7 +9,7 @@
         :value="search"
         type="search"
         :placeholder="searchPlaceholder"
-        class="admin-filter-input"
+        class="admin-input"
         @input="emit('update:search', ($event.target as HTMLInputElement).value)"
       >
     </div>
@@ -25,7 +25,7 @@
       <select
         :id="`${searchId}-${select.key}`"
         :value="selectValues[select.key] ?? ''"
-        class="admin-filter-input"
+        class="admin-input"
         @change="emit('update:select', select.key, ($event.target as HTMLSelectElement).value)"
       >
         <option value="">
@@ -71,9 +71,3 @@ const emit = defineEmits<{
 
 const searchId = `admin-search-${useId()}`
 </script>
-
-<style scoped>
-.admin-filter-input {
-  @apply w-full border border-neutral-200 px-4 py-3 text-sm outline-none focus:border-luxury-brass;
-}
-</style>

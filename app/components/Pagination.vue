@@ -94,17 +94,3 @@ function emitPageChange(page: number) {
   emit('page-change', page)
 }
 </script>
-
-<style scoped>
-.pagination-btn {
-  @apply inline-flex min-h-10 min-w-[4.5rem] items-center justify-center gap-1 rounded-sm border border-neutral-200 px-3 text-xs uppercase tracking-widest text-luxury-matte-black transition-colors hover:border-luxury-brass hover:text-luxury-brass disabled:cursor-not-allowed disabled:opacity-40;
-}
-
-.pagination-page {
-  @apply inline-flex h-10 min-w-10 items-center justify-center rounded-sm border border-transparent px-2 text-sm text-luxury-charcoal transition-colors hover:border-neutral-200 hover:text-luxury-matte-black;
-}
-
-.pagination-page-active {
-  @apply border-luxury-brass bg-luxury-brass/10 font-medium text-luxury-matte-black;
-}
-</style>

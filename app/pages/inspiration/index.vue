@@ -1,6 +1,7 @@
 <template>
   <div class="page-shell">
     <div class="page-container py-8 sm:py-12 md:py-16">
+      <h1 class="sr-only">Inspiration | Verve Luxury Interiors</h1>
       <PageState
         :pending="pending"
         :error-message="errorMessage"
@@ -33,7 +34,7 @@
       </PageState>
     </div>
 
-    <Transition name="fade">
+    <Transition name="overlay-fade">
       <div
         v-if="activeBrochureUrl"
         class="fixed inset-0 z-50 flex items-center justify-center bg-luxury-matte-black/90 p-4 backdrop-blur-md sm:p-6 md:p-10"
@@ -106,22 +107,10 @@ watch(activeBrochureUrl, (value) => {
   document.body.classList.toggle('overflow-hidden', Boolean(value))
 })
 
-useHead({
+
+usePageSeo({
   title: 'Inspiration | Verve Luxury Interiors',
-  meta: [
-    { name: 'description', content: 'Explore the Verve brochures and collection catalog files for premium design inspirations.' },
-  ],
+  description: 'Explore the Verve brochures and collection catalog files for premium design inspirations.',
+  path: computed(() => buildCanonicalPath('/inspiration', page.value)),
 })
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

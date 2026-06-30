@@ -38,21 +38,9 @@ const { data: categories, pending, error, refresh } = await useCategorySummaries
 const errorMessage = computed(() => error.value?.message ?? null)
 const categoryList = computed(() => categories.value ?? [])
 
-useHead({
+usePageSeo({
   title: 'Collections | Verve Luxury Interiors',
+  description: 'Browse Verve luxury wallpaper and fabric collections by category — curated wallcoverings and textiles for sophisticated residential and commercial interiors.',
+  path: '/collections',
 })
 </script>
-
-<style scoped>
-.collections-page-shell {
-  @apply min-h-0 pb-0 pt-0;
-}
-
-.collections-page-container {
-  @apply pb-8 sm:pb-10 md:pb-12;
-}
-
-.collections-page-title {
-  @apply my-8 text-center font-sans text-xl font-medium text-luxury-matte-black sm:my-10 sm:text-2xl md:my-12;
-}
-</style>

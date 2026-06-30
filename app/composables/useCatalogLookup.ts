@@ -143,15 +143,6 @@ export async function fetchProductDetail(
   }
 }
 
-export function useCategoryBySlug(slug: string) {
-  const client = useSupabaseClient()
-
-  return useAsyncData(
-    `category-by-slug-${slug}`,
-    () => fetchCategoryBySlug(client, slug),
-  )
-}
-
 export function useProductDetail(
   categorySlug: string,
   collectionSlug: string,

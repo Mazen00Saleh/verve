@@ -19,6 +19,7 @@
         :retry="refresh"
       >
         <template v-if="category && collection">
+          <h1 class="sr-only">{{ collection.title }}</h1>
           <CatalogGridSkeleton v-if="pending" grid-class="md:grid-cols-3" />
 
           <PageState
@@ -58,6 +59,7 @@
 const route = useRoute()
 const categorySlug = route.params.category as string
 const collectionSlug = route.params.collection as string
+const { public: { siteUrl } } = useRuntimeConfig()
 
 const { data, pending, error, refresh } = await usePaginatedProducts(categorySlug, collectionSlug)
 const { setPage, pageSize } = useRoutePagination('products')
@@ -80,11 +82,36 @@ const total = computed(() => data.value?.total ?? 0)
 const page = computed(() => data.value?.page ?? 1)
 const totalPages = computed(() => data.value?.totalPages ?? 1)
 
-useHead({
-  title: computed(() =>
-    collection.value && category.value
-      ? `${collection.value.title} | ${category.value.title} | Verve Luxury Interiors`
-      : 'Collection | Verve Luxury Interiors',
-  ),
+const seoTitle = computed(() =>
+  collection.value && category.value
+    ? `${collection.value.title} | ${category.value.title} | Verve Luxury Interiors`
+    : 'Collection | Verve Luxury Interiors',
+)
+
+const seoDescription = computed(() => {
+  if (collection.value?.description) {
+    return collection.value.description
+  }
+
+  return `Discover ${collection.value?.title ?? 'this'} from Verve's ${category.value?.title ?? 'luxury'} range — curated wallpapers, fabrics, and wallcoverings.`
+})
+
+usePageSeo({
+  title: seoTitle,
+  description: seoDescription,
+  path: computed(() => buildCanonicalPath(`/collections/${categorySlug}/${collectionSlug}`, page.value)),
+  image: computed(() => collection.value?.heroImage || undefined),
+  jsonLd: computed(() => {
+    if (!category.value || !collection.value) {
+      return null
+    }
+
+    return buildBreadcrumbJsonLd(siteUrl, [
+      { name: 'Home', path: '/' },
+      { name: 'Collections', path: '/collections' },
+      { name: category.value.title, path: `/collections/${categorySlug}` },
+      { name: collection.value.title, path: `/collections/${categorySlug}/${collectionSlug}` },
+    ])
+  }),
 })
 </script>

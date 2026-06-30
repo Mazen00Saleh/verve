@@ -62,6 +62,10 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  robots: 'noindex, nofollow',
+})
+
 const route = useRoute()
 const { user, logout } = useAdminAuth()
 

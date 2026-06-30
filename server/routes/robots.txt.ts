@@ -9,6 +9,7 @@ export default defineEventHandler((event) => {
     'User-Agent: *',
     'Disallow: /admin/',
     'Disallow: /admin',
+    'Disallow: /admin/login',
     '',
     `Sitemap: ${origin}/sitemap.xml`,
   ].join('\n')

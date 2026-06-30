@@ -1,6 +1,7 @@
 <template>
   <div class="page-shell contact-page">
     <div class="page-container contact-page-container">
+      <h1 class="sr-only">Contact Verve Luxury Interiors</h1>
       <div class="contact-layout">
         <div class="contact-map" aria-label="Verve showroom location on Google Maps">
           <iframe
@@ -207,81 +208,12 @@ onBeforeUnmount(() => {
   reset()
 })
 
-useHead({
+const { public: { siteUrl } } = useRuntimeConfig()
+
+usePageSeo({
   title: 'Contact | Verve Luxury Interiors',
+  description: 'Visit Verve in Amman or get in touch by phone, email, or our contact form for luxury fabrics, wallpapers, and interior design support.',
+  path: '/contact',
+  jsonLd: computed(() => buildLocalBusinessJsonLd(siteUrl)),
 })
 </script>
-
-<style scoped>
-.contact-page {
-  @apply min-h-0 pb-8 pt-8 sm:pb-10 sm:pt-10 lg:pb-12 lg:pt-12;
-}
-
-.contact-page-container {
-  @apply py-4 sm:py-6 lg:py-8;
-}
-
-.contact-layout {
-  @apply grid grid-cols-1 gap-5 lg:grid-cols-[40%_1fr] lg:gap-6 lg:h-[calc(100dvh-var(--site-header-height)-10rem)] lg:max-h-[calc(100dvh-var(--site-header-height)-10rem)];
-}
-
-.contact-map {
-  @apply relative min-h-[280px] w-full overflow-hidden sm:min-h-[320px] lg:min-h-0 lg:h-full;
-}
-
-.contact-map-iframe {
-  @apply absolute inset-0 h-full w-full border-0;
-}
-
-.contact-content {
-  @apply flex min-h-0 flex-col lg:overflow-y-auto lg:pr-1;
-}
-
-.contact-info-grid {
-  @apply grid grid-cols-2 gap-x-4 gap-y-4 sm:gap-x-6 sm:gap-y-4;
-}
-
-.contact-info-heading {
-  @apply mb-1 text-base text-luxury-matte-black sm:text-lg;
-}
-
-.contact-info-text {
-  @apply text-xs font-normal leading-snug text-luxury-charcoal sm:text-sm;
-}
-
-.contact-form-section {
-  @apply mt-8 border-t border-luxury-warm-beige/40 pt-8 sm:mt-10 sm:pt-10;
-}
-
-.contact-form-title {
-  @apply text-xl text-luxury-matte-black sm:text-2xl;
-}
-
-.contact-form-intro {
-  @apply mt-1.5 max-w-xl text-xs font-normal leading-snug text-luxury-charcoal sm:text-sm;
-}
-
-.contact-form {
-  @apply mt-3 space-y-3;
-}
-
-.contact-form-row {
-  @apply grid grid-cols-1 gap-3 sm:grid-cols-2;
-}
-
-.contact-label {
-  @apply mb-1 block text-sm text-luxury-charcoal;
-}
-
-.contact-input {
-  @apply w-full border border-luxury-warm-beige/50 bg-white px-2.5 py-1.5 text-sm text-luxury-matte-black outline-none transition-colors focus:border-luxury-brass disabled:opacity-60;
-}
-
-.contact-submit {
-  @apply px-6 py-2 text-xs;
-}
-
-.contact-footer-text {
-  @apply mt-auto pt-4 text-[9px] font-normal leading-snug text-luxury-charcoal sm:text-[10px];
-}
-</style>
