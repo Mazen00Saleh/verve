@@ -183,7 +183,7 @@
   }
 
   .about-hours-row {
-    @apply grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 text-xs font-normal text-luxury-charcoal sm:text-sm;
+    @apply grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 text-xs font-medium text-luxury-charcoal sm:text-sm;
   }
 
   .about-hours-row dt {
