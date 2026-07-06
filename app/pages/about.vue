@@ -128,7 +128,11 @@ const accordionPanels = [
 ]
 
 const hoursOfOperation = [
-  { day: 'Saturday to Wednesday', hours: '10 AM - 8 PM' },
+  { day: 'Saturday', hours: '10 AM - 8 PM' },
+  { day: 'Sunday', hours: '10 AM - 8 PM' },
+  { day: 'Monday', hours: '10 AM - 8 PM' },
+  { day: 'Tuesday', hours: '10 AM - 8 PM' },
+  { day: 'Wednesday', hours: '10 AM - 8 PM' },
   { day: 'Thursday', hours: '10 AM - 7 PM' },
   { day: 'Friday', hours: 'Closed' },
 ]
