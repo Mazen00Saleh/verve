@@ -28,24 +28,24 @@ export interface CompressionResult {
   savingsPercent: number
 }
 
-const CATALOG_MAX_SIZE_BYTES = 300 * 1024
+const CATALOG_MAX_SIZE_BYTES = 600 * 1024
 
-// Unified catalog upload preset (primary, gallery, mockup, categories, etc.).
-// Sized to the largest public delivery width (mockup 1600w) while staying under 300 KB.
+// High-quality source for IPX derivatives. 600 KB is enough for 2560px WebP
+// without the old 300 KB path that had to crush quality and resolution.
 const PRESETS: Record<ImageUploadPreset, {
   maxWidthOrHeight: number
   quality: number
   maxSizeBytes: number
 }> = {
   catalog: {
-    maxWidthOrHeight: 1600,
-    quality: 0.74,
+    maxWidthOrHeight: 2560,
+    quality: 0.9,
     maxSizeBytes: CATALOG_MAX_SIZE_BYTES,
   },
   hero: {
     maxWidthOrHeight: 2560,
-    quality: 0.88,
-    maxSizeBytes: 500 * 1024,
+    quality: 0.92,
+    maxSizeBytes: 800 * 1024,
   },
 }
 
@@ -99,6 +99,7 @@ export function useImageUpload() {
       const imageCompression = (await import('browser-image-compression')).default
       let quality = options.quality
       let maxDimension = options.maxWidthOrHeight
+      let keepResolution = true
       let compressedFile = file
 
       for (let attempt = 0; attempt < 6; attempt++) {
@@ -108,6 +109,7 @@ export function useImageUpload() {
           useWebWorker: true,
           initialQuality: quality,
           fileType: OUTPUT_TYPE,
+          alwaysKeepResolution: keepResolution,
         })
 
         if (compressedFile.size < maxSizeBytes) {
@@ -119,8 +121,12 @@ export function useImageUpload() {
           }
         }
 
-        quality = Math.max(0.35, quality - 0.1)
-        maxDimension = Math.round(maxDimension * 0.85)
+        if (quality > 0.78) {
+          quality = Math.max(0.78, quality - 0.04)
+        } else {
+          keepResolution = false
+          maxDimension = Math.round(maxDimension * 0.92)
+        }
       }
 
       throw new Error(

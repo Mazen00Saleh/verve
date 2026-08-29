@@ -17,8 +17,8 @@ const PRESETS: Record<ImageSizePreset, { width: number, height?: number, sizes: 
     sizes: '(max-width: 768px) 100vw, 33vw',
   },
   product: {
-    width: 1200,
-    height: 1200,
+    width: 1600,
+    height: 1600,
     sizes: '(max-width: 1024px) 100vw, 50vw',
   },
   mockup: {
