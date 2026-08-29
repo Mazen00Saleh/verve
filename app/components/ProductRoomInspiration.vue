@@ -101,7 +101,7 @@ const modalImageSrc = computed(() => {
   }
 
   return $img(activeImage.value, {
-    width: 1600,
+    width: 2560,
     quality: 100,
     format: 'webp',
   })

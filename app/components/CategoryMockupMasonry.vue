@@ -127,7 +127,7 @@ const modalImageSrc = computed(() => {
   }
 
   return $img(activeMockup.value.url, {
-    width: 1600,
+    width: 2560,
     quality: 100,
     format: 'webp',
   })

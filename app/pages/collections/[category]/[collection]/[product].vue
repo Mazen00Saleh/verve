@@ -35,8 +35,8 @@
                   loading="eager"
                   fetchpriority="high"
                   decoding="async"
-                  width="1200"
-                  height="1200"
+                  width="1600"
+                  height="1600"
                   @load="onMainImageLoad"
                 >
 
@@ -169,12 +169,12 @@ const selectedVariant = computed(() => variants.value[selectedVariantIdx.value] 
 const activeImage = computed(() => selectedVariant.value.image || product.value?.image || '')
 const mainImageSrc = computed(() =>
   activeImage.value
-    ? $img(activeImage.value, { width: 1200, quality: 100, format: 'webp' })
+    ? $img(activeImage.value, { width: 1600, quality: 100, format: 'webp' })
     : '',
 )
 const zoomImageSrc = computed(() =>
   activeImage.value
-    ? $img(activeImage.value, { width: 1920, quality: 100, format: 'webp' })
+    ? $img(activeImage.value, { width: 2560, quality: 100, format: 'webp' })
     : '',
 )
 

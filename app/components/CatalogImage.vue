@@ -79,11 +79,11 @@ const resolvedQuality = computed(() => {
     return props.quality
   }
 
-  if (props.size === 'mockup' || props.size === 'feature' || props.size === 'accent') {
+  if (props.size === 'product' || props.size === 'mockup' || props.size === 'feature' || props.size === 'accent') {
     return 95
   }
 
-  return 80
+  return 90
 })
 const resolvedFit = computed(() => (usesNaturalAspect.value ? 'inside' : undefined))
 
